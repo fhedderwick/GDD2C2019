@@ -1,0 +1,2 @@
+C:\Users\Matias\Desktop\Groupon2019\src\FrbaOfertas\FrbaOfertas\bin\Debug\FrbaOfertas.exe.config
+C:\Users\Federico\Documents\Visual Studio 2012\Projects\FrbaOfertas\FrbaOfertas\bin\Debug\FrbaOfertas.exe.config
