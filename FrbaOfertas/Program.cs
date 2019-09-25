@@ -20,8 +20,8 @@ namespace FrbaOfertas
             if (dbm.initialize())
             {
                 System.Console.Out.WriteLine("Connected OK!");
-                //MainPanel mainPanel = new MainPanel(dbm);
-                //Application.Run(mainPanel);
+                Login.Login loginPanel = new Login.Login(dbm);
+                Application.Run(loginPanel);
             }
             else
             {

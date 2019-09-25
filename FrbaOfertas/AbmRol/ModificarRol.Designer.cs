@@ -1,6 +1,6 @@
 ﻿namespace FrbaOfertas.AbmRol
 {
-    partial class AltaRol
+    partial class ModificarRol
     {
         /// <summary>
         /// Required designer variable.
@@ -70,7 +70,7 @@
             this.dataGridView1.Size = new System.Drawing.Size(253, 150);
             this.dataGridView1.TabIndex = 3;
             // 
-            // AltaRol
+            // ModificarRol
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -79,7 +79,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
-            this.Name = "AltaRol";
+            this.Name = "ModificarRol";
             this.Text = "Modificar rol";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);

@@ -123,6 +123,18 @@
     <Compile Include="Login\Password.Designer.cs">
       <DependentUpon>Password.cs</DependentUpon>
     </Compile>
+    <Compile Include="PantallaPrincipalAdministrador.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PantallaPrincipalAdministrador.Designer.cs">
+      <DependentUpon>PantallaPrincipalAdministrador.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PantallaPrincipalUsuario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PantallaPrincipalUsuario.Designer.cs">
+      <DependentUpon>PantallaPrincipalUsuario.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AbmRol\AltaRol.resx">
@@ -142,6 +154,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Password.resx">
       <DependentUpon>Password.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PantallaPrincipalAdministrador.resx">
+      <DependentUpon>PantallaPrincipalAdministrador.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PantallaPrincipalUsuario.resx">
+      <DependentUpon>PantallaPrincipalUsuario.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

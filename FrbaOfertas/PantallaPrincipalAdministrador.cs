@@ -8,11 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FrbaOfertas.AbmRol
+namespace FrbaOfertas
 {
-    public partial class ListaRol : Form
+    public partial class PantallaPrincipalAdministrador : Form
     {
-        public ListaRol()
+        private DataBaseManager _dbm;
+
+        public PantallaPrincipalAdministrador(DataBaseManager dbm)
         {
             InitializeComponent();
         }
