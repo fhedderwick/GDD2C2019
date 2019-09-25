@@ -16,7 +16,17 @@ namespace FrbaOfertas
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            DataBaseManager dbm = new DataBaseManager();
+            if (dbm.initialize())
+            {
+                System.Console.Out.WriteLine("Connected OK!");
+                //MainPanel mainPanel = new MainPanel(dbm);
+                //Application.Run(mainPanel);
+            }
+            else
+            {
+                Application.Run(new ErrorConexion());
+            }
         }
     }
 }
