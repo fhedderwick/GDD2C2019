@@ -14,9 +14,9 @@ namespace FrbaOfertas.Login
     public partial class Login : Form
     {
 
-        const String USER_QUERY = "SELECT USERNAME, PASSWORD, INTENTOS_FALLIDOS FROM MANA.USUARIO U "
+        const String USER_QUERY = "SELECT USER_USERNAME, USER_PASSWORD, USER_INTENTOS_FALLIDOS FROM MANA.USUARIO U "
                   //+ " LEFT JOIN MANA.USUARIO_ROL UR ON UR.USUARIO_ID = U.USERNAME AND UR.FUNCIONALIDAD = 'administrador' "
-                  + " WHERE U.USUARIO = @USER_NOMBRE";
+                  + " WHERE U.USER_USERNAME = @USER_NOMBRE";
 
         private DataBaseManager _dbm;
 

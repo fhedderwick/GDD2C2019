@@ -15,7 +15,7 @@ namespace FrbaOfertas
 
         internal bool initialize()
         {
-            String uri = "data source=.\\SQLSERVER2012; initial catalog=GD1C2019; user id=gdCupon2019; password=gd2019; MultipleActiveResultSets=True";
+            String uri = "data source=.\\SQLSERVER2012; initial catalog=GD2C2019; user id=gdCupon2019; password=gd2019; MultipleActiveResultSets=True";
             this._conn = new SqlConnection(uri);
             try
             {
