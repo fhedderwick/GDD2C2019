@@ -12,19 +12,21 @@ namespace FrbaOfertas.Login
 {
     public partial class Password : Form
     {
-        const String CONT_UPDATE_QUERY = "UPDATE MANA.USUARIO SET INTENTOS_FALLIDOS = @CONT";
+        const String CONT_UPDATE_QUERY = "UPDATE MANA.USUARIO SET USER_INTENTOS_FALLIDOS = @CONT";
 
         Login _loginForm;
         String _password;
+        int _userId;
         DataBaseManager _dbm;
         int _count;
-        public Password(Login loginForm, DataBaseManager dbm, String password, int count)
+        public Password(Login loginForm, DataBaseManager dbm, int userId, String password, int count)
         {
             _dbm = dbm;
+            _userId = userId;
             _loginForm = loginForm;
             _password = password;
-            InitializeComponent();
             _count = count;
+            InitializeComponent();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -41,8 +43,8 @@ namespace FrbaOfertas.Login
                 map.Add("@CONT", _count);
                 _dbm.executeUpdate(CONT_UPDATE_QUERY, map);
                 _loginForm.Hide();
-                PantallaPrincipalAdministrador pantallaPrincipalAdministrador = new PantallaPrincipalAdministrador(_dbm);
-                pantallaPrincipalAdministrador.Show();
+                PantallaPrincipalUsuario pantallaPrincipalUsuario = new PantallaPrincipalUsuario(_dbm,_userId.ToString());
+                pantallaPrincipalUsuario.Show();
                 this.Hide();
             }
             else

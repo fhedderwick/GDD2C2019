@@ -14,9 +14,7 @@ namespace FrbaOfertas.Login
     public partial class Login : Form
     {
 
-        const String USER_QUERY = "SELECT USER_USERNAME, USER_PASSWORD, USER_INTENTOS_FALLIDOS FROM MANA.USUARIO U "
-                  //+ " LEFT JOIN MANA.USUARIO_ROL UR ON UR.USUARIO_ID = U.USERNAME AND UR.FUNCIONALIDAD = 'administrador' "
-                  + " WHERE U.USER_USERNAME = @USER_NOMBRE";
+        const String USER_QUERY = "SELECT * FROM MANA.USUARIO U WHERE U.USER_USERNAME = @USER_NOMBRE";
 
         private DataBaseManager _dbm;
 
@@ -35,20 +33,20 @@ namespace FrbaOfertas.Login
             if (resultSet.HasRows)
             {
                 resultSet.Read();
-                if (false) //si es administrador
+                if ("Habilitado".Equals((String)resultSet.GetValue(resultSet.GetOrdinal("USUARIO_ESTADO"))))
                 {
-                    Password passwordDialog = new Password(this, _dbm, (String)resultSet.GetValue(resultSet.GetOrdinal("PASSWORD")), (int)resultSet.GetValue(resultSet.GetOrdinal("INTENTOS_FALLIDOS")));
+                    Password passwordDialog = new Password(this, _dbm, (int)resultSet.GetValue(resultSet.GetOrdinal("USER_ID")), (String)resultSet.GetValue(resultSet.GetOrdinal("USER_PASSWORD")), (int)resultSet.GetValue(resultSet.GetOrdinal("USER_INTENTOS_FALLIDOS")));
                     passwordDialog.ShowDialog();
                 }
                 else
                 {
-                    PantallaPrincipalUsuario pantallaPrincipalUsuario = new PantallaPrincipalUsuario(_dbm);
-                    pantallaPrincipalUsuario.ShowDialog();
+                    MessageBox.Show("El usuario especificado se encuentra deshabilitado.");
                 }
             }
             else
             {
-                MessageBox.Show("El usuario especificado no existe.");
+                UsuarioInexistente usuarioInexistenteDialog = new UsuarioInexistente(this, _dbm, inputText);
+                usuarioInexistenteDialog.ShowDialog();
             }
         }
     }

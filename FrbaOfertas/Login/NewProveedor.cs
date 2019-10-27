@@ -8,13 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FrbaOfertas
+namespace FrbaOfertas.Login
 {
-    public partial class PantallaPrincipalAdministrador : Form
+    public partial class NewProveedor : Form
     {
-        private DataBaseManager _dbm;
-
-        public PantallaPrincipalAdministrador(DataBaseManager dbm)
+        public NewProveedor()
         {
             InitializeComponent();
         }
