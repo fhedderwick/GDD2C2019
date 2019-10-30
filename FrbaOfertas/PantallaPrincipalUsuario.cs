@@ -8,6 +8,7 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FrbaOfertas.AbmRol;
 
 namespace FrbaOfertas
 {
@@ -41,14 +42,19 @@ namespace FrbaOfertas
                     case "Abm Cliente": button3.Show(); break;
                     case "Abm Proveedor": button4.Show(); break;
                     case "Carga Credito": button2.Show(); break;
-                    case "Crear Oferta": button5.Show(); break;
+                    case "Abm Oferta": button5.Show(); break;
                     case "Comprar Oferta": button6.Show(); break;
-                    case "Baja Oferta": break;
                     case "Facturacion": button7.Show(); break;
-                    case "Estadistica": button8.Show(); break;
+                    case "Listado Estadistico": button8.Show(); break;
                 }
             }
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ListaRol listaRol = new ListaRol(_dbm);
+            listaRol.Show();
         }
     }
 }
