@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace FrbaOfertas.AbmProveedor
 {
-    public partial class Form1 : Form
+    public partial class BajaProveedor : Form
     {
-        public Form1()
+        public BajaProveedor()
         {
             InitializeComponent();
         }

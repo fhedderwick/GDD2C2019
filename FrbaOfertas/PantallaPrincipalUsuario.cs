@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FrbaOfertas.AbmRol;
+using FrbaOfertas.AbmProveedor;
 
 namespace FrbaOfertas
 {
@@ -55,6 +56,12 @@ namespace FrbaOfertas
         {
             ListaRol listaRol = new ListaRol(_dbm);
             listaRol.Show();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            ListaProveedor listaProv = new ListaProveedor(_dbm);
+            listaProv.Show();
         }
     }
 }
