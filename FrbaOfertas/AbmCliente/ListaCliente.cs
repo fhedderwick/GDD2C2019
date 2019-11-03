@@ -16,8 +16,10 @@ namespace FrbaOfertas.AbmCliente
     {
 
         private String GET_CLIENTES_QUERY = "SELECT C.CLI_ID ID, C.CLI_NOMBRE NOMBRE, C.CLI_APELLIDO APELLIDO, C.CLI_DNI DNI, C.CLI_MAIL MAIL, C.CLI_TELEFONO TELEFONO, C.CLI_DIRECCION DIRECCION, C.CLI_CODIGO_POSTAL CODIGO_POSTAL, C.CLI_CIUDAD CIUDAD, C.CLI_FECHA_NACIMIENTO FECHA, C.CLI_SALDO SALDO, C.CLI_ESTADO ESTADO FROM MANA.CLIENTE C";
-        private String WHERE_EXACT_QUERY = " WHERE C.CLI_NOMBRE = @nombre OR C.CLI_APELLIDO = @apellido OR C.CLI_DNI = @dni OR C.CLI_MAIL = @mail OR C.CLI_TELEFONO = @telefono OR C.CLI_DIRECCION = @direccion OR C.CLI_CODIGO_POSTAL = @codigoPostal OR C.CLI_CIUDAD = @ciudad";
-        private String WHERE_NON_EXACT_QUERY = " WHERE C.CLI_NOMBRE LIKE @nombre OR C.CLI_APELLIDO LIKE @apellido OR C.CLI_DNI LIKE @dni OR C.CLI_MAIL LIKE @mail OR C.CLI_TELEFONO LIKE @telefono OR C.CLI_DIRECCION LIKE @direccion OR C.CLI_CODIGO_POSTAL LIKE @codigoPostal OR C.CLI_CIUDAD LIKE @ciudad";
+        private String FILTRO_NOMBRE_QUERY = " WHERE C.CLI_NOMBRE = @nombre OR C.CLI_APELLIDO = @apellido OR C.CLI_DNI = @dni OR C.CLI_MAIL = @mail OR C.CLI_TELEFONO = @telefono OR C.CLI_DIRECCION = @direccion OR C.CLI_CODIGO_POSTAL = @codigoPostal OR C.CLI_CIUDAD = @ciudad";
+        private String FILTRO_APELLIDO_QUERY = " WHERE C.CLI_NOMBRE LIKE @nombre OR C.CLI_APELLIDO LIKE @apellido OR C.CLI_DNI LIKE @dni OR C.CLI_MAIL LIKE @mail OR C.CLI_TELEFONO LIKE @telefono OR C.CLI_DIRECCION LIKE @direccion OR C.CLI_CODIGO_POSTAL LIKE @codigoPostal OR C.CLI_CIUDAD LIKE @ciudad";
+        private String FILTRO_DNI_QUERY = " WHERE C.CLI_NOMBRE LIKE @nombre OR C.CLI_APELLIDO LIKE @apellido OR C.CLI_DNI LIKE @dni OR C.CLI_MAIL LIKE @mail OR C.CLI_TELEFONO LIKE @telefono OR C.CLI_DIRECCION LIKE @direccion OR C.CLI_CODIGO_POSTAL LIKE @codigoPostal OR C.CLI_CIUDAD LIKE @ciudad";
+        private String FILTRO_EMAIL_QUERY = " WHERE C.CLI_NOMBRE LIKE @nombre OR C.CLI_APELLIDO LIKE @apellido OR C.CLI_DNI LIKE @dni OR C.CLI_MAIL LIKE @mail OR C.CLI_TELEFONO LIKE @telefono OR C.CLI_DIRECCION LIKE @direccion OR C.CLI_CODIGO_POSTAL LIKE @codigoPostal OR C.CLI_CIUDAD LIKE @ciudad";
 
         private DataBaseManager _dbm;
 
@@ -51,7 +53,7 @@ namespace FrbaOfertas.AbmCliente
             else
             {
                 String id = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
-                BajaCliente bajaCliente = new BajaCliente(_dbm, id);
+                BajaCliente bajaCliente = new BajaCliente(_dbm,this, id);
                 bajaCliente.Show();
             }
         }
@@ -61,28 +63,38 @@ namespace FrbaOfertas.AbmCliente
             llenarListado();
         }
 
-        private void llenarListado()
+        public void llenarListado()
         {
             Dictionary<string, string> map = new Dictionary<string, string>();
-            StringBuilder query = new StringBuilder();
-            query.Append(GET_CLIENTES_QUERY);
-            if(textBox1.TextLength != 0){
-                String texto = textBox1.Text;
-                if (!checkBox1.Checked)
-                {
-                    texto = "%" + texto + "%";
-                    query.Append(WHERE_NON_EXACT_QUERY);
-                } else {
-                    query.Append(WHERE_EXACT_QUERY);
-                }
-                map.Add("@nombre", texto);
-                map.Add("@apellido", texto);
-                map.Add("@dni", texto);
-                map.Add("@mail", texto);
-                map.Add("@telefono", texto);
-                map.Add("@direccion", texto);
-                map.Add("@codigoPostal", texto);
-                map.Add("@ciudad", texto);
+            StringBuilder query = new StringBuilder(GET_CLIENTES_QUERY);
+            bool whereSet = false;
+            if(textBox1.TextLength != 0)
+            {
+                query.Append(whereSet ? " AND " : " WHERE ");
+                whereSet = true;
+                query.Append(" C.CLI_NOMBRE LIKE @nombre ");
+                map.Add("@nombre", "%" + textBox1.Text + "%");
+            }
+            if(textBox2.TextLength != 0)
+            {
+                query.Append(whereSet ? " AND " : " WHERE ");
+                whereSet = true;
+                query.Append(" C.CLI_APELLIDO LIKE @apellido ");
+                map.Add("@apellido", "%" + textBox2.Text + "%");
+            }
+            if(textBox3.TextLength != 0)
+            {
+                query.Append(whereSet ? " AND " : " WHERE ");
+                whereSet = true;
+                query.Append(" C.CLI_DNI = @dni ");
+                map.Add("@dni", textBox3.Text);
+            }
+            if (textBox4.TextLength != 0)
+            {
+                query.Append(whereSet ? " AND " : " WHERE ");
+                whereSet = true;
+                query.Append(" C.CLI_MAIL LIKE @mail ");
+                map.Add("@mail", "%" + textBox4.Text + "%");
             }
             SqlDataReader resultSet = _dbm.executeSelect(query.ToString(), map);
             dataGridView1.Rows.Clear();
@@ -151,6 +163,14 @@ namespace FrbaOfertas.AbmCliente
             {
                 MessageBox.Show("Debe seleccionar un cliente.");
             }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            textBox1.Text = "";
+            textBox2.Text = "";
+            textBox3.Text = "";
+            textBox4.Text = "";
         }
         
     }

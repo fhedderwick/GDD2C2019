@@ -16,11 +16,13 @@ namespace FrbaOfertas.AbmCliente
         private String DELETE_USER_QUERY = "UPDATE MANA.CLIENTE SET CLI_ESTADO = 'Deshabilitado' WHERE CLI_ID = @cliId";
 
         private DataBaseManager _dbm;
+        ListaCliente _lista;
         private String _id;
 
-        public BajaCliente(DataBaseManager dbm, String id)
+        public BajaCliente(DataBaseManager dbm, ListaCliente lista, String id)
         {
             _dbm = dbm;
+            _lista = lista;
             _id = id;
             InitializeComponent();
             label2.Text = id;
@@ -38,6 +40,7 @@ namespace FrbaOfertas.AbmCliente
             if (1 == _dbm.executeUpdate(DELETE_USER_QUERY, map))
             {
                 MessageBox.Show("Cliente dado de baja correctamente.");
+                _lista.llenarListado();
             }
             else
             {

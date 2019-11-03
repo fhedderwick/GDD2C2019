@@ -21,6 +21,7 @@ namespace FrbaOfertas.AbmCliente
             _id = id;
             InitializeComponent();
             label10.Text = id;
+            //cargar el resto de los datos!
         }
 
         private void cancelarButton_Click(object sender, EventArgs e)
