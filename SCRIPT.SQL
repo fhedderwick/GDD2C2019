@@ -181,9 +181,11 @@ CREATE TABLE [MANA].PROVEEDOR (
 	PROV_ID INT NOT NULL IDENTITY,
 	PROV_RAZON_SOCIAL NVARCHAR(100),
 	PROV_CUIT NVARCHAR(20),
+	PROV_NOMBRE_CONTACTO NVARCHAR(20),
 	PROV_MAIL NVARCHAR(100),
-	PROV_TELEFONO NUMERIC(18),
-	PROV_DIRECCION NVARCHAR(100),	
+	PROV_TELEFONO NVARCHAR(18),
+	PROV_DIRECCION NVARCHAR(100),
+	PROV_CODIGO_POSTAL NVARCHAR(18),	
 	PROV_CIUDAD NVARCHAR(255),
 	PROV_RUBRO_ID INT,
 	PROV_ESTADO NVARCHAR(20),
@@ -438,12 +440,9 @@ GO
 CREATE PROCEDURE MANA.MigrarProveedor
 AS
 insert into MANA.PROVEEDOR
-select M.Provee_RS, M.Provee_CUIT, 
-       NULL,         /*Aca ver porque en tabla maestra no hay emails para Proveedor*/
-	   M.Provee_Telefono, M.Provee_Dom, M.Provee_Ciudad, R.RUBRO_ID,'Habilitado'
+select M.Provee_RS, M.Provee_CUIT, NULL, NULL, M.Provee_Telefono, M.Provee_Dom, NULL, M.Provee_Ciudad, R.RUBRO_ID,'Habilitado'
 from gd_esquema.Maestra M, MANA.RUBRO R
-where
-     M.Provee_Rubro = R.RUBRO_DESCRIPCION
+where M.Provee_Rubro = R.RUBRO_DESCRIPCION
 group by M.Provee_RS, M.Provee_CUIT, M.Provee_Telefono, M.Provee_Dom, M.Provee_Ciudad, R.RUBRO_ID
 GO
 
@@ -518,7 +517,7 @@ GO
 /* Proveedor Vista*/
 CREATE VIEW MANA.Proveedor_VW
 AS
-select P.PROV_ID, P.PROV_RAZON_SOCIAL, P.PROV_CUIT, P.PROV_MAIL, P.PROV_TELEFONO, P.PROV_DIRECCION, P.PROV_CIUDAD, R.RUBRO_ID, P.PROV_ESTADO
+select P.PROV_ID, P.PROV_RAZON_SOCIAL, P.PROV_NOMBRE_CONTACTO, P.PROV_CUIT, P.PROV_MAIL, P.PROV_TELEFONO, P.PROV_DIRECCION, P.PROV_CODIGO_POSTAL, P.PROV_CIUDAD, R.RUBRO_ID, P.PROV_ESTADO
 from MANA.PROVEEDOR P, MANA.RUBRO R
 where R.RUBRO_ID = P.PROV_RUBRO_ID  
 GO
@@ -917,25 +916,25 @@ BEGIN
 END	   
 GO   
 
-CREATE PROCEDURE MANA.CrearProveedor @RazonSocial nvarchar(100), @CUIT nvarchar(20), @Mail nvarchar(100), 
-                                   @Telefono numeric(18), @Direccion nvarchar(100), @Ciudad nvarchar(255), @Rubro nvarchar(100)
+CREATE PROCEDURE MANA.CrearProveedor @RazonSocial nvarchar(100), @CUIT nvarchar(20), @NombreContacto nvarchar(20), @Mail nvarchar(100), 
+                                   @Telefono numeric(18), @Direccion nvarchar(100), @CodigoPostal nvarchar(18), @Ciudad nvarchar(255), @Rubro nvarchar(100)
 AS
 IF(NOT EXISTS(SELECT PROV_RAZON_SOCIAL, PROV_CUIT FROM MANA.PROVEEDOR 
               where PROV_RAZON_SOCIAL = @RazonSocial AND PROV_CUIT = @CUIT))
 BEGIN
-insert into MANA.PROVEEDOR values(@RazonSocial, @CUIT, @Mail, @Telefono, @Direccion, @Ciudad, MANA.ObtenerIdRubro(@Rubro),'Habilitado');
+insert into MANA.PROVEEDOR values(@RazonSocial, @CUIT, @NombreContacto, @Mail, @Telefono, @Direccion, @CodigoPostal, @Ciudad, MANA.ObtenerIdRubro(@Rubro),'Habilitado');
 END
 GO
 
-CREATE PROCEDURE MANA.ModificarProveedor @ID int, @RazonSocial nvarchar(100), @CUIT nvarchar(20), @Mail nvarchar(100), 
-                                   @Telefono numeric(18), @Direccion nvarchar(100), @Ciudad nvarchar(255), @Rubro nvarchar(100)
+CREATE PROCEDURE MANA.ModificarProveedor @ID int, @RazonSocial nvarchar(100), @CUIT nvarchar(20), @NombreContacto nvarchar(20), @Mail nvarchar(100), 
+                                   @Telefono numeric(18), @Direccion nvarchar(100), @CodigoPostal nvarchar(18), @Ciudad nvarchar(255), @Rubro nvarchar(100)
 AS
 IF(NOT EXISTS(SELECT PROV_RAZON_SOCIAL, PROV_CUIT FROM MANA.PROVEEDOR 
               where PROV_RAZON_SOCIAL = @RazonSocial AND PROV_CUIT = @CUIT))
 BEGIN
    UPDATE MANA.PROVEEDOR
-   SET  PROV_RAZON_SOCIAL = @RazonSocial, PROV_CUIT = @CUIT, PROV_MAIL = @Mail, PROV_TELEFONO = @Telefono, 
-	    PROV_DIRECCION = @Direccion, PROV_CIUDAD = @Ciudad, PROV_RUBRO_ID = Mana.ObtenerIdRubro(@Rubro)
+   SET  PROV_RAZON_SOCIAL = @RazonSocial, PROV_CUIT = @CUIT, PROV_NOMBRE_CONTACTO = @NombreContacto, PROV_MAIL = @Mail, PROV_TELEFONO = @Telefono, 
+	    PROV_DIRECCION = @Direccion, PROV_CODIGO_POSTAL = @CodigoPostal, PROV_CIUDAD = @Ciudad, PROV_RUBRO_ID = Mana.ObtenerIdRubro(@Rubro)
 	  WHERE PROV_ID = @ID
 END
 GO
@@ -954,9 +953,9 @@ AS
 	  WHERE PROV_RAZON_SOCIAL = @RazonSocial AND PROV_CUIT = @CUIT
 GO
 /*Test ABM Proveedor*/
-Mana.CrearProveedor 'Proveedor Cortinas S.R.L.', '11-22445103-2', 'cortinas@gmail.com', 43825679, 'Pozos618', 'CABA', 'Electronica' 
+Mana.CrearProveedor 'Proveedor Cortinas S.R.L.', '11-22445103-2', 'Cortinas Congreso','cortinas@gmail.com', '43828110', 'Pozos618','1456', 'CABA', 'Electronica' 
 GO
-Mana.ModificarProveedor 10, 'Proveedor Freddo S.R.L.', '71-43350643-1', 'freddo@gmail.com', 48625167, 'Rivadavia6115','CABA', 'Comestibles' 
+Mana.ModificarProveedor 10, 'Proveedor Freddo S.R.L.', '71-43350643-1', 'Freddo','freddo@gmail.com', '48659523', 'Rivadavia 6115','1548','CABA', 'Comestibles' 
 GO
 Mana.BajaProveedor 'Proveedor N°13S.R.L.', '13-52415793-5'
 GO
