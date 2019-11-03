@@ -16,6 +16,7 @@ namespace FrbaOfertas.AbmRol
 
         const String GET_ROL_DATA_QUERY = "SELECT ROL_ID,ROL_ESTADO FROM MANA.ROL R WHERE R.ROL_NOMBRE = @ROL_NOMBRE";
         const String GET_ROLES_QUERY = "SELECT ROL_NOMBRE FROM MANA.ROL";
+        const String GET_FUNC_ROL_QUERY = "SELECT FUNC_ID, FUN_NOMBRE FROM MANA.FUNCIONALIDAD_ROL FR INNER JOIN MANA.FUNCIONALIDAD F ON FR.FR_FUNCIONALIDAD_ID = F.FUNC_ID WHERE FR.FR_ROL_ID = @ROL_ID";
 
         private DataBaseManager _dbm;
         private int _idSeleccionado;
@@ -74,6 +75,7 @@ namespace FrbaOfertas.AbmRol
         private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
         {
             actualizarValores();
+            recargarListaFuncionalidades();
         }
 
 
@@ -97,6 +99,33 @@ namespace FrbaOfertas.AbmRol
                 _habilitado = false;
             }
             button3.Enabled = _habilitado;
+        }
+
+        private void recargarListaFuncionalidades()
+        {
+            dataGridView1.ColumnCount = 2;
+            dataGridView1.Columns[0].Name = "ID";
+            dataGridView1.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridView1.Columns[1].Name = "Nombre";
+
+            dataGridView1.Rows.Clear();
+            dataGridView1.AllowUserToAddRows = true;
+
+            Dictionary<string, string> map = new Dictionary<string, string>();
+            map.Add("@ROL_ID", _idSeleccionado.ToString());
+            SqlDataReader resultSet = _dbm.executeSelect(GET_FUNC_ROL_QUERY,map);
+            while (resultSet.Read())
+            {
+                int id = (int)resultSet.GetValue(resultSet.GetOrdinal("FUNC_ID"));
+                String name = (String)resultSet.GetValue(resultSet.GetOrdinal("FUN_NOMBRE"));
+
+                string[] row = new string[] {id.ToString(), name};
+                dataGridView1.Rows.Add(row);
+
+                dataGridView1.Rows[0].ReadOnly = true;
+                dataGridView1.Rows[1].ReadOnly = true;
+            }
+            dataGridView1.AllowUserToAddRows = false;
         }
     }
 }

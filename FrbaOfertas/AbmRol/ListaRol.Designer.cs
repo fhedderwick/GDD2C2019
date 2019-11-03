@@ -92,23 +92,23 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(13, 165);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(164, 13);
+            this.label2.Size = new System.Drawing.Size(115, 13);
             this.label2.TabIndex = 5;
-            this.label2.Text = "Funcionalidades del rol (readonly)";
+            this.label2.Text = "Funcionalidades del rol";
             // 
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(12, 196);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(248, 76);
+            this.dataGridView1.Size = new System.Drawing.Size(248, 146);
             this.dataGridView1.TabIndex = 6;
             // 
             // ListaRol
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(272, 284);
+            this.ClientSize = new System.Drawing.Size(272, 354);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.comboBox1);
