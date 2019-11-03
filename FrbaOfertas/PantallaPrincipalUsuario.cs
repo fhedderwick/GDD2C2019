@@ -9,11 +9,10 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FrbaOfertas.AbmRol;
-<<<<<<< HEAD
 using FrbaOfertas.AbmProveedor;
-=======
 using FrbaOfertas.AbmCliente;
->>>>>>> 2b594561d02e29052ee6ef4e90624a093e90e7c8
+using FrbaOfertas.AbmProveedor;
+using FrbaOfertas.AbmCliente;
 
 namespace FrbaOfertas
 {
@@ -62,17 +61,17 @@ namespace FrbaOfertas
             listaRol.Show();
         }
 
-<<<<<<< HEAD
+
         private void button4_Click(object sender, EventArgs e)
         {
             ListaProveedor listaProv = new ListaProveedor(_dbm);
             listaProv.Show();
-=======
+        }
+
         private void button3_Click(object sender, EventArgs e)
         {
             ListaCliente listaCliente = new ListaCliente(_dbm);
             listaCliente.Show();
->>>>>>> 2b594561d02e29052ee6ef4e90624a093e90e7c8
         }
     }
 }

@@ -58,11 +58,12 @@ namespace FrbaOfertas.AbmProveedor
         }
 
 
-        //private bool addProveedor(String nombre)
+        private bool addProveedor(String nombre)
         {
-            Dictionary<string, object> map = new Dictionary<string, object>();
-            map.Add("@ROL_NOMBRE", nombre);
-            return 1 == _dbm.executeUpdate(ADD_ROL_QUERY, map);
+            //Dictionary<string, object> map = new Dictionary<string, object>();
+           // map.Add("@ROL_NOMBRE", nombre);
+            //return 1 == _dbm.executeUpdate(ADD_ROL_QUERY, map);
+            return true;
         }
 
     }
