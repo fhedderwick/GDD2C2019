@@ -12,6 +12,7 @@ namespace FrbaOfertas
     {
 
         private SqlConnection _conn;
+        private SqlTransaction _tran;
 
         internal bool initialize()
         {
@@ -61,6 +62,11 @@ namespace FrbaOfertas
             {
                 return null;
             }
+        }
+
+        internal void setAutoCommit()
+        {
+            _tran = _conn.BeginTransaction();
         }
 
         internal int executeUpdate(string query, Dictionary<string, object> map)

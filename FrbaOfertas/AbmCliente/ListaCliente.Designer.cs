@@ -93,9 +93,9 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(91, 19);
+            this.textBox1.Location = new System.Drawing.Point(90, 18);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(131, 20);
+            this.textBox1.Size = new System.Drawing.Size(394, 20);
             this.textBox1.TabIndex = 5;
             // 
             // groupBox1
@@ -136,14 +136,14 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 22);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 13);
+            this.label1.Size = new System.Drawing.Size(78, 13);
             this.label1.TabIndex = 8;
-            this.label1.Text = "Nombre Cliente";
+            this.label1.Text = "Texto a buscar";
             // 
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(228, 21);
+            this.checkBox1.Location = new System.Drawing.Point(9, 44);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(109, 17);
             this.checkBox1.TabIndex = 9;
@@ -162,7 +162,7 @@
             this.Controls.Add(this.button3);
             this.Controls.Add(this.dataGridView1);
             this.Name = "ListaCliente";
-            this.Text = "Form1";
+            this.Text = "Clientes";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
