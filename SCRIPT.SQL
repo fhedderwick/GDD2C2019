@@ -57,6 +57,12 @@ IF OBJECT_ID('MANA.FUNCIONALIDAD') IS NOT NULL
 DROP TABLE MANA.FUNCIONALIDAD;
 
 --DROP PROCEDURES, FUNCIONES, TRIGGERS
+IF OBJECT_ID('MANA.PublicarOferta') IS NOT NULL
+    DROP TRIGGER MANA.PublicarOferta;
+IF OBJECT_ID('MANA.ValidarVencimientoOferta') IS NOT NULL
+    DROP TRIGGER MANA.ValidarVencimientoOferta;
+IF OBJECT_ID('MANA.ValidarVencimientoCupon') IS NOT NULL
+    DROP TRIGGER MANA.ValidarVencimientoCupon;
 IF OBJECT_ID('MANA.MigrarCliente') IS NOT NULL
     DROP PROCEDURE MANA.MigrarCliente;
 IF OBJECT_ID('MANA.MigrarRubro') IS NOT NULL
@@ -83,14 +89,16 @@ IF OBJECT_ID('MANA.OfertaVendida_VW') IS NOT NULL
     DROP VIEW MANA.OfertaVendida_VW;
 IF OBJECT_ID('MANA.MigrarFactura') IS NOT NULL
     DROP PROCEDURE MANA.MigrarFactura;
+IF OBJECT_ID('MANA.LoginFallido') IS NOT NULL
+    DROP PROCEDURE MANA.LoginFallido;
+IF OBJECT_ID('MANA.LimpiarLoginFallido') IS NOT NULL
+    DROP PROCEDURE MANA.LimpiarLoginFallido;
 IF OBJECT_ID('MANA.CrearRol') IS NOT NULL
     DROP PROCEDURE MANA.CrearRol;
-IF OBJECT_ID('MANA.ObtenerRolesHabilitados') IS NOT NULL
-    DROP PROCEDURE MANA.ObtenerRolesHabilitados;
+IF OBJECT_ID('MANA.ObtenerRoles') IS NOT NULL
+    DROP PROCEDURE MANA.ObtenerRoles;
 IF OBJECT_ID('MANA.FuncionalidadRol_VW') IS NOT NULL
     DROP VIEW MANA.FuncionalidadRol_VW;
-IF OBJECT_ID('MANA.ObtenerFuncionalidadesDisponiblesDeRol') IS NOT NULL
-    DROP PROCEDURE MANA.ObtenerFuncionalidadesDisponiblesDeRol;
 IF OBJECT_ID('MANA.ObtenerFuncionalidadesDeRol') IS NOT NULL
     DROP PROCEDURE MANA.ObtenerFuncionalidadesDeRol;	
 IF OBJECT_ID('MANA.EliminarFuncionalidadesDeRol') IS NOT NULL
@@ -98,7 +106,9 @@ IF OBJECT_ID('MANA.EliminarFuncionalidadesDeRol') IS NOT NULL
 IF OBJECT_ID('MANA.EliminarUsuariosDeRol') IS NOT NULL
     DROP PROCEDURE MANA.EliminarUsuariosDeRol;	
 IF OBJECT_ID('MANA.CambiarNombreDeRol') IS NOT NULL
-    DROP PROCEDURE MANA.CambiarNombreDeRol;	
+    DROP PROCEDURE MANA.CambiarNombreDeRol;
+IF OBJECT_ID('MANA.HabilitarRol') IS NOT NULL
+    DROP PROCEDURE MANA.HabilitarRol;			
 IF OBJECT_ID('MANA.BajaDeRol') IS NOT NULL
     DROP PROCEDURE MANA.BajaDeRol;	
 IF OBJECT_ID('MANA.AsignarFuncionRol') IS NOT NULL
@@ -113,10 +123,16 @@ IF OBJECT_ID('MANA.AsignarUsuarioRol') IS NOT NULL
     DROP PROCEDURE MANA.AsignarUsuarioRol;
 IF OBJECT_ID('MANA.CrearUsuario') IS NOT NULL
     DROP PROCEDURE MANA.CrearUsuario;
+IF OBJECT_ID('MANA.BajaUsuario') IS NOT NULL
+    DROP PROCEDURE MANA.BajaUsuario;
+IF OBJECT_ID('MANA.CambiarPassword') IS NOT NULL
+    DROP PROCEDURE MANA.CambiarPassword;
 IF OBJECT_ID('MANA.CrearCliente') IS NOT NULL
     DROP PROCEDURE MANA.CrearCliente;	
 IF OBJECT_ID('MANA.ModificarCliente') IS NOT NULL
     DROP PROCEDURE MANA.ModificarCliente;
+IF OBJECT_ID('MANA.HabilitarCliente') IS NOT NULL
+    DROP PROCEDURE MANA.HabilitarCliente;
 IF OBJECT_ID('MANA.BajaCliente') IS NOT NULL
     DROP PROCEDURE MANA.BajaCliente;
 IF OBJECT_ID('MANA.ObtenerIdRubro') IS NOT NULL
@@ -125,9 +141,28 @@ IF OBJECT_ID('MANA.CrearProveedor') IS NOT NULL
     DROP PROCEDURE MANA.CrearProveedor;	
 IF OBJECT_ID('MANA.ModificarProveedor') IS NOT NULL
     DROP PROCEDURE MANA.ModificarProveedor;
+IF OBJECT_ID('MANA.HabilitarProveedor') IS NOT NULL
+    DROP PROCEDURE MANA.HabilitarProveedor;
 IF OBJECT_ID('MANA.BajaProveedor') IS NOT NULL
     DROP PROCEDURE MANA.BajaProveedor;
-	
+IF OBJECT_ID('MANA.CrearConsumoOferta') IS NOT NULL
+    DROP PROCEDURE MANA.CrearConsumoOferta;
+IF OBJECT_ID('MANA.CrearCupon') IS NOT NULL
+    DROP PROCEDURE MANA.CrearCupon;
+IF OBJECT_ID('MANA.ObtenerIdCupon') IS NOT NULL
+    DROP FUNCTION MANA.ObtenerIdCupon;
+IF OBJECT_ID('MANA.ObtenerEstadoCupon') IS NOT NULL
+    DROP FUNCTION MANA.ObtenerEstadoCupon;
+IF OBJECT_ID('MANA.ObtenerProveedorOferta') IS NOT NULL
+    DROP FUNCTION MANA.ObtenerProveedorOferta;
+IF OBJECT_ID('MANA.ValidarCupon') IS NOT NULL
+    DROP PROCEDURE MANA.ValidarCupon
+IF OBJECT_ID('MANA.BajaCupon') IS NOT NULL
+    DROP PROCEDURE MANA.BajaCupon;					
+IF OBJECT_ID('MANA.CrearOferta') IS NOT NULL
+    DROP PROCEDURE MANA.CrearOferta;
+IF OBJECT_ID('MANA.BajaOferta') IS NOT NULL
+    DROP PROCEDURE MANA.BajaOferta;			
 						
 --DROP SCHEMA
 IF EXISTS(SELECT NAME FROM SYS.SCHEMAS WHERE NAME='MANA')
@@ -167,7 +202,7 @@ CREATE TABLE [MANA].FACTURA (
 	FACT_ID INT NOT NULL IDENTITY,
 	FACT_NUMERO NUMERIC(18), 
 	FACT_FECHA DATETIME,	
-	/*FACT_PROVEEDOR_ID INT,*/
+	FACT_PROVEEDOR_ID INT,
 	FACT_OF_VEN_ID INT, 
 	FACT_IMPORTE NUMERIC(18),
 	
@@ -304,7 +339,7 @@ CREATE TABLE [MANA].FUNCIONALIDAD (
 --------------------------------------------------------------------------------------
 
 ALTER TABLE [MANA].PROVEEDOR ADD CONSTRAINT FK_RUBRO_ID FOREIGN KEY (PROV_RUBRO_ID) REFERENCES [MANA].RUBRO (RUBRO_ID);
-/*ALTER TABLE [MANA].FACTURA ADD CONSTRAINT FK_PROV_ID FOREIGN KEY (FACT_PROVEEDOR_ID) REFERENCES [MANA].PROVEEDOR (PROV_ID);*/
+ALTER TABLE [MANA].FACTURA ADD CONSTRAINT FK_PROV_ID FOREIGN KEY (FACT_PROVEEDOR_ID) REFERENCES [MANA].PROVEEDOR (PROV_ID);
 ALTER TABLE [MANA].FACTURA ADD CONSTRAINT FK_OF_VEN_ID FOREIGN KEY (FACT_OF_VEN_ID) REFERENCES [MANA].OFERTA_VENDIDA (OF_VEN_ID);
 ALTER TABLE [MANA].CONSUMO_OFERTA ADD CONSTRAINT FK_CUPON_ID FOREIGN KEY (CONSOF_CUPON_ID) REFERENCES [MANA].CUPON (CUPON_ID);
 ALTER TABLE [MANA].CARGA_CREDITO ADD CONSTRAINT FK_CLI_ID FOREIGN KEY (CC_CLIENTE_ID) REFERENCES [MANA].CLIENTE (CLI_ID);
@@ -319,6 +354,44 @@ ALTER TABLE [MANA].FUNCIONALIDAD_ROL ADD CONSTRAINT FK_R_ID FOREIGN KEY (FR_ROL_
 ALTER TABLE [MANA].FUNCIONALIDAD_ROL ADD CONSTRAINT FK_FUNC_ID FOREIGN KEY (FR_FUNCIONALIDAD_ID) REFERENCES [MANA].FUNCIONALIDAD (FUNC_ID);
 GO 
 
+
+/** TRIGGERS **/
+
+create TRIGGER MANA.PublicarOferta
+on MANA.OFERTA
+   after INSERT
+AS
+BEGIN
+  Update OFERTA set OF_ESTADO = 'Habilitado' where OFERTA.OF_ID in
+  (select O.OF_ID
+    from OFERTA O
+	where O.OF_FECHA_PUBLICACION <= GETDATE())
+END
+GO
+
+create TRIGGER MANA.ValidarVencimientoOferta 
+on MANA.OFERTA
+   after INSERT
+AS
+BEGIN
+   Update OFERTA set OF_ESTADO = 'Deshabilitado' where OFERTA.OF_ID in
+   (select O.OF_ID
+    from OFERTA O
+	where O.OF_FECHA_VENCIMIENTO <= GETDATE())
+END
+GO
+
+create TRIGGER MANA.ValidarVencimientoCupon
+   on MANA.CUPON
+   after INSERT
+AS
+BEGIN
+   update CUPON set CUPON_ESTADO = 'Deshabilitado' where CUPON_ID in
+   (select O.OF_CUPON_ID
+    from OFERTA O
+	where O.OF_ESTADO = 'Deshabilitado' )
+END
+GO
 
 /** MIGRACION **/
 
@@ -453,7 +526,7 @@ GO
 CREATE PROCEDURE MANA.MigrarOferta
 AS
 insert into MANA.OFERTA
-select M.Oferta_Codigo, M.Oferta_Descripcion, M.Oferta_Fecha, M.Oferta_Fecha_Venc, C.CUPON_ID, P.PROV_ID, M.Oferta_Cantidad,'Habilitado'
+select M.Oferta_Codigo, M.Oferta_Descripcion, M.Oferta_Fecha, M.Oferta_Fecha_Venc, C.CUPON_ID, P.PROV_ID, M.Oferta_Cantidad,'En Espera'
 from gd_esquema.Maestra M, MANA.CUPON C, MANA.PROVEEDOR P, MANA.Proveedor_VW PVW
 where
     M.Oferta_Precio = C.CUPON_PRECIO_OFERTA AND
@@ -549,22 +622,48 @@ GO
 /** STORES PROCEDURES **/
 
 
+/*Login*/
+
+CREATE PROCEDURE MANA.LoginFallido @Username nvarchar(20)
+AS
+BEGIN
+	DECLARE @Nueva_Cant_Int_Fallidos int
+	SET @Nueva_Cant_Int_Fallidos = (SELECT USER_INTENTOS_FALLIDOS FROM MANA.USUARIO WHERE USER_USERNAME = @Username) + 1
+
+	IF @Nueva_Cant_Int_Fallidos >= 3
+		BEGIN
+			UPDATE MANA.USUARIO 
+				SET USER_INTENTOS_FALLIDOS = @Nueva_Cant_Int_Fallidos
+				WHERE USER_USERNAME = @Username            
+		END		
+	ELSE
+		BEGIN
+			UPDATE MANA.USUARIO 
+				SET USER_INTENTOS_FALLIDOS = @Nueva_Cant_Int_Fallidos
+				WHERE USER_USERNAME = @Username 
+		END
+END
+GO
+
+CREATE PROCEDURE MANA.LimpiarLoginFallido @Username nvarchar(20)
+AS
+BEGIN
+	UPDATE MANA.USUARIO 
+	  SET USER_INTENTOS_FALLIDOS = 0
+	  WHERE USER_USERNAME = @Username 
+END
+GO
+
+
+
 /*Rol*/
 
 CREATE PROCEDURE MANA.CrearRol @Nombre nvarchar(20)
-AS
-    DECLARE @iCount int
-    set @iCount = (select count(*) from MANA.ROL R where R.ROL_ESTADO = 'Deshabilitado' and R.ROL_NOMBRE =  @Nombre)
-	IF @iCount > 0
-	BEGIN
-		update MANA.ROL
-		SET MANA.ROL.ROL_ESTADO = 'Habilitado'
-		where MANA.ROL.ROL_NOMBRE = @Nombre
-	END
-	ELSE
-	BEGIN
-		insert into MANA.ROL(ROL_NOMBRE, ROL_ESTADO) values (@Nombre,'Habilitado');
-	END
+AS	
+IF(NOT EXISTS(SELECT ROL_NOMBRE FROM MANA.ROL WHERE ROL_NOMBRE = @Nombre))
+BEGIN
+  insert into MANA.ROL(ROL_NOMBRE, ROL_ESTADO) values (@Nombre,'Habilitado');	
+END
 GO
 
 MANA.CrearRol 'AdministradorGral'
@@ -576,40 +675,25 @@ GO
 MANA.CrearRol 'Administrativo'       
 GO          
 
-CREATE PROCEDURE MANA.ObtenerRolesHabilitados   /* Ver*/
+CREATE PROCEDURE MANA.ObtenerRoles  
 AS
    	select R.ROL_ID, R.ROL_NOMBRE, R.ROL_ESTADO
 	from MANA.ROL R
-	where R.ROL_ESTADO = 'Habilitado'
 GO
 
 CREATE VIEW MANA.FuncionalidadRol_VW
 AS 
-select R.ROL_ID, R.ROL_NOMBRE as RolNombre,
-    F.FUNC_ID,
-    F.FUN_NOMBRE as FuncionNombre
+select R.ROL_ID, R.ROL_NOMBRE,F.FUNC_ID, F.FUN_NOMBRE
 from
     MANA.ROL R,
     MANA.FUNCIONALIDAD_ROL FR,
     MANA.FUNCIONALIDAD F
-where
-    R.ROL_ID = FR.FR_ROL_ID
-    AND FR.FR_FUNCIONALIDAD_ID = F.FUNC_ID    
-GO
-
-CREATE PROCEDURE MANA.ObtenerFuncionalidadesDisponiblesDeRol @RolID int
-AS
-    select F.FUNC_ID, F.FUN_NOMBRE
-    from MANA.FUNCIONALIDAD F
-    where 
-        F.FUNC_ID not in ( select FR.FUNC_ID 
-                           from MANA.FuncionalidadRol_VW FR 
-                           where FR.ROL_ID = @RolID )
+where R.ROL_ID = FR.FR_ROL_ID AND FR.FR_FUNCIONALIDAD_ID = F.FUNC_ID    
 GO
 
 CREATE PROCEDURE MANA.ObtenerFuncionalidadesDeRol @RolID int
 AS
-    select FR.FUNC_ID, FR.FuncionNombre
+    select FR.FUNC_ID, FR.FUN_NOMBRE
     from MANA.FuncionalidadRol_VW FR
     where FR.ROL_ID = @RolID
 GO
@@ -633,6 +717,13 @@ AS
     where MANA.ROL.ROL_ID = @RolID
 GO
 
+CREATE PROCEDURE MANA.HabilitarRol @RolId int
+AS
+    update MANA.ROL
+    SET ROL_ESTADO = 'Habilitado'
+    where ROL_ID = @RolId
+GO
+
 CREATE PROCEDURE MANA.BajaDeRol @RolID int
 AS
     exec MANA.EliminarFuncionalidadesDeRol @RolID
@@ -641,6 +732,7 @@ AS
     SET MANA.ROL.ROL_ESTADO = 'Deshabilitado'
     where MANA.ROL.ROL_ID = @RolID
 GO
+
 
 /*Funcionalidad*/
 
@@ -664,9 +756,39 @@ GO
 
 CREATE PROCEDURE MANA.AsignarFuncionRol @RolID int, @FuncionID int
 AS
+IF(NOT EXISTS(SELECT FR_ROL_ID, FR_FUNCIONALIDAD_ID FROM MANA.FUNCIONALIDAD_ROL WHERE FR_ROL_ID = @RolID AND FR_FUNCIONALIDAD_ID = @FuncionID))
+BEGIN
 insert into MANA.FUNCIONALIDAD_ROL values (@RolID,@FuncionID);
+END
 GO
 
+CREATE PROCEDURE MANA.EliminarFuncionRol @RolID int, @FuncionID int
+AS
+    delete from MANA.FUNCIONALIDAD_ROL where MANA.FUNCIONALIDAD_ROL.FR_ROL_ID = @RolID and MANA.FUNCIONALIDAD_ROL.FR_FUNCIONALIDAD_ID = @FuncionID;
+GO
+
+CREATE PROCEDURE MANA.AsignarFuncionesAdministrador
+AS
+DECLARE @FuncionID int 
+DECLARE @RolID int = 1 
+-- declare a cursor
+DECLARE funcion CURSOR FOR 
+SELECT FUNC_ID from MANA.FUNCIONALIDAD
+OPEN funcion
+FETCH NEXT FROM funcion into @FuncionID 
+-- check for a new row
+WHILE @@FETCH_STATUS=0
+BEGIN
+exec MANA.AsignarFuncionRol @RolID,@FuncionID
+FETCH NEXT FROM funcion into @FuncionID
+END
+close funcion
+Deallocate funcion
+GO
+
+/*Funcionalidades de Administrador General*/
+MANA.AsignarFuncionesAdministrador
+GO
 /*Funcionalidades de Cliente*/
 Mana.AsignarFuncionRol 2, 4
 GO
@@ -680,41 +802,11 @@ Mana.AsignarFuncionRol 4, 2
 GO
 Mana.AsignarFuncionRol 4, 3
 GO
+Mana.AsignarFuncionRol 4, 5
+GO
 Mana.AsignarFuncionRol 4, 7
 GO
 Mana.AsignarFuncionRol 4, 8
-GO
-
-CREATE PROCEDURE MANA.EliminarFuncionRol @RolID int, @FuncionID int
-AS
-    delete from MANA.FUNCIONALIDAD_ROL where MANA.FUNCIONALIDAD_ROL.FR_ROL_ID = @RolID and MANA.FUNCIONALIDAD_ROL.FR_FUNCIONALIDAD_ID = @FuncionID;
-GO
-
-CREATE PROCEDURE MANA.AsignarFuncionesAdministrador
-AS
-
-DECLARE @FuncionID int 
-DECLARE @RolID int = 1 
--- declare a cursor
-DECLARE funcion CURSOR FOR 
-SELECT FUNC_ID from MANA.FUNCIONALIDAD
-
-OPEN funcion
-FETCH NEXT FROM funcion into @FuncionID
- 
--- check for a new row
-WHILE @@FETCH_STATUS=0
-BEGIN
-
-exec MANA.AsignarFuncionRol @RolID,@FuncionID
-
-FETCH NEXT FROM funcion into @FuncionID
-END
-close funcion
-Deallocate funcion
-GO
-
-MANA.AsignarFuncionesAdministrador
 GO
 
 
@@ -722,23 +814,45 @@ GO
 
 CREATE PROCEDURE MANA.CrearUsuario @Username nvarchar(20), @Password nvarchar(20)
 AS
+IF(NOT EXISTS(SELECT USER_USERNAME FROM MANA.USUARIO WHERE USER_USERNAME = @Username))
+BEGIN
 insert into MANA.USUARIO values (@Username, @Password, 0, 'Habilitado');
+END
 GO
 
 Mana.CrearUsuario 'admin', 'w23e'
 GO
 
+CREATE PROCEDURE MANA.BajaUsuario @Username nvarchar(20)
+AS
+UPDATE MANA.USUARIO
+SET USUARIO_ESTADO = 'Deshabilitado'
+WHERE USER_USERNAME = @Username
+GO
+
+CREATE PROCEDURE MANA.CambiarPassword @Username nvarchar(20), @Password nvarchar(20)
+AS
+UPDATE MANA.USUARIO
+SET USER_PASSWORD = @Password
+WHERE USER_USERNAME = @Username
+GO
 
 /*UsuarioRol*/
 
-CREATE PROCEDURE MANA.AsignarUsuarioRol @UserID int, @RolNombre nvarchar(20)
+CREATE PROCEDURE MANA.AsignarUsuarioRol @Username nvarchar(20), @RolNombre nvarchar(20)
 AS
+DECLARE @UserID int = (select USER_ID from MANA.USUARIO WHERE USER_USERNAME = @Username)
 DECLARE @RolID int = (select ROL_ID from MANA.ROL R WHERE R.ROL_NOMBRE = @RolNombre)
+DECLARE @RolEstado nvarchar(20) = (select ROL_ESTADO from MANA.ROL WHERE ROL_NOMBRE = @RolNombre)
+IF(@RolEstado = 'Habilitado')
+BEGIN
 insert into MANA.USUARIO_ROL values (@UserID, @RolID );
+END
 GO
 
-Mana.AsignarUsuarioRol 1, 'AdministradorGral'
+Mana.AsignarUsuarioRol 'admin', 'AdministradorGral'
 GO
+
 
 
 /*ABM Cliente*/
@@ -746,33 +860,47 @@ GO
 CREATE PROCEDURE MANA.CrearCliente @Nombre nvarchar(255), @Apellido nvarchar(255), @Dni numeric(18), @Mail nvarchar(255), 
                                    @Telefono numeric(18), @Direccion nvarchar(255), @Ciudad nvarchar(255), @FechaNac datetime
 AS
+IF(NOT EXISTS(SELECT CLI_NOMBRE, CLI_APELLIDO, CLI_DNI FROM MANA.CLIENTE 
+              where CLI_NOMBRE = @Nombre AND CLI_APELLIDO = @Apellido AND CLI_DNI = @Dni))
+BEGIN
 insert into MANA.CLIENTE values(@Nombre, @Apellido, @Dni, @Mail, @Telefono, @Direccion, @Ciudad, @FechaNac, 200, 'Habilitado');
+END
 GO
 
 CREATE PROCEDURE MANA.ModificarCliente @ID int, @Nombre nvarchar(255), @Apellido nvarchar(255), @Dni numeric(18), @Mail nvarchar(255), 
                                    @Telefono numeric(18), @Direccion nvarchar(255), @Ciudad nvarchar(255), @FechaNac datetime
 AS
+IF(NOT EXISTS(SELECT CLI_NOMBRE, CLI_APELLIDO, CLI_DNI FROM MANA.CLIENTE 
+              where CLI_NOMBRE = @Nombre AND CLI_APELLIDO = @Apellido AND CLI_DNI = @Dni))
+BEGIN
    UPDATE MANA.CLIENTE
-   SET 
-      CLI_NOMBRE = @Nombre, CLI_APELLIDO = @Apellido, CLI_DNI = @Dni, CLI_MAIL = @Mail, CLI_TELEFONO = @Telefono,
-	  CLI_DIRECCION = @Direccion, CLI_CIUDAD = @Ciudad, CLI_FECHA_NACIMIENTO = @FechaNac
+   SET  CLI_NOMBRE = @Nombre, CLI_APELLIDO = @Apellido, CLI_DNI = @Dni, CLI_MAIL = @Mail, CLI_TELEFONO = @Telefono,
+	    CLI_DIRECCION = @Direccion, CLI_CIUDAD = @Ciudad, CLI_FECHA_NACIMIENTO = @FechaNac
 	  WHERE CLI_ID = @ID
+END
+GO
+
+CREATE PROCEDURE MANA.HabilitarCliente @ClienteId int
+AS
+  UPDATE MANA.CLIENTE
+  SET CLI_ESTADO = 'Habilitado'
+  WHERE CLI_ID = @ClienteId
 GO
 
 CREATE PROCEDURE MANA.BajaCliente @Nombre nvarchar(255), @Apellido nvarchar(255), @Dni numeric(18), @Mail nvarchar(255)
 AS
    UPDATE MANA.CLIENTE
-   SET
-      CLI_ESTADO = 'Deshabilitado'
+      SET   CLI_ESTADO = 'Deshabilitado'
 	  WHERE CLI_NOMBRE = @Nombre AND CLI_APELLIDO = @Apellido AND CLI_DNI = @Dni AND CLI_MAIL = @Mail
 GO
 /*Test ABM Cliente*/
-Mana.CrearCliente 'Gregory', 'House', 40158932, 'house@hotmail.com', 15856682, 'HOSPITAL521', 'Miami', '1985/06/10'
+Mana.CrearCliente 'Gregory', 'House', 88430112, 'house@hotmail.com', 15856682, 'HOSPITAL521', 'Miami', '1985/06/10'
 GO
-Mana.ModificarCliente 5, 'Patrick', 'Jane', 45124512, 'jane@hotmail.com', 15534689, 'FBI5212', 'California', '1990/07/11'
+Mana.ModificarCliente 5, 'Patrick', 'Jane', 62525087, 'jane@hotmail.com', 15534689, 'FBI5212', 'California', '1990/07/11'
 GO
 Mana.BajaCliente 'Adaia', 'Pino', 97990522, 'adaia@gmail.com'
 GO    
+
 
 
 /*ABM Proveedor*/
@@ -790,30 +918,135 @@ GO
 CREATE PROCEDURE MANA.CrearProveedor @RazonSocial nvarchar(100), @CUIT nvarchar(20), @Mail nvarchar(100), 
                                    @Telefono numeric(18), @Direccion nvarchar(100), @Ciudad nvarchar(255), @Rubro nvarchar(100)
 AS
+IF(NOT EXISTS(SELECT PROV_RAZON_SOCIAL, PROV_CUIT FROM MANA.PROVEEDOR 
+              where PROV_RAZON_SOCIAL = @RazonSocial AND PROV_CUIT = @CUIT))
+BEGIN
 insert into MANA.PROVEEDOR values(@RazonSocial, @CUIT, @Mail, @Telefono, @Direccion, @Ciudad, MANA.ObtenerIdRubro(@Rubro),'Habilitado');
+END
 GO
 
 CREATE PROCEDURE MANA.ModificarProveedor @ID int, @RazonSocial nvarchar(100), @CUIT nvarchar(20), @Mail nvarchar(100), 
                                    @Telefono numeric(18), @Direccion nvarchar(100), @Ciudad nvarchar(255), @Rubro nvarchar(100)
 AS
+IF(NOT EXISTS(SELECT PROV_RAZON_SOCIAL, PROV_CUIT FROM MANA.PROVEEDOR 
+              where PROV_RAZON_SOCIAL = @RazonSocial AND PROV_CUIT = @CUIT))
+BEGIN
    UPDATE MANA.PROVEEDOR
-   SET 
-     PROV_RAZON_SOCIAL = @RazonSocial, PROV_CUIT = @CUIT, PROV_MAIL = @Mail, PROV_TELEFONO = @Telefono, 
-	 PROV_DIRECCION = @Direccion, PROV_CIUDAD = @Ciudad, PROV_RUBRO_ID = Mana.ObtenerIdRubro(@Rubro)
+   SET  PROV_RAZON_SOCIAL = @RazonSocial, PROV_CUIT = @CUIT, PROV_MAIL = @Mail, PROV_TELEFONO = @Telefono, 
+	    PROV_DIRECCION = @Direccion, PROV_CIUDAD = @Ciudad, PROV_RUBRO_ID = Mana.ObtenerIdRubro(@Rubro)
 	  WHERE PROV_ID = @ID
+END
+GO
+
+CREATE PROCEDURE MANA.HabilitarProveedor @RazonSocial nvarchar(100), @CUIT nvarchar(20)
+AS
+   UPDATE MANA.PROVEEDOR
+      SET   PROV_ESTADO = 'Habilitado'
+	  WHERE PROV_RAZON_SOCIAL = @RazonSocial AND PROV_CUIT = @CUIT
 GO
 
 CREATE PROCEDURE MANA.BajaProveedor @RazonSocial nvarchar(100), @CUIT nvarchar(20)
 AS
    UPDATE MANA.PROVEEDOR
-   SET
-      PROV_ESTADO = 'Deshabilitado'
+      SET   PROV_ESTADO = 'Deshabilitado'
 	  WHERE PROV_RAZON_SOCIAL = @RazonSocial AND PROV_CUIT = @CUIT
 GO
 /*Test ABM Proveedor*/
-Mana.CrearProveedor 'CortinasCongreso', 20568945125, 'cortinas@gmail.com', 43825679, 'Pozos618', 'CABA', 'Electronica' 
+Mana.CrearProveedor 'Proveedor Cortinas S.R.L.', '11-22445103-2', 'cortinas@gmail.com', 43825679, 'Pozos618', 'CABA', 'Electronica' 
 GO
-Mana.ModificarProveedor 10, 'FREDDO', 29589125157, 'freddo@gmail.com', 48625167, 'Rivadavia6115','CABA', 'Comestibles' 
+Mana.ModificarProveedor 10, 'Proveedor Freddo S.R.L.', '71-43350643-1', 'freddo@gmail.com', 48625167, 'Rivadavia6115','CABA', 'Comestibles' 
 GO
 Mana.BajaProveedor 'Proveedor N°13S.R.L.', '13-52415793-5'
 GO
+
+
+
+/*Abm Oferta*/
+
+CREATE PROCEDURE MANA.CrearConsumoOferta @FechaEntrega datetime, @CuponId int, @C_Dest_Nombre nvarchar(255), @C_Dest_Apellido nvarchar(255), @C_Dest_Dni numeric(18), 
+                                 @C_Dest_Direccion nvarchar(255), @C_Dest_Telefono numeric(18), @C_Dest_Mail nvarchar(255), @C_Dest_Fecha_Nac datetime, @C_Dest_Ciudad nvarchar(255)
+AS
+insert into MANA.CONSUMO_OFERTA values (@FechaEntrega, @CuponId, @C_Dest_Nombre, @C_Dest_Apellido, @C_Dest_Dni, @C_Dest_Direccion, @C_Dest_Telefono, @C_Dest_Mail, @C_Dest_Fecha_Nac, @C_Dest_Ciudad)
+GO
+
+CREATE PROCEDURE MANA.CrearCupon @PrecioOferta numeric(18), @PrecioLista numeric(18)
+AS
+insert into MANA.CUPON values (@PrecioOferta, @PrecioLista, 'Habilitado')
+GO
+
+CREATE FUNCTION MANA.ObtenerIdCupon (@PrecioOferta numeric(18), @PrecioLista numeric(18))
+RETURNS INT
+AS
+BEGIN
+  return( select C.CUPON_ID
+	      from MANA.CUPON C
+	      where C.CUPON_PRECIO_OFERTA = @PrecioOferta AND C.CUPON_PRECIO_LISTA = @PrecioLista )
+END	   
+GO
+
+CREATE FUNCTION MANA.ObtenerEstadoCupon (@CuponId int)
+RETURNS INT
+AS
+BEGIN
+  return( select C.CUPON_ESTADO
+	      from MANA.CUPON C
+	      where C.CUPON_ID = @CuponId )
+END	   
+GO
+
+CREATE FUNCTION MANA.ObtenerProveedorOferta (@NumeroOferta nvarchar(50), @CuponId int)
+RETURNS INT
+AS
+BEGIN
+  return( select O.OF_PROVEEDOR_ID
+	      from MANA.OFERTA O
+	      where O.OF_NUMERO = @NumeroOferta AND O.OF_CUPON_ID = @CuponId )
+END	   
+GO
+
+CREATE PROCEDURE MANA.ValidarCupon (@NumeroOferta nvarchar(50), @ProveedorId int, @CuponId int)
+AS
+BEGIN /*El cupon esta habilitado desde su creacion; si ya fue canjeado o ya se vencio va a estar Deshabilitado -> Si sigue habilitado es Valido */
+  IF(Mana.ObtenerEstadoCupon (@CuponId) = 'Habilitado' AND Mana.ObtenerProveedorOferta(@NumeroOferta, @CuponId) = @ProveedorId)  
+  return 1  /*El cupon es Valido; con este procedimiento hacemos la validacion del Cupon llamandolo desde el Visual*/    
+END	   
+GO
+
+CREATE PROCEDURE MANA.BajaCupon @FechaEntrega datetime, @CuponId int, @C_Dest_Nombre nvarchar(255), @C_Dest_Apellido nvarchar(255), @C_Dest_Dni numeric(18), 
+                                @C_Dest_Direccion nvarchar(255), @C_Dest_Telefono numeric(18), @C_Dest_Mail nvarchar(255), @C_Dest_Fecha_Nac datetime, @C_Dest_Ciudad nvarchar(255)
+AS
+  UPDATE MANA.CUPON
+  SET   CUPON_ESTADO = 'Deshabilitado'
+  WHERE CUPON_ID = @CuponId
+  EXECUTE Mana.CrearConsumoOferta @FechaEntrega, @CuponId, @C_Dest_Nombre, @C_Dest_Apellido, @C_Dest_Dni, @C_Dest_Direccion, @C_Dest_Telefono, @C_Dest_Mail, @C_Dest_Fecha_Nac, @C_Dest_Ciudad
+GO
+
+CREATE PROCEDURE MANA.CrearOferta @NumeroOferta nvarchar(50), @Descripcion nvarchar(255), @FechaPublicacion datetime, 
+                                  @FechaVencimiento datetime, @PrecioOferta numeric(18), @PrecioLista numeric(18), 
+								  @ProveedorId int, @CantidadDisponible numeric (18)
+AS
+IF(NOT EXISTS(SELECT OF_NUMERO FROM MANA.OFERTA where OF_NUMERO = @NumeroOferta ) AND @FechaPublicacion >= GETDATE() AND @FechaVencimiento >= GETDATE())
+BEGIN
+EXECUTE Mana.CrearCupon @PrecioOferta, @PrecioLista 
+insert into MANA.OFERTA values (@NumeroOferta, @Descripcion, @FechaPublicacion, @FechaVencimiento, MANA.ObtenerIdCupon(@PrecioOferta, @PrecioLista), @ProveedorId , @CantidadDisponible,'En Espera');
+END
+GO
+
+CREATE PROCEDURE MANA.BajaOferta @NumeroOferta nvarchar(50), @Proveedor int, @FechaEntrega datetime, @CuponId int, @C_Dest_Nombre nvarchar(255), @C_Dest_Apellido nvarchar(255), @C_Dest_Dni numeric(18), 
+                                 @C_Dest_Direccion nvarchar(255), @C_Dest_Telefono numeric(18), @C_Dest_Mail nvarchar(255), @C_Dest_Fecha_Nac datetime, @C_Dest_Ciudad nvarchar(255)  
+AS
+BEGIN
+   EXECUTE Mana.BajaCupon @FechaEntrega, @CuponId, @C_Dest_Nombre, @C_Dest_Apellido, @C_Dest_Dni, @C_Dest_Direccion, @C_Dest_Telefono, @C_Dest_Mail, @C_Dest_Fecha_Nac, @C_Dest_Ciudad	
+   UPDATE MANA.OFERTA
+   SET   OF_ESTADO = 'Deshabilitado'
+   WHERE OF_NUMERO = @NumeroOferta
+END
+GO
+/*Test ABM Oferta*/
+Mana.CrearOferta 'ABCDEFGHIJ7', 'NotebookICoreI9', '2019/01/11', '2020/05/12', 1500, 2000, 15, 10
+GO
+
+Mana.BajaOferta 'AAAPMPRXNL9', 28, '2019/12/11', 327, 'Lionel', 'Messi', 39256784, 'Barcelona123', 10101010, 'leomessi@gmail.com', '1989/07/10', 'Rosario' 
+GO
+
+				 							                    
