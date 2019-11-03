@@ -13,11 +13,14 @@ namespace FrbaOfertas.AbmCliente
     public partial class ModificarCliente : Form
     {
         private DataBaseManager _dbm;
+        private String _id;
 
-        public ModificarCliente(DataBaseManager dbm)
+        public ModificarCliente(DataBaseManager dbm, String id)
         {
             _dbm = dbm;
+            _id = id;
             InitializeComponent();
+            label10.Text = id;
         }
 
         private void cancelarButton_Click(object sender, EventArgs e)

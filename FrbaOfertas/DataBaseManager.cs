@@ -69,6 +69,74 @@ namespace FrbaOfertas
             _tran = _conn.BeginTransaction();
         }
 
+        internal Object getFromResultSet(SqlDataReader resultSet, String nombreParametro)
+        {
+            return getFromResultSet(resultSet, nombreParametro, null);
+        }
+
+        internal Object getFromResultSet(SqlDataReader resultSet, String nombreParametro, Object defaultValue)
+        {
+            try
+            {
+                return resultSet.GetValue(resultSet.GetOrdinal(nombreParametro));
+            }
+            catch (Exception e)
+            {
+                return defaultValue;
+            }
+        }
+
+        internal String getStringFromResultSet(SqlDataReader resultSet, String nombreParametro)
+        {
+            return getStringFromResultSet(resultSet, nombreParametro, "");
+        }
+
+        internal String getStringFromResultSet(SqlDataReader resultSet, String nombreParametro, String defaultValue)
+        {
+            try
+            {
+                return  (String)resultSet.GetValue(resultSet.GetOrdinal(nombreParametro));
+            }
+            catch (Exception e)
+            {
+                return defaultValue;
+            }
+        }
+
+        internal int getIntFromResultSet(SqlDataReader resultSet, String nombreParametro)
+        {
+            return getIntFromResultSet(resultSet, nombreParametro, -1);
+        }
+
+        internal int getIntFromResultSet(SqlDataReader resultSet, String nombreParametro, int defaultValue)
+        {
+            try
+            {
+                return (int)resultSet.GetValue(resultSet.GetOrdinal(nombreParametro));
+            }
+            catch (Exception e)
+            {
+                return defaultValue;
+            }
+        }
+
+        internal Decimal getNumericFromResultSet(SqlDataReader resultSet, String nombreParametro)
+        {
+            return getNumericFromResultSet(resultSet, nombreParametro, Decimal.MinusOne);
+        }
+
+        internal Decimal getNumericFromResultSet(SqlDataReader resultSet, String nombreParametro, Decimal defaultValue)
+        {
+            try
+            {
+                return (Decimal)resultSet.GetValue(resultSet.GetOrdinal(nombreParametro));
+            }
+            catch (Exception e)
+            {
+                return defaultValue;
+            }
+        }
+
         internal int executeUpdate(string query, Dictionary<string, object> map)
         {
             SqlCommand comando = new SqlCommand(query, _conn);

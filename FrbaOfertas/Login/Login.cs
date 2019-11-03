@@ -33,9 +33,10 @@ namespace FrbaOfertas.Login
             if (resultSet.HasRows)
             {
                 resultSet.Read();
-                if ("Habilitado".Equals((String)resultSet.GetValue(resultSet.GetOrdinal("USUARIO_ESTADO"))))
+                String estado = _dbm.getStringFromResultSet(resultSet, "USUARIO_ESTADO");
+                if ("Habilitado".Equals(estado))
                 {
-                    Password passwordDialog = new Password(this, _dbm, (int)resultSet.GetValue(resultSet.GetOrdinal("USER_ID")), (String)resultSet.GetValue(resultSet.GetOrdinal("USER_PASSWORD")), (int)resultSet.GetValue(resultSet.GetOrdinal("USER_INTENTOS_FALLIDOS")));
+                    Password passwordDialog = new Password(this, _dbm, _dbm.getIntFromResultSet(resultSet, "USER_ID"), _dbm.getStringFromResultSet(resultSet, "USER_PASSWORD"), _dbm.getIntFromResultSet(resultSet, "USER_INTENTOS_FALLIDOS"));
                     passwordDialog.ShowDialog();
                 }
                 else

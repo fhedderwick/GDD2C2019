@@ -46,6 +46,8 @@
             this.guardarButton = new System.Windows.Forms.Button();
             this.cancelarButton = new System.Windows.Forms.Button();
             this.fechaTextBox = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.codigoPostalTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // nombreTextBox
@@ -119,7 +121,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(23, 189);
+            this.label7.Location = new System.Drawing.Point(19, 210);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(40, 13);
             this.label7.TabIndex = 8;
@@ -128,7 +130,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(14, 215);
+            this.label8.Location = new System.Drawing.Point(14, 240);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(106, 13);
             this.label8.TabIndex = 9;
@@ -164,14 +166,14 @@
             // 
             // ciudadTextBox
             // 
-            this.ciudadTextBox.Location = new System.Drawing.Point(75, 186);
+            this.ciudadTextBox.Location = new System.Drawing.Point(98, 207);
             this.ciudadTextBox.Name = "ciudadTextBox";
             this.ciudadTextBox.Size = new System.Drawing.Size(139, 20);
             this.ciudadTextBox.TabIndex = 14;
             // 
             // guardarButton
             // 
-            this.guardarButton.Location = new System.Drawing.Point(17, 259);
+            this.guardarButton.Location = new System.Drawing.Point(17, 273);
             this.guardarButton.Name = "guardarButton";
             this.guardarButton.Size = new System.Drawing.Size(75, 23);
             this.guardarButton.TabIndex = 16;
@@ -181,7 +183,7 @@
             // 
             // cancelarButton
             // 
-            this.cancelarButton.Location = new System.Drawing.Point(100, 259);
+            this.cancelarButton.Location = new System.Drawing.Point(98, 273);
             this.cancelarButton.Name = "cancelarButton";
             this.cancelarButton.Size = new System.Drawing.Size(75, 23);
             this.cancelarButton.TabIndex = 17;
@@ -192,16 +194,34 @@
             // fechaTextBox
             // 
             this.fechaTextBox.Enabled = false;
-            this.fechaTextBox.Location = new System.Drawing.Point(135, 212);
+            this.fechaTextBox.Location = new System.Drawing.Point(142, 233);
             this.fechaTextBox.Name = "fechaTextBox";
             this.fechaTextBox.Size = new System.Drawing.Size(100, 20);
             this.fechaTextBox.TabIndex = 18;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(21, 186);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(71, 13);
+            this.label9.TabIndex = 19;
+            this.label9.Text = "Codigo postal";
+            // 
+            // codigoPostalTextBox
+            // 
+            this.codigoPostalTextBox.Location = new System.Drawing.Point(108, 186);
+            this.codigoPostalTextBox.Name = "codigoPostalTextBox";
+            this.codigoPostalTextBox.Size = new System.Drawing.Size(106, 20);
+            this.codigoPostalTextBox.TabIndex = 20;
             // 
             // AltaCliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(282, 312);
+            this.ClientSize = new System.Drawing.Size(282, 335);
+            this.Controls.Add(this.codigoPostalTextBox);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.fechaTextBox);
             this.Controls.Add(this.cancelarButton);
             this.Controls.Add(this.guardarButton);
@@ -247,5 +267,7 @@
         private System.Windows.Forms.Button guardarButton;
         private System.Windows.Forms.Button cancelarButton;
         private System.Windows.Forms.TextBox fechaTextBox;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox codigoPostalTextBox;
     }
 }
