@@ -68,11 +68,29 @@
     <Compile Include="AbmCliente\ListaCliente.Designer.cs">
       <DependentUpon>ListaCliente.cs</DependentUpon>
     </Compile>
-    <Compile Include="AbmProveedor\Form1.cs">
+    <Compile Include="AbmProveedor\AltaProveedor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AbmProveedor\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="AbmProveedor\AltaProveedor.Designer.cs">
+      <DependentUpon>AltaProveedor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmProveedor\BajaProveedor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmProveedor\BajaProveedor.Designer.cs">
+      <DependentUpon>BajaProveedor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmProveedor\ListaProveedor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmProveedor\ListaProveedor.Designer.cs">
+      <DependentUpon>ListaProveedor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmProveedor\ModificarProveedor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmProveedor\ModificarProveedor.Designer.cs">
+      <DependentUpon>ModificarProveedor.cs</DependentUpon>
     </Compile>
     <Compile Include="AbmRol\AltaRol.cs">
       <SubType>Form</SubType>
@@ -190,6 +208,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AbmCliente\ListaCliente.resx">
       <DependentUpon>ListaCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmProveedor\AltaProveedor.resx">
+      <DependentUpon>AltaProveedor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmProveedor\ListaProveedor.resx">
+      <DependentUpon>ListaProveedor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AbmRol\AltaRol.resx">
       <DependentUpon>AltaRol.cs</DependentUpon>
