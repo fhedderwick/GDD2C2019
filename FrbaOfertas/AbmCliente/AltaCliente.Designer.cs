@@ -193,11 +193,12 @@
             // 
             // fechaTextBox
             // 
-            this.fechaTextBox.Enabled = false;
             this.fechaTextBox.Location = new System.Drawing.Point(142, 233);
             this.fechaTextBox.Name = "fechaTextBox";
+            this.fechaTextBox.ReadOnly = true;
             this.fechaTextBox.Size = new System.Drawing.Size(100, 20);
             this.fechaTextBox.TabIndex = 18;
+            this.fechaTextBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.abrirCalendario);
             // 
             // label9
             // 
