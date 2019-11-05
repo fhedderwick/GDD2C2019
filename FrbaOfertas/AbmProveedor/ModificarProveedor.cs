@@ -12,9 +12,19 @@ namespace FrbaOfertas.AbmProveedor
 {
     public partial class ModificarProveedor : Form
     {
-        public ModificarProveedor()
+        private DataBaseManager _dbm;
+        private String _razonSocial;
+
+        public ModificarProveedor(DataBaseManager dbm,String razonSocial)
         {
             InitializeComponent();
+            _razonSocial = razonSocial;
+            _dbm = dbm;
+        }
+
+        private void ModificarProveedor_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
