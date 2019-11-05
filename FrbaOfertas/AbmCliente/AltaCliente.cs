@@ -16,10 +16,20 @@ namespace FrbaOfertas.AbmCliente
         private String INSERT_QUERY = "INSERT INTO MANA.CLIENTE (CLI_NOMBRE,CLI_APELLIDO,CLI_DNI,CLI_MAIL,CLI_TELEFONO,CLI_DIRECCION,CLI_CODIGO_POSTAL,CLI_CIUDAD,CLI_FECHA_NACIMIENTO) VALUES (@nombre,@apellido,@dni,@mail,@telefono,@direccion,@codigoPostal,@ciudad,@fechaNacimiento)";
 
         private DataBaseManager _dbm;
+        private String _user;
+        private String _pass;
 
         public AltaCliente(DataBaseManager dbm)
         {
             _dbm = dbm;
+            InitializeComponent();
+        }
+
+        public AltaCliente(DataBaseManager dbm,String user, String pass)
+        {
+            _dbm = dbm;
+            _user = user;
+            _pass = pass;
             InitializeComponent();
         }
 
@@ -50,13 +60,74 @@ namespace FrbaOfertas.AbmCliente
                 {
                     MessageBox.Show("Error al dar de alta al cliente.");
                 }
-                Close();
             }
-            
+            Close();
         }
 
         private bool validarDatos()
         {
+            String nombre = nombreTextBox.Text;
+            String apellido = apellidoTextBox.Text;
+            String dni = dniTextBox.Text;
+            String mail = mailTextBox.Text;
+            String telefono = telefonoTextBox.Text;
+            String direccion = direccionTextBox.Text;
+            String codigoPostal = codigoPostalTextBox.Text;
+            String ciudad = ciudadTextBox.Text;
+            String fechaNacimiento = fechaTextBox.Text;
+
+            if (nombre.Length == 0)
+            {
+                MessageBox.Show("Debe completar el Nombre.");
+                return false;
+            }
+            if (apellido.Length == 0)
+            {
+                MessageBox.Show("Debe completar el Apellido.");
+                return false;
+            }
+            if (dni.Length == 0)
+            {
+                MessageBox.Show("Debe completar el DNI.");
+                return false;
+            }
+            if (mail.Length == 0)
+            {
+                MessageBox.Show("Debe completar el mail.");
+                return false;
+            }
+            if (telefono.Length == 0)
+            {
+                MessageBox.Show("Debe completar el telefono.");
+                return false;
+            }
+            if (direccion.Length == 0)
+            {
+                MessageBox.Show("Debe completar la direccion.");
+                return false;
+            }
+            if (codigoPostal.Length == 0)
+            {
+                MessageBox.Show("Debe completar el codigo postal.");
+                return false;
+            }
+            if (ciudad.Length == 0)
+            {
+                MessageBox.Show("Debe completar la ciudad.");
+                return false;
+            }
+            if (fechaNacimiento.Length == 0)
+            {
+                MessageBox.Show("Debe seleccionar la fecha de nacimiento.");
+                return false;
+            }
+            
+            if (datosCopiados(nombre,apellido,dni,mail))
+            {
+                MessageBox.Show("Datos copiados");
+                return false;
+            }
+            
             return true;
         }
 
@@ -64,6 +135,11 @@ namespace FrbaOfertas.AbmCliente
         {
             DateChooser dateChooser = new DateChooser(fechaTextBox);
             dateChooser.Show();
+        }
+
+        private bool datosCopiados(String nombre, String apellido, String dni, String mail)
+        {
+            return false;
         }
     }
 }

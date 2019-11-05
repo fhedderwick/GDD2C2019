@@ -165,23 +165,11 @@
     <Compile Include="Login\Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
-    <Compile Include="Login\NewProveedor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Login\NewProveedor.Designer.cs">
-      <DependentUpon>NewProveedor.cs</DependentUpon>
-    </Compile>
     <Compile Include="Login\NewUser.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Login\NewUser.Designer.cs">
       <DependentUpon>NewUser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Login\NuevoCliente.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Login\NuevoCliente.Designer.cs">
-      <DependentUpon>NuevoCliente.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\Password.cs">
       <SubType>Form</SubType>

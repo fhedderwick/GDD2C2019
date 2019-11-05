@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FrbaOfertas.Login;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -36,8 +37,8 @@ namespace FrbaOfertas.AbmCliente
 
         private void button2_Click(object sender, EventArgs e)
         {
-            AltaCliente altaCliente = new AltaCliente(_dbm);
-            altaCliente.Show();
+            NewUser altaUsuario = new NewUser(_dbm,"","Cliente");
+            altaUsuario.Show();
         }
 
         private void button4_Click(object sender, EventArgs e)
