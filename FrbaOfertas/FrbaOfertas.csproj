@@ -123,6 +123,12 @@
     <Compile Include="ComprarOferta\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="DateChooser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DateChooser.Designer.cs">
+      <DependentUpon>DateChooser.cs</DependentUpon>
+    </Compile>
     <Compile Include="ErrorConexion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -229,6 +235,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AbmRol\BajaRol.resx">
       <DependentUpon>BajaRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DateChooser.resx">
+      <DependentUpon>DateChooser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ErrorConexion.resx">
       <DependentUpon>ErrorConexion.cs</DependentUpon>

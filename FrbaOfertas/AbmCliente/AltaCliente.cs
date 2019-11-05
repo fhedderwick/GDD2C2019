@@ -42,7 +42,15 @@ namespace FrbaOfertas.AbmCliente
                 map.Add("@codigoPostal", codigoPostalTextBox.Text);
                 map.Add("@ciudad", ciudadTextBox.Text);
                 map.Add("@fechaNacimiento", fechaTextBox.Text);
-                _dbm.executeUpdate(INSERT_QUERY, map);
+                if (1 == _dbm.executeUpdate(INSERT_QUERY, map))
+                {
+                    MessageBox.Show("El cliente fue dado de alta correctamente.");
+                }
+                else
+                {
+                    MessageBox.Show("Error al dar de alta al cliente.");
+                }
+                Close();
             }
             
         }
@@ -50,6 +58,12 @@ namespace FrbaOfertas.AbmCliente
         private bool validarDatos()
         {
             return true;
+        }
+
+        private void abrirCalendario(object sender, MouseEventArgs e)
+        {
+            DateChooser dateChooser = new DateChooser(fechaTextBox);
+            dateChooser.Show();
         }
     }
 }
