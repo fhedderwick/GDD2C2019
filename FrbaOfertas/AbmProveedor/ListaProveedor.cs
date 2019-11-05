@@ -37,6 +37,26 @@ namespace FrbaOfertas.AbmProveedor
 
         private void button4_Click(object sender, EventArgs e)
         {
+            if (dataGridView1.SelectedRows.Count < 1)
+            {
+                MessageBox.Show("Debe seleccionar un proveedor.");
+            }
+            else if (!"Habilitado".Equals(dataGridView1.SelectedRows[0].Cells[9].Value.ToString()))
+            {
+                MessageBox.Show("El cliente elegido ya está deshabilitado.");
+            }
+            else
+            {
+                String rSocial = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
+                W bajaProveedor = new W(_dbm, this, rSocial);
+                bajaProveedor.Show();
+            }
+
+
+
+
+
+
 
         }
 
@@ -51,7 +71,7 @@ namespace FrbaOfertas.AbmProveedor
         }
 
 
-        private void searchProveedores()
+        public void searchProveedores()
         {
             Dictionary<string, string> map = new Dictionary<string, string>();
             StringBuilder query = new StringBuilder(GET_PROVEEDORES_QUERY);
@@ -121,6 +141,18 @@ namespace FrbaOfertas.AbmProveedor
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            razonSocialTextBox.Text = "";
+            cuitTextBox.Text = "";
+            emailTextBox.Text = "";
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Close();
         }
 
     }
