@@ -48,11 +48,11 @@
             this.razonSocialTextBox = new System.Windows.Forms.TextBox();
             this.nombreContactoBox1 = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // rubroTextBox
             // 
-            this.rubroTextBox.Enabled = false;
             this.rubroTextBox.Location = new System.Drawing.Point(116, 211);
             this.rubroTextBox.Name = "rubroTextBox";
             this.rubroTextBox.Size = new System.Drawing.Size(139, 20);
@@ -200,7 +200,6 @@
             // 
             // nombreContactoBox1
             // 
-            this.nombreContactoBox1.Enabled = false;
             this.nombreContactoBox1.Location = new System.Drawing.Point(116, 246);
             this.nombreContactoBox1.Name = "nombreContactoBox1";
             this.nombreContactoBox1.Size = new System.Drawing.Size(139, 20);
@@ -215,11 +214,21 @@
             this.label9.TabIndex = 38;
             this.label9.Text = "Nombre Contacto";
             // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(261, 211);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(99, 21);
+            this.comboBox1.TabIndex = 39;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
             // AltaProveedor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(366, 327);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.nombreContactoBox1);
             this.Controls.Add(this.rubroTextBox);
@@ -241,7 +250,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.razonSocialTextBox);
             this.Name = "AltaProveedor";
-            this.Text = "AltaProveedor";
+            this.Text = "Alta Proveedor";
             this.Load += new System.EventHandler(this.AltaProveedor_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -270,5 +279,6 @@
         private System.Windows.Forms.TextBox razonSocialTextBox;
         private System.Windows.Forms.TextBox nombreContactoBox1;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
