@@ -155,5 +155,19 @@ namespace FrbaOfertas.AbmProveedor
             Close();
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                String rSocial = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
+                ModificarProveedor modificarProveedor = new ModificarProveedor(_dbm, rSocial);
+                modificarProveedor.Show();
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar un cliente.");
+            }
+        }
+
     }
 }
