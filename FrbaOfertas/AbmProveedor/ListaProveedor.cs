@@ -160,7 +160,9 @@ namespace FrbaOfertas.AbmProveedor
             if (dataGridView1.SelectedRows.Count > 0)
             {
                 String rSocial = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
-                ModificarProveedor modificarProveedor = new ModificarProveedor(_dbm, rSocial);
+                String cuit = dataGridView1.SelectedRows[0].Cells[6].Value.ToString();
+
+                ModificarProveedor modificarProveedor = new ModificarProveedor(_dbm, rSocial,cuit);
                 modificarProveedor.Show();
             }
             else
