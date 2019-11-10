@@ -20,6 +20,7 @@ namespace FrbaOfertas.CrearOferta
         private void btnVolverAtras_Click(object sender, EventArgs e)
         {
             Hide();
+            this.Close();
 
         }
 
@@ -29,8 +30,8 @@ namespace FrbaOfertas.CrearOferta
             if (this.camposObligatoriosCompletos() == true)
             {                                
                     Hide();
-                  // Pantalla siguiente  
-                  //  i.Show();
+                    Generacion_Exitosa i = new Generacion_Exitosa();
+                    i.Show();
                     this.Close();                                
             }
             else { MessageBox.Show("Faltan ingresar algunos de los datos solicitados", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }

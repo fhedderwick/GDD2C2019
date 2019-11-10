@@ -8,30 +8,28 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FrbaOfertas.CrearOferta
+namespace FrbaOfertas.Facturar
 {
-    public partial class Generacion_Exitosa : Form
+    public partial class GenerarFactura : Form
     {
-        public Generacion_Exitosa()
+        public GenerarFactura()
         {
             InitializeComponent();
         }
 
-        
-        private void btnVolverAtras_Click(object sender, EventArgs e)
+        private void b1_Click(object sender, EventArgs e)
         {
             Hide();
-            this.Close();
-        }
-
-        private void btnGenerarNuevaOferta_Click(object sender, EventArgs e)
-        {
-            Hide();
-            AltaOferta i = new AltaOferta();
+            IngresoDatos i = new IngresoDatos();
             i.Show();
             this.Close();
+
         }
 
-        
+        private void b2_Click(object sender, EventArgs e)
+        {
+            Hide();
+            this.Close();
+        }
     }
 }

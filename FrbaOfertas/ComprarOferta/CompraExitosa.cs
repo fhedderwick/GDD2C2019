@@ -28,6 +28,7 @@ namespace FrbaOfertas.ComprarOferta
         private void btnVolverMenu_Click(object sender, EventArgs e)
         {
             Hide();
+            this.Close();
         }
 
         
