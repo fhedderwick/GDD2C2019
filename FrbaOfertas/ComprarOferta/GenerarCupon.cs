@@ -10,11 +10,19 @@ using System.Windows.Forms;
 
 namespace FrbaOfertas.ComprarOferta
 {
-    public partial class Form1 : Form
+    public partial class GenerarCupon : Form
     {
-        public Form1()
+        public GenerarCupon()
         {
             InitializeComponent();
+        }
+      
+        private void btnSiguiente_Click(object sender, EventArgs e)
+        {
+            Hide();
+            CompraExitosa i = new CompraExitosa();
+            i.Show();
+            this.Close();
         }
     }
 }
