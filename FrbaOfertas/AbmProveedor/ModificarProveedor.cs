@@ -22,12 +22,16 @@ namespace FrbaOfertas.AbmProveedor
         const String EXISTS_PROV_QUERY = "SELECT PROV_ID ID, PROV_RAZON_SOCIAL RSOCIAL,PROV_MAIL MAIL,PROV_TELEFONO TELEFONO,PROV_DIRECCION DIRECCION,PROV_CODIGO_POSTAL CPOSTAL,PROV_CIUDAD CIUDAD,PROV_CUIT CUIT,PROV_RUBRO_ID RUBRO,PROV_NOMBRE_CONTACTO NOMBRE,PROV_ESTADO ESTADO FROM MANA.PROVEEDOR P WHERE P.PROV_CUIT = @CUIT AND P.PROV_RAZON_SOCIAL = @RSOCIAL";
         const String UPDATE_PROV_QUERY = "UPDATE MANA.PROVEEDOR SET PROV_RAZON_SOCIAL=@RSOCIAL, PROV_MAIL=@MAIL, PROV_TELEFONO=@TEL,PROV_DIRECCION=@DIRE,PROV_CODIGO_POSTAL=@CPOSTAL,PROV_CIUDAD=@CIUDAD,PROV_CUIT=@CUIT,PROV_RUBRO_ID=@RUBRO,PROV_NOMBRE_CONTACTO=@NOMBRE,PROV_ESTADO=@ESTADO where PROV_ID=@ID";
 
+        const String RUBROS_QUERY = "SELECT RUBRO_ID ID, RUBRO_DESCRIPCION DESCRIPCION FROM MANA.RUBRO";
+
         public ModificarProveedor(DataBaseManager dbm,String razonSocial,String cuit)
         {
             InitializeComponent();
             _razonSocial = razonSocial;
             _dbm = dbm;
             _cuit = cuit;
+            loadRubro();
+            loadEstado();
             loadProveedor();
         }
 
@@ -47,9 +51,9 @@ namespace FrbaOfertas.AbmProveedor
             String nCPostal = codigoPostalTextBox.Text;
             String nCiudad = ciudadTextBox.Text;
             String nCuit = cuitTextBox.Text;
-            String nRubro = rubroTextBox.Text;
+            String nRubro = rubroComboBox.Text;
             String nNombre = nombreContactoBox1.Text;
-            String nEstado = estadoTextBox.Text;
+            String nEstado = estadoComboBox.Text;
 
             map.Add("@RSOCIAL", nRSocial);
             map.Add("@MAIL", nMail);
@@ -108,6 +112,38 @@ namespace FrbaOfertas.AbmProveedor
 
         }
 
+        private void loadRubro()
+        {
+
+           SqlDataReader resultSet = _dbm.executeSelect(RUBROS_QUERY);
+
+          
+           List<Periodo> list = new List<Periodo>();
+          // list.Add(new Periodo() { Text = "Febrero", Value = "2" });
+          // list.Add(new Periodo() { Text = "Marzo", Value = "3" });
+
+           while (resultSet.Read())
+           {
+               Console.WriteLine("HOLAAA");
+               Console.WriteLine(resultSet["ID"].ToString());
+               Console.WriteLine(resultSet["DESCRIPCION"].ToString());
+               //list.Add(new Periodo() { Text = resultSet["DESCRIPCION"].ToString(), Value = resultSet["ID"].ToString() });
+               //list.Add(new Periodo() { Text = "_dbm.getStringFromResultSet(resultSet, 'DESCRIPCION')", Value = "_dbm.getStringFromResultSet(resultSet, 'ID') "});
+               rubroComboBox.Items.Add(new Periodo() { Text = resultSet["DESCRIPCION"].ToString(), Value = resultSet["ID"].ToString() });
+                
+           }
+
+          // rubroComboBox.DataSource = list;       
+
+
+        }
+
+        private void loadEstado()
+        {
+            estadoComboBox.Items.Add("Habilitado");
+            estadoComboBox.Items.Add("Deshabilitado");
+        }
+
         private void loadProveedor()
         {
             Dictionary<string, string> map = new Dictionary<string, string>();
@@ -125,10 +161,13 @@ namespace FrbaOfertas.AbmProveedor
                 codigoPostalTextBox.Text = resultSet["CPOSTAL"].ToString();
                 ciudadTextBox.Text = resultSet["CIUDAD"].ToString();
                 cuitTextBox.Text = resultSet["CUIT"].ToString();
-                rubroTextBox.Text = resultSet["RUBRO"].ToString();
+                rubroComboBox.Text = resultSet["RUBRO"].ToString();
                 nombreContactoBox1.Text = resultSet["NOMBRE"].ToString();
+                estadoComboBox.Text = resultSet["ESTADO"].ToString();
 
-                _id = resultSet["ID"].ToString();                     
+                _id = resultSet["ID"].ToString();
+
+                
 
             }
 
@@ -141,7 +180,11 @@ namespace FrbaOfertas.AbmProveedor
         }
 
 
-
+        public class Periodo
+        {
+            public string Text { get; set; }
+            public string Value { get; set; }
+        }
 
 
     }

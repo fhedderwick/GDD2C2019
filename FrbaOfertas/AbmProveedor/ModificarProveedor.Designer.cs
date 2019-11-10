@@ -28,10 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
             this.nombreContactoBox1 = new System.Windows.Forms.TextBox();
-            this.rubroTextBox = new System.Windows.Forms.TextBox();
             this.cancelarButton = new System.Windows.Forms.Button();
             this.guardarButton = new System.Windows.Forms.Button();
             this.cuitTextBox = new System.Windows.Forms.TextBox();
@@ -50,16 +48,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.razonSocialTextBox = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.estadoTextBox = new System.Windows.Forms.TextBox();
+            this.estadoComboBox = new System.Windows.Forms.ComboBox();
+            this.rubroComboBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(255, 206);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(99, 21);
-            this.comboBox1.TabIndex = 60;
             // 
             // label9
             // 
@@ -76,13 +67,6 @@
             this.nombreContactoBox1.Name = "nombreContactoBox1";
             this.nombreContactoBox1.Size = new System.Drawing.Size(139, 20);
             this.nombreContactoBox1.TabIndex = 58;
-            // 
-            // rubroTextBox
-            // 
-            this.rubroTextBox.Location = new System.Drawing.Point(110, 206);
-            this.rubroTextBox.Name = "rubroTextBox";
-            this.rubroTextBox.Size = new System.Drawing.Size(139, 20);
-            this.rubroTextBox.TabIndex = 57;
             // 
             // cancelarButton
             // 
@@ -234,24 +218,32 @@
             this.label10.TabIndex = 62;
             this.label10.Text = "Estado";
             // 
-            // estadoTextBox
+            // estadoComboBox
             // 
-            this.estadoTextBox.Location = new System.Drawing.Point(110, 268);
-            this.estadoTextBox.Name = "estadoTextBox";
-            this.estadoTextBox.Size = new System.Drawing.Size(139, 20);
-            this.estadoTextBox.TabIndex = 61;
+            this.estadoComboBox.FormattingEnabled = true;
+            this.estadoComboBox.Location = new System.Drawing.Point(110, 271);
+            this.estadoComboBox.Name = "estadoComboBox";
+            this.estadoComboBox.Size = new System.Drawing.Size(139, 21);
+            this.estadoComboBox.TabIndex = 63;
+            // 
+            // rubroComboBox
+            // 
+            this.rubroComboBox.FormattingEnabled = true;
+            this.rubroComboBox.Location = new System.Drawing.Point(110, 210);
+            this.rubroComboBox.Name = "rubroComboBox";
+            this.rubroComboBox.Size = new System.Drawing.Size(139, 21);
+            this.rubroComboBox.TabIndex = 64;
             // 
             // ModificarProveedor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(367, 334);
+            this.ClientSize = new System.Drawing.Size(723, 334);
+            this.Controls.Add(this.rubroComboBox);
+            this.Controls.Add(this.estadoComboBox);
             this.Controls.Add(this.label10);
-            this.Controls.Add(this.estadoTextBox);
-            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.nombreContactoBox1);
-            this.Controls.Add(this.rubroTextBox);
             this.Controls.Add(this.cancelarButton);
             this.Controls.Add(this.guardarButton);
             this.Controls.Add(this.cuitTextBox);
@@ -279,10 +271,8 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox nombreContactoBox1;
-        private System.Windows.Forms.TextBox rubroTextBox;
         private System.Windows.Forms.Button cancelarButton;
         private System.Windows.Forms.Button guardarButton;
         private System.Windows.Forms.TextBox cuitTextBox;
@@ -301,6 +291,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox razonSocialTextBox;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox estadoTextBox;
+        private System.Windows.Forms.ComboBox estadoComboBox;
+        private System.Windows.Forms.ComboBox rubroComboBox;
     }
 }
