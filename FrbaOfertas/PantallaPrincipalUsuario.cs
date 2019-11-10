@@ -14,6 +14,8 @@ using FrbaOfertas.AbmCliente;
 using FrbaOfertas.ComprarOferta;
 using FrbaOfertas.CrearOferta;
 using FrbaOfertas.Facturar;
+using FrbaOfertas.CragaCredito;
+
 
 namespace FrbaOfertas
 {
@@ -90,6 +92,12 @@ namespace FrbaOfertas
         private void button7_Click_1(object sender, EventArgs e)
         {
             IngresoDatos i = new IngresoDatos();
+            i.Show();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            CargarCredito i = new CargarCredito();
             i.Show();
         }
     }

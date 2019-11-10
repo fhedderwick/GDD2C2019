@@ -122,6 +122,12 @@
     <Compile Include="ComprarOferta\OfertasPublicadas.Designer.cs">
       <DependentUpon>OfertasPublicadas.cs</DependentUpon>
     </Compile>
+    <Compile Include="CragaCredito\CargarCredito.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CragaCredito\CargarCredito.Designer.cs">
+      <DependentUpon>CargarCredito.cs</DependentUpon>
+    </Compile>
     <Compile Include="CrearOferta\Generacion Exitosa.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -147,11 +153,11 @@
     <Compile Include="ErrorConexion.Designer.cs">
       <DependentUpon>ErrorConexion.cs</DependentUpon>
     </Compile>
-    <Compile Include="CragaCredito\Form1.cs">
+    <Compile Include="CragaCredito\CargaExitosa.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CragaCredito\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="CragaCredito\CargaExitosa.Designer.cs">
+      <DependentUpon>CargaExitosa.cs</DependentUpon>
     </Compile>
     <Compile Include="CrearOferta\AltaOferta.cs">
       <SubType>Form</SubType>
@@ -250,6 +256,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ComprarOferta\OfertasPublicadas.resx">
       <DependentUpon>OfertasPublicadas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CragaCredito\CargaExitosa.resx">
+      <DependentUpon>CargaExitosa.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CrearOferta\AltaOferta.resx">
       <DependentUpon>AltaOferta.cs</DependentUpon>
