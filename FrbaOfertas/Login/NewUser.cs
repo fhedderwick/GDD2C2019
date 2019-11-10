@@ -15,13 +15,13 @@ namespace FrbaOfertas.Login
 {
     public partial class NewUser : Form
     {
-
+        const String USER_EXISTS_QUERY = "SELECT * FROM MANA.USUARIO WHERE USER_USERNAME = @username";
         const String GET_ROLES_QUERY = "SELECT ROL_ID, ROL_NOMBRE FROM MANA.ROL R WHERE R.ROL_ESTADO = 'Habilitado'";
 
         DataBaseManager _dbm;
         String _username;
 
-        public NewUser(DataBaseManager dbm, String username) : this (dbm, username, "") {}
+        public NewUser(DataBaseManager dbm, String username) : this(dbm, username, "") { }
         public NewUser(DataBaseManager dbm, String username, String rol)
         {
             _dbm = dbm;
@@ -45,20 +45,16 @@ namespace FrbaOfertas.Login
                 comboBox1.SelectedIndex = 0;
                 comboBox1.Enabled = false;
             }
-           
+
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             String user = textBox2.Text;
             String pass = maskedTextBox1.Text;
-            String passRep = maskedTextBox1.Text;
+            String passRep = maskedTextBox2.Text;
             String eleccion = comboBox1.Text;
-            if (!checkUser(user))
-            {
-                return;
-            }
-            if (!checkPass(pass,passRep))
+            if (!checkUser(user) || !checkPass(pass, passRep))
             {
                 return;
             }
@@ -68,7 +64,7 @@ namespace FrbaOfertas.Login
             }
             else if ("Cliente".Equals(eleccion))
             {
-                AltaYModifCliente altaCliente = new AltaYModifCliente(_dbm,user,pass);
+                AltaYModifCliente altaCliente = new AltaYModifCliente(_dbm, user, pass);
                 altaCliente.Show();
                 Close();
             }
@@ -97,10 +93,12 @@ namespace FrbaOfertas.Login
 
         private bool existeEnBaseDeDatos(String user)
         {
-            return false;// _dbm.executeSelect();
+            Dictionary<string, string> map = new Dictionary<string, string>();
+            map.Add("@username", user);
+            return _dbm.executeSelect(USER_EXISTS_QUERY, map).HasRows;
         }
 
-        private bool checkPass(String pass,String pass2)
+        private bool checkPass(String pass, String pass2)
         {
             if (pass.Length == 0 || pass2.Length == 0)
             {
