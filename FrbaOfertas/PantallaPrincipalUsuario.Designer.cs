@@ -93,8 +93,9 @@
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(199, 23);
             this.button5.TabIndex = 5;
-            this.button5.Text = "Ofertas (Proveedor)";
+            this.button5.Text = "Generar Oferta";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click_1);
             // 
             // button6
             // 
@@ -102,8 +103,9 @@
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(199, 23);
             this.button6.TabIndex = 6;
-            this.button6.Text = "Comprar Oferta (client)";
+            this.button6.Text = "Comprar Oferta";
             this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click_1);
             // 
             // button7
             // 
@@ -113,6 +115,7 @@
             this.button7.TabIndex = 7;
             this.button7.Text = "Facturación";
             this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click_1);
             // 
             // button8
             // 

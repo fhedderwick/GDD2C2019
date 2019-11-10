@@ -11,6 +11,9 @@ using System.Windows.Forms;
 using FrbaOfertas.AbmRol;
 using FrbaOfertas.AbmProveedor;
 using FrbaOfertas.AbmCliente;
+using FrbaOfertas.ComprarOferta;
+using FrbaOfertas.CrearOferta;
+using FrbaOfertas.Facturar;
 
 namespace FrbaOfertas
 {
@@ -70,6 +73,24 @@ namespace FrbaOfertas
         {
             ListaCliente listaCliente = new ListaCliente(_dbm);
             listaCliente.Show();
+        }       
+      
+        private void button5_Click_1(object sender, EventArgs e)
+        {
+            AltaOferta i = new AltaOferta();
+            i.Show();
+        }
+
+        private void button6_Click_1(object sender, EventArgs e)
+        {
+            OfertasPublicadas i = new OfertasPublicadas();
+            i.Show();
+        }
+
+        private void button7_Click_1(object sender, EventArgs e)
+        {
+            IngresoDatos i = new IngresoDatos();
+            i.Show();
         }
     }
 }
