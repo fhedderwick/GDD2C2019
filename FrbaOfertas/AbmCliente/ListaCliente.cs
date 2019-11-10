@@ -157,7 +157,7 @@ namespace FrbaOfertas.AbmCliente
             if (dataGridView1.SelectedRows.Count > 0)
             {
                 String id = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
-                ModificarCliente modificarCliente = new ModificarCliente(_dbm,id);
+                AltaYModifCliente modificarCliente = new AltaYModifCliente(_dbm, id);
                 modificarCliente.Show();
             }
             else

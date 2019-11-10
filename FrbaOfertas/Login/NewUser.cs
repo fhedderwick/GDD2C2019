@@ -68,7 +68,7 @@ namespace FrbaOfertas.Login
             }
             else if ("Cliente".Equals(eleccion))
             {
-                AltaCliente altaCliente = new AltaCliente(_dbm,user,pass);
+                AltaYModifCliente altaCliente = new AltaYModifCliente(_dbm,user,pass);
                 altaCliente.Show();
                 Close();
             }

@@ -11,8 +11,6 @@ using System.Windows.Forms;
 using FrbaOfertas.AbmRol;
 using FrbaOfertas.AbmProveedor;
 using FrbaOfertas.AbmCliente;
-using FrbaOfertas.AbmProveedor;
-using FrbaOfertas.AbmCliente;
 
 namespace FrbaOfertas
 {

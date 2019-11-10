@@ -44,23 +44,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbmCliente\AltaCliente.cs">
+    <Compile Include="AbmCliente\AltaYModifCliente.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AbmCliente\AltaCliente.Designer.cs">
-      <DependentUpon>AltaCliente.cs</DependentUpon>
+    <Compile Include="AbmCliente\AltaYModifCliente.Designer.cs">
+      <DependentUpon>AltaYModifCliente.cs</DependentUpon>
     </Compile>
     <Compile Include="AbmCliente\BajaCliente.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AbmCliente\BajaCliente.Designer.cs">
       <DependentUpon>BajaCliente.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AbmCliente\ModificarCliente.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AbmCliente\ModificarCliente.Designer.cs">
-      <DependentUpon>ModificarCliente.cs</DependentUpon>
     </Compile>
     <Compile Include="AbmCliente\ListaCliente.cs">
       <SubType>Form</SubType>
@@ -209,14 +203,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="AbmCliente\AltaCliente.resx">
-      <DependentUpon>AltaCliente.cs</DependentUpon>
+    <EmbeddedResource Include="AbmCliente\AltaYModifCliente.resx">
+      <DependentUpon>AltaYModifCliente.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AbmCliente\BajaCliente.resx">
       <DependentUpon>BajaCliente.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AbmCliente\ModificarCliente.resx">
-      <DependentUpon>ModificarCliente.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AbmCliente\ListaCliente.resx">
       <DependentUpon>ListaCliente.cs</DependentUpon>
