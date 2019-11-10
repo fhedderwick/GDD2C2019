@@ -206,7 +206,7 @@ namespace FrbaOfertas.AbmCliente
                 map.Add("@clientId", _id.ToString());
                 resultSet = _dbm.executeSelect(USER_EXISTS_QUERY + " WHERE CLI_ID <> @clientId", map);
             }
-            return resultSet.HasRows();
+            return resultSet.HasRows;
         }
     }
 }
