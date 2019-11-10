@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.rubroTextBox = new System.Windows.Forms.TextBox();
             this.cancelarButton = new System.Windows.Forms.Button();
             this.guardarButton = new System.Windows.Forms.Button();
             this.cuitTextBox = new System.Windows.Forms.TextBox();
@@ -48,15 +47,8 @@
             this.razonSocialTextBox = new System.Windows.Forms.TextBox();
             this.nombreContactoBox1 = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.rubroComboBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
-            // 
-            // rubroTextBox
-            // 
-            this.rubroTextBox.Location = new System.Drawing.Point(116, 211);
-            this.rubroTextBox.Name = "rubroTextBox";
-            this.rubroTextBox.Size = new System.Drawing.Size(139, 20);
-            this.rubroTextBox.TabIndex = 36;
             // 
             // cancelarButton
             // 
@@ -66,6 +58,7 @@
             this.cancelarButton.TabIndex = 35;
             this.cancelarButton.Text = "Cancelar";
             this.cancelarButton.UseVisualStyleBackColor = true;
+            this.cancelarButton.Click += new System.EventHandler(this.cancelarButton_Click);
             // 
             // guardarButton
             // 
@@ -214,24 +207,23 @@
             this.label9.TabIndex = 38;
             this.label9.Text = "Nombre Contacto";
             // 
-            // comboBox1
+            // rubroComboBox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(261, 211);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(99, 21);
-            this.comboBox1.TabIndex = 39;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.rubroComboBox.FormattingEnabled = true;
+            this.rubroComboBox.Location = new System.Drawing.Point(116, 215);
+            this.rubroComboBox.Name = "rubroComboBox";
+            this.rubroComboBox.Size = new System.Drawing.Size(139, 21);
+            this.rubroComboBox.TabIndex = 39;
+            this.rubroComboBox.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // AltaProveedor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(366, 327);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.rubroComboBox);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.nombreContactoBox1);
-            this.Controls.Add(this.rubroTextBox);
             this.Controls.Add(this.cancelarButton);
             this.Controls.Add(this.guardarButton);
             this.Controls.Add(this.cuitTextBox);
@@ -259,7 +251,6 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox rubroTextBox;
         private System.Windows.Forms.Button cancelarButton;
         private System.Windows.Forms.Button guardarButton;
         private System.Windows.Forms.TextBox cuitTextBox;
@@ -279,6 +270,6 @@
         private System.Windows.Forms.TextBox razonSocialTextBox;
         private System.Windows.Forms.TextBox nombreContactoBox1;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox rubroComboBox;
     }
 }

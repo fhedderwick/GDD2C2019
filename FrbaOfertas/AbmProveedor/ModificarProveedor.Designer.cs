@@ -238,7 +238,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(723, 334);
+            this.ClientSize = new System.Drawing.Size(279, 334);
             this.Controls.Add(this.rubroComboBox);
             this.Controls.Add(this.estadoComboBox);
             this.Controls.Add(this.label10);
