@@ -90,14 +90,22 @@ namespace FrbaOfertas.AbmCliente
                 map.Add("@fechaNacimiento", fechaTextBox.Text);
                 if (_id == -1)
                 {
-                    if (1 == _dbm.executeUpdate(INSERT_QUERY, map))
+                    SqlTransaction transaction = _dbm.getTransaction();
+                    if (1 == _dbm.executeUpdate(transaction, false, INSERT_QUERY, map))
                     {
-                        MessageBox.Show("El cliente fue dado de alta correctamente.");
-                        Close();
+                        if (1 == _dbm.executeUpdate(transaction, true, INSERT_QUERY, map))
+                        {
+                            MessageBox.Show("El cliente fue dado de alta correctamente.");
+                            Close();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error al dar de alta al cliente: fallo insertar cliente");
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("Error al dar de alta al cliente.");
+                        MessageBox.Show("Error al dar de alta al cliente: fallo insertar usuario");
                     }
                 }
                 else

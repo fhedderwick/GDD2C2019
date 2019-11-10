@@ -12,7 +12,6 @@ namespace FrbaOfertas
     {
 
         private SqlConnection _conn;
-        private SqlTransaction _tran;
 
         internal bool initialize()
         {
@@ -62,11 +61,6 @@ namespace FrbaOfertas
             {
                 return null;
             }
-        }
-
-        internal void setAutoCommit()
-        {
-            _tran = _conn.BeginTransaction();
         }
 
         internal Object getFromResultSet(SqlDataReader resultSet, String nombreParametro)
@@ -192,5 +186,43 @@ namespace FrbaOfertas
             }
 
         }
+
+        //con transaccion:
+
+        internal SqlTransaction getTransaction()
+        {
+            return _conn.BeginTransaction();
+        }
+        internal void commitTransaction(SqlTransaction tran)
+        {
+            tran.Commit();
+        }
+        internal int executeUpdate(SqlTransaction transaction, bool commitNow, String query, Dictionary<string, object> map)
+        {
+            SqlCommand command = _conn.CreateCommand();
+            command.Transaction = transaction;
+            try
+            {
+                command.CommandText = query;
+                foreach (var pair in map)
+                {
+                    string key = pair.Key;
+                    object value = pair.Value;
+                    command.Parameters.AddWithValue(key, value);
+                }
+                if(commitNow)
+                {
+                    transaction.Commit();
+                }
+                return command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback(); //si aca lanza excepcion falla el rollback
+                return -1;
+            }
+
+        }
+
     }
 }
