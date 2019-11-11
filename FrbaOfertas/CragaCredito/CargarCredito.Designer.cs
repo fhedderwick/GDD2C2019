@@ -104,7 +104,7 @@
             this.t3.Items.AddRange(new object[] {
             "Efectivo",
             "Debito",
-            "Credito"});
+            "Crédito"});
             this.t3.Location = new System.Drawing.Point(144, 108);
             this.t3.Name = "t3";
             this.t3.Size = new System.Drawing.Size(100, 21);

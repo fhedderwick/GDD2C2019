@@ -79,25 +79,25 @@ namespace FrbaOfertas
       
         private void button5_Click_1(object sender, EventArgs e)
         {
-            AltaOferta i = new AltaOferta();
+            AltaOferta i = new AltaOferta(_dbm);
             i.Show();
         }
 
         private void button6_Click_1(object sender, EventArgs e)
         {
-            OfertasPublicadas i = new OfertasPublicadas();
+            OfertasPublicadas i = new OfertasPublicadas(_dbm);
             i.Show();
         }
 
         private void button7_Click_1(object sender, EventArgs e)
         {
-            IngresoDatos i = new IngresoDatos();
+            IngresoDatos i = new IngresoDatos(_dbm);
             i.Show();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            CargarCredito i = new CargarCredito();
+            CargarCredito i = new CargarCredito(_dbm);
             i.Show();
         }
     }

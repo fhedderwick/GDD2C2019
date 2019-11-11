@@ -12,15 +12,18 @@ namespace FrbaOfertas.ComprarOferta
 {
     public partial class GenerarCupon : Form
     {
-        public GenerarCupon()
+        private DataBaseManager _dbm;
+
+        public GenerarCupon(DataBaseManager dbm)
         {
+            _dbm = dbm;
             InitializeComponent();
         }
       
         private void btnSiguiente_Click(object sender, EventArgs e)
         {
             Hide();
-            CompraExitosa i = new CompraExitosa();
+            CompraExitosa i = new CompraExitosa(_dbm);
             i.Show();
             this.Close();
         }

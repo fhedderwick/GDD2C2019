@@ -7,13 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace FrbaOfertas.CragaCredito
 {
     public partial class CargarCredito : Form
     {
-        public CargarCredito()
+        private DataBaseManager _dbm;
+        public string clienteId;
+        public CargarCredito(DataBaseManager dbm)
         {
+            _dbm = dbm;            
             InitializeComponent();
         }
 
@@ -27,10 +31,19 @@ namespace FrbaOfertas.CragaCredito
         {
             try
             {
-                if (this.camposObligatorios() == true && this.ingresoCampos() == true)
+                 if (this.validarModoPago() == true && this.ingresoCampos() == true)
                 {
+                    clienteId = t1.Text;                    
+                    Dictionary<string, object> map = new Dictionary<string, object>();                    
+                    map.Add("@FechaCarga", DateTime.Today);                      //Fecha del archivo de Configuracion
+                    map.Add("ClienteId", t1.Text);
+                    map.Add("@TipoPago", t3.SelectedItem.ToString());
+                    map.Add("@Monto", t4.Text);
+                    map.Add("NumeroTarjeta", t2.Text);
+                    _dbm.executeProcedure("Mana.CargarCredito", map);
+                   
                     Hide();
-                    CargaExitosa i = new CargaExitosa();
+                    CargaExitosa i = new CargaExitosa(_dbm, clienteId);
                     i.Show();
                     this.Close();
                 }
@@ -39,12 +52,11 @@ namespace FrbaOfertas.CragaCredito
             catch (Exception ex) { MessageBox.Show("Faltan ingresar algunos de los datos solicitados", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
         }
 
-        private bool camposObligatorios()
+        private bool validarModoPago()
         {
             if (this.pagoConEfectivo()) { return true; }
             if (this.pagoConDebito()) { return this.ingresoNumeroTarjeta(); }
-            if (this.pagoConCredito()) { return this.ingresoNumeroTarjeta(); }
-            if (this.noSeleccionoMedio()) { return false; }
+            if (this.pagoConCredito()) { return this.ingresoNumeroTarjeta(); }            
             else { return false; }
         }
 
@@ -57,13 +69,22 @@ namespace FrbaOfertas.CragaCredito
             if (this.pagoConCredito()) { t2.ReadOnly = false; }
             if (this.pagoConDebito()) { t2.ReadOnly = false; }
         }
-
-        private bool noSeleccionoMedio() { return t3.SelectedText.Length != 0; }
+        
         private bool pagoConEfectivo() { return t3.SelectedItem.Equals("Efectivo"); }
-        private bool pagoConCredito() { return t3.SelectedItem.Equals("Credito"); }
+        private bool pagoConCredito() { return t3.SelectedItem.Equals("Crédito"); }
         private bool pagoConDebito() { return t3.SelectedItem.Equals("Debito"); }
         private bool pagoConTarjeta() { return this.pagoConCredito() || this.pagoConDebito(); }
         private bool ingresoNumeroTarjeta() { return t2.Text.Length != 0; }
-        
+
+
+        /*
+         int saldo;
+                    string query = "SELECT C.CLI_SALDO FROM CLIENTE C WHERE CLI_ID = @ClienteId";
+                    Dictionary<string, object> map1 = new Dictionary<string, object>();
+                    map1.Add("@ClienteId", clienteId);
+                    SqlDataReader r = _dbm.executeSelect(query);
+                    saldo = r ??
+          MessageBox.Show("Su carga fue exitosa. Su nuevo saldo es:" + saldo, "Exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+         */
     }
 }

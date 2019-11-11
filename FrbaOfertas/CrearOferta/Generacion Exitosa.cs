@@ -12,8 +12,11 @@ namespace FrbaOfertas.CrearOferta
 {
     public partial class Generacion_Exitosa : Form
     {
-        public Generacion_Exitosa()
+        private DataBaseManager _dbm;
+
+        public Generacion_Exitosa(DataBaseManager dbm)
         {
+            _dbm = dbm;
             InitializeComponent();
         }
 
@@ -27,7 +30,7 @@ namespace FrbaOfertas.CrearOferta
         private void btnGenerarNuevaOferta_Click(object sender, EventArgs e)
         {
             Hide();
-            AltaOferta i = new AltaOferta();
+            AltaOferta i = new AltaOferta(_dbm);
             i.Show();
             this.Close();
         }

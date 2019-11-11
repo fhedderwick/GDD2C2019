@@ -12,15 +12,18 @@ namespace FrbaOfertas.ComprarOferta
 {
     public partial class CompraExitosa : Form
     {
-        public CompraExitosa()
+        private DataBaseManager _dbm;
+
+        public CompraExitosa(DataBaseManager dbm)
         {
+            _dbm = dbm;
             InitializeComponent();
         }
 
         private void btnComprarNuevaOferta_Click(object sender, EventArgs e)
         {
             Hide();
-            OfertasPublicadas i = new OfertasPublicadas();
+            OfertasPublicadas i = new OfertasPublicadas(_dbm);
             i.Show();
             this.Close();
         }

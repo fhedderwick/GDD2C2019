@@ -57,21 +57,21 @@
             // 
             // dtFechaPublicacion
             // 
-            this.dtFechaPublicacion.Location = new System.Drawing.Point(259, 129);
+            this.dtFechaPublicacion.Location = new System.Drawing.Point(250, 85);
             this.dtFechaPublicacion.Name = "dtFechaPublicacion";
             this.dtFechaPublicacion.Size = new System.Drawing.Size(200, 20);
             this.dtFechaPublicacion.TabIndex = 1;
             // 
             // dtFechaVencimiento
             // 
-            this.dtFechaVencimiento.Location = new System.Drawing.Point(259, 85);
+            this.dtFechaVencimiento.Location = new System.Drawing.Point(250, 129);
             this.dtFechaVencimiento.Name = "dtFechaVencimiento";
             this.dtFechaVencimiento.Size = new System.Drawing.Size(200, 20);
             this.dtFechaVencimiento.TabIndex = 2;
             // 
             // tbProveedorId
             // 
-            this.tbProveedorId.Location = new System.Drawing.Point(294, 258);
+            this.tbProveedorId.Location = new System.Drawing.Point(294, 347);
             this.tbProveedorId.Name = "tbProveedorId";
             this.tbProveedorId.Size = new System.Drawing.Size(100, 20);
             this.tbProveedorId.TabIndex = 5;
@@ -92,14 +92,14 @@
             // 
             // tbCantidadDisponible
             // 
-            this.tbCantidadDisponible.Location = new System.Drawing.Point(294, 302);
+            this.tbCantidadDisponible.Location = new System.Drawing.Point(294, 258);
             this.tbCantidadDisponible.Name = "tbCantidadDisponible";
             this.tbCantidadDisponible.Size = new System.Drawing.Size(100, 20);
             this.tbCantidadDisponible.TabIndex = 6;
             // 
             // tbMaximoUnidadCliente
             // 
-            this.tbMaximoUnidadCliente.Location = new System.Drawing.Point(294, 350);
+            this.tbMaximoUnidadCliente.Location = new System.Drawing.Point(294, 302);
             this.tbMaximoUnidadCliente.Name = "tbMaximoUnidadCliente";
             this.tbMaximoUnidadCliente.Size = new System.Drawing.Size(100, 20);
             this.tbMaximoUnidadCliente.TabIndex = 7;

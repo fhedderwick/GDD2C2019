@@ -59,6 +59,7 @@
             this.t1.ReadOnly = true;
             this.t1.Size = new System.Drawing.Size(100, 20);
             this.t1.TabIndex = 2;
+            this.t1.TextChanged += new System.EventHandler(this.t1_TextChanged);            
             // 
             // b1
             // 

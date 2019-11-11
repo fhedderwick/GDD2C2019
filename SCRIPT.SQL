@@ -1084,11 +1084,10 @@ GO
 CREATE PROCEDURE MANA.CrearOferta @Descripcion nvarchar(255), @FechaPublicacion datetime, @FechaVencimiento datetime, @PrecioOferta numeric(18), @PrecioLista numeric(18), 
 								  @ProveedorId int, @CantidadDisponible numeric (18), @MaximoUnidadesPorCliente int
 AS
-  IF(@FechaPublicacion >= CONVERT(DATE,GETDATE()) AND @FechaVencimiento >= CONVERT(DATE,GETDATE()) AND @CantidadDisponible>= @MaximoUnidadesPorCliente) /*Valido las fechas y que el stock sea mayor al MaxUnidadesPorCliente*/
+  IF(@FechaPublicacion >= CONVERT(DATE,GETDATE()) AND @FechaVencimiento >= CONVERT(DATE,GETDATE()) AND @CantidadDisponible>= @MaximoUnidadesPorCliente) /*Validado en visual*/
   BEGIN
 declare @NumeroOferta nvarchar(50) = 1  /*Autogenerar Codigo de Oferta: Si no existe codigo -> Crea . Si existe codigo -> Lo aumento en 1 y luego crea*/
-    IF(NOT EXISTS(SELECT OF_NUMERO FROM MANA.OFERTA where OF_NUMERO = @NumeroOferta ) AND @FechaPublicacion >= CONVERT(DATE,GETDATE()) 
-              AND @FechaVencimiento >= CONVERT(DATE,GETDATE()) AND @CantidadDisponible>= @MaximoUnidadesPorCliente)  
+    IF(NOT EXISTS(SELECT OF_NUMERO FROM MANA.OFERTA where OF_NUMERO = @NumeroOferta))  
      BEGIN
        insert into MANA.OFERTA values (@NumeroOferta, @Descripcion, @FechaPublicacion, @FechaVencimiento, @PrecioOferta, @PrecioLista, @ProveedorId , @CantidadDisponible, @MaximoUnidadesPorCliente,'En Espera');
      END
@@ -1303,7 +1302,7 @@ GO
 
 /** Test **/ 
                           /*Formato Fechas AÑO/DIA/MES, no me pregunten porque*/
-/*ABM Cliente*/
+/*ABM Cliente
 Mana.CrearCliente 'Gregory', 'House', 88430112, 'house@hotmail.com', 15856682, 'HOSPITAL521', 1252, 'Miami', '1985/06/10'
 GO
 Mana.ModificarCliente 5, 'Patrick', 'Jane', 62525087, 'jane@hotmail.com', 15534689, 'FBI5212', 1456, 'California', '1990/07/11'
@@ -1314,20 +1313,24 @@ Mana.CargarCredito '2019/08/11', 5, 'Debito', 100000, 0855648989
 GO
 Mana.CargarCredito '2019/08/11', 7, 'Crédito', 50000, 0975423614
 GO
+*/
 
-/*ABM Proveedor*/
+/*ABM Proveedor
 Mana.CrearProveedor 'Proveedor Cortinas S.R.L.', '11-22445103-2',  'Cortinas Congreso', 'cortinas@gmail.com', 43825679, 'Pozos618', 1256, 'CABA', 'Hogar' 
 GO
 Mana.ModificarProveedor 10, 'Proveedor Freddo S.R.L.', '71-43350643-1',  'Freddo', 'freddo@gmail.com', 48625167, 'Rivadavia6115', 1423, 'CABA', 'Comestibles' 
 GO
 Mana.BajaProveedor 'Proveedor N°13S.R.L.', '13-52415793-5'
 GO
+*/
 
 /*ABM Oferta*/
-Mana.CrearOferta 'NotebookICoreI9', '2019/09/11', '2020/02/11', 15000, 20000, 15, 10, 2
+/*
+Mana.CrearOferta 'NotebookICoreI9', '2018/11/11', '2020/02/11', 15000, 20000, 15, 10, 2
 GO
-Mana.CrearOferta 'CelularMotorolaE5', '2019/09/11', '2025/05/11', 7700, 12500, 12, 15, 5
+Mana.CrearOferta 'CelularMotorolaE5', '2019/12/11', '2025/05/11', 7700, 12500, 12, 15, 5
 GO
+*/
 Mana.CanjearCupon 5, 'AZHEVYMSAC6', 26, '2020-01-08', 'Mirtha', 'Legrand', 00000001, NULL, 41114565, 'eltrece 99', '1920/04/10', 'CABA'			
 GO
 Mana.ComprarOferta '2019/09/11', 1, 15000, 20000, 1, 5

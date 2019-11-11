@@ -12,8 +12,11 @@ namespace FrbaOfertas.Facturar
 {
     public partial class IngresoDatos : Form
     {
-        public IngresoDatos()
+        private DataBaseManager _dbm;
+
+        public IngresoDatos(DataBaseManager dbm)
         {
+            _dbm = dbm;
             InitializeComponent();
         }
 
@@ -22,7 +25,7 @@ namespace FrbaOfertas.Facturar
             if (this.camposObligatoriosCompletos() == true)
             {
                 Hide();
-                GenerarFactura i = new GenerarFactura();
+                GenerarFactura i = new GenerarFactura(_dbm);
                 i.Show();
                 this.Close();
             }

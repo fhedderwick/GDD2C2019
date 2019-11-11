@@ -12,15 +12,18 @@ namespace FrbaOfertas.Facturar
 {
     public partial class GenerarFactura : Form
     {
-        public GenerarFactura()
+        private DataBaseManager _dbm;
+
+        public GenerarFactura(DataBaseManager dbm)
         {
+            _dbm = dbm;
             InitializeComponent();
         }
 
         private void b1_Click(object sender, EventArgs e)
         {
             Hide();
-            IngresoDatos i = new IngresoDatos();
+            IngresoDatos i = new IngresoDatos(_dbm);
             i.Show();
             this.Close();
 

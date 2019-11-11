@@ -12,8 +12,11 @@ namespace FrbaOfertas.ComprarOferta
 {
     public partial class OfertasPublicadas : Form
     {
-        public OfertasPublicadas()
+        private DataBaseManager _dbm;
+
+        public OfertasPublicadas(DataBaseManager dbm)
         {
+            _dbm = dbm;
             InitializeComponent();
         }
 
@@ -31,7 +34,7 @@ namespace FrbaOfertas.ComprarOferta
         private void button2_Click(object sender, EventArgs e)
         {
             Hide();
-            GenerarCupon i = new GenerarCupon();
+            GenerarCupon i = new GenerarCupon(_dbm);
             i.Show();
             this.Close();
         }

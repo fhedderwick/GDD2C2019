@@ -197,6 +197,7 @@ namespace FrbaOfertas
         {
             tran.Commit();
         }
+
         internal int executeUpdate(SqlTransaction transaction, bool commitNow, String query, Dictionary<string, object> map)
         {
             SqlCommand command = _conn.CreateCommand();
@@ -213,8 +214,8 @@ namespace FrbaOfertas
                 if(commitNow)
                 {
                     transaction.Commit();
-                }
-                return command.ExecuteNonQuery();
+                }               
+                return command.ExecuteNonQuery();                
             }
             catch (Exception ex)
             {
@@ -222,6 +223,19 @@ namespace FrbaOfertas
                 return -1;
             }
 
+        }
+
+        internal void executeProcedure(String procedure, Dictionary<string, object> map)
+        {
+            SqlCommand command = new SqlCommand(procedure, _conn);
+            command.CommandType = System.Data.CommandType.StoredProcedure;
+            foreach (var pair in map)
+                {
+                    string key = pair.Key;
+                    object value = pair.Value;
+                    command.Parameters.AddWithValue(key, value);
+                }
+            command.ExecuteNonQuery();            
         }
 
     }
