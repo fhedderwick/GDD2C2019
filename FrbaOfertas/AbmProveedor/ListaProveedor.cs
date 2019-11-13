@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FrbaOfertas.Login;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,8 +27,10 @@ namespace FrbaOfertas.AbmProveedor
 
         private void button2_Click(object sender, EventArgs e)
         {
-            AltaProveedor altaProv = new AltaProveedor(_dbm);
-            altaProv.Show();
+            //AltaProveedor altaProv = new AltaProveedor(_dbm);
+            //altaProv.Show();
+            NewUser altaUsuarioProveedor = new NewUser(_dbm, "", "Proveedor");
+            altaUsuarioProveedor.Show();
         }
 
         private void ListaProveedor_Load(object sender, EventArgs e)

@@ -85,7 +85,7 @@ namespace FrbaOfertas.Login
             }
             if (existeEnBaseDeDatos(user))
             {
-                MessageBox.Show("El nombre de usuario elegido esta tomado. Escoja otro.");
+                MessageBox.Show("El nombre de usuario elegido ya existe. Elija otro.");
                 return false;
             }
             return true;
@@ -126,6 +126,11 @@ namespace FrbaOfertas.Login
         private void button1_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
