@@ -172,6 +172,8 @@ IF OBJECT_ID('MANA.CrearCupon') IS NOT NULL
     DROP PROCEDURE MANA.CrearCupon;
 IF OBJECT_ID('MANA.BajaCupon') IS NOT NULL
     DROP PROCEDURE MANA.BajaCupon;
+IF OBJECT_ID('MANA.ObtenerNroOfertaCupon') IS NOT NULL
+    DROP FUNCTION MANA.ObtenerNroOfertaCupon;
 IF OBJECT_ID('MANA.ObtenerEstadoCupon') IS NOT NULL
     DROP FUNCTION MANA.ObtenerEstadoCupon;
 IF OBJECT_ID('MANA.ObtenerProveedorOferta') IS NOT NULL
@@ -203,6 +205,8 @@ IF OBJECT_ID('MANA.CrearItemFactura') IS NOT NULL
     DROP PROCEDURE MANA.CrearItemFactura;
 IF OBJECT_ID('MANA.CrearFactura') IS NOT NULL
     DROP PROCEDURE MANA.CrearFactura;
+IF OBJECT_ID('MANA.BorrarFactura') IS NOT NULL
+    DROP PROCEDURE MANA.BorrarFactura;
 IF OBJECT_ID('MANA.ObtenerNumeroFactura') IS NOT NULL
     DROP FUNCTION MANA.ObtenerNumeroFactura;		
 IF OBJECT_ID('MANA.FacturarOfertasAProveedor') IS NOT NULL
@@ -1165,7 +1169,7 @@ CREATE PROCEDURE MANA.BajaCupon (@CuponId int, @NumeroOferta nvarchar(50))
 AS
   UPDATE MANA.CUPON
   SET CUPON_ESTADO = 'Deshabilitado'
-  WHERE CUPON_ID = @CuponId and CUPON_NUMERO_OFERTA = @NumeroOferta
+  WHERE CUPON_ID = @CuponId  and CUPON_NUMERO_OFERTA = @NumeroOferta
 GO
 
 CREATE FUNCTION MANA.ObtenerEstadoCupon (@CuponId int)
@@ -1174,6 +1178,14 @@ AS
 BEGIN
   return( select C.CUPON_ESTADO from MANA.CUPON C where C.CUPON_ID = @CuponId)
 END	   
+GO
+
+CREATE FUNCTION MANA.ObtenerNroOfertaCupon (@CuponId int)
+RETURNS NVARCHAR
+AS
+BEGIN
+ return (select C.CUPON_NUMERO_OFERTA from MANA.CUPON C where C.CUPON_ID = @CuponId)
+END
 GO
 
 CREATE PROCEDURE MANA.RegistrarOfertaVendida @FechaCompra datetime, @CuponId int, @ProveedorId int, @OfertaNumero nvarchar(50), @Importe numeric(18)
@@ -1234,19 +1246,19 @@ GO
 
 CREATE PROCEDURE MANA.CanjearCupon @CuponId int, @NumeroOferta nvarchar(50), @ProveedorId int, @FechaEntrega datetime, @C_Dest_Nombre nvarchar(255), @C_Dest_Apellido nvarchar(255), @C_Dest_Dni numeric(18), 
                                 @C_Dest_Direccion nvarchar(255), @C_Dest_Telefono numeric(18), @C_Dest_Mail nvarchar(255), @C_Dest_Fecha_Nac datetime, @C_Dest_Ciudad nvarchar(255)
-AS
- BEGIN 
+AS   
     /*El cupon esta habilitado desde su creacion; si ya fue canjeado o ya se vencio va a estar Deshabilitado -> Valido que no este deshabilitado y que la Oferta pertenezca al proveedor que quiere canjear el cupon */
   IF((Mana.ObtenerProveedorOferta(@NumeroOferta) = @ProveedorId) AND (Mana.ObtenerEstadoCupon(@CuponId) != 'Deshabilitado' ))
-  EXECUTE MANA.BajaCupon @CuponId, @NumeroOferta                                                     /*Baja Logica del Cupon*/                                                 
-  EXECUTE Mana.CrearConsumoOferta @FechaEntrega, @ProveedorId, @CuponId, @C_Dest_Nombre, @C_Dest_Apellido, @C_Dest_Dni, @C_Dest_Direccion, 
+   BEGIN
+    EXECUTE MANA.BajaCupon @CuponId, @NumeroOferta                                                     /*Baja Logica del Cupon*/                                                 
+    EXECUTE Mana.CrearConsumoOferta @FechaEntrega, @ProveedorId, @CuponId, @C_Dest_Nombre, @C_Dest_Apellido, @C_Dest_Dni, @C_Dest_Direccion, 
                                   @C_Dest_Telefono, @C_Dest_Mail, @C_Dest_Fecha_Nac, @C_Dest_Ciudad  /*Registramos la baja del Cupon en la tabla ConsumoOferta */
- END
+   END
+ 
 GO
 
 
 /**Factura**/
-
 
 CREATE PROCEDURE MANA.CrearItemFactura @OfertaVendidaId int
 AS
@@ -1265,20 +1277,26 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE MANA.CrearFactura @ImporteTotal numeric(18)
+CREATE PROCEDURE MANA.CrearFactura 
 AS  
-    declare @FactNro int
-	declare @a numeric(18)
-    set @FactNro = (select max(FACT_NUMERO) from FACTURA) + 1
+    declare @FactNro int	
+    set @FactNro = (select max(FACT_NUMERO) from FACTURA) + 1	
+	insert into MANA.FACTURA values(@FactNro, GETDATE(), NULL)
+GO
 
-	insert into MANA.FACTURA values(@FactNro, GETDATE(), @ImporteTotal)
+CREATE PROCEDURE MANA.BorrarFactura @FacturaNro int
+AS
+   DELETE FROM FACTURA
+   WHERE FACT_NUMERO = @FacturaNro
 GO
 
 CREATE PROCEDURE MANA.FacturarOfertasAProveedor @ProveedorId int, @FechaInicio datetime, @FechaFinal datetime
 AS   	
    declare @OfertaVendidaId int
    declare @ImporteOferta numeric(18)
-   declare @ImporteTotal numeric(18)  
+   declare @ImporteTotal numeric(18)
+ IF((select COUNT(OF_VEN_ID) from OFERTA_VENDIDA where OF_VEN_PROV_ID = @ProveedorId AND OF_VEN_FECHA_COMPRA BETWEEN @FechaInicio AND @FechaFinal) != 0) /*Valido que existan Ofertas entre esas fechas*/
+  BEGIN
    declare OfertaVendida CURSOR FOR
    select OF_VEN_ID from OFERTA_VENDIDA where OF_VEN_PROV_ID = @ProveedorId AND OF_VEN_FECHA_COMPRA BETWEEN @FechaInicio AND @FechaFinal
    Open OfertaVendida
@@ -1291,10 +1309,15 @@ AS
    END
    close OfertaVendida
    Deallocate OfertaVendida	
-                                                       /*Calculo el importe total de la factura */  
-   set @ImporteTotal = (select SUM(I_FACT_IMPORTE) FROM ITEM_FACTURA WHERE I_FACT_NUMERO = (SELECT MAX(FACT_NUMERO) FROM FACTURA) +1)
-
-   EXECUTE MANA.CrearFactura @ImporteTotal             /*Creo la factura*/
+  
+   EXECUTE MANA.CrearFactura              /*Creo la factura*/ 
+   declare @FactNro int  
+   set @FactNro = (SELECT MAX(FACT_NUMERO) FROM FACTURA)                                        
+   set @ImporteTotal = (select SUM(I_FACT_IMPORTE) FROM ITEM_FACTURA WHERE I_FACT_NUMERO = @FactNro)   /*Calculo el importe total de la factura */                                                                      
+	   UPDATE FACTURA
+	   SET FACT_IMPORTE_TOTAL = @ImporteTotal
+	   WHERE FACT_NUMERO = @FactNro                            /*Asigno el importe total a la factura creada*/
+  END     
 GO
 
 
@@ -1325,21 +1348,23 @@ GO
 */
 
 /*ABM Oferta*/
+
+Mana.CrearOferta 'NotebookICoreI9', '2020/25/11', '2020/02/11', 15000, 20000, 15, 10, 2
+GO
+Mana.CrearOferta 'CelularMotorolaE5', '2019/12/11', '2025/05/11', 7700, 12500, 12, 100, 5
+GO
 /*
-Mana.CrearOferta 'NotebookICoreI9', '2018/11/11', '2020/02/11', 15000, 20000, 15, 10, 2
-GO
-Mana.CrearOferta 'CelularMotorolaE5', '2019/12/11', '2025/05/11', 7700, 12500, 12, 15, 5
-GO
-*/
 Mana.CanjearCupon 5, 'AZHEVYMSAC6', 26, '2020-01-08', 'Mirtha', 'Legrand', 00000001, NULL, 41114565, 'eltrece 99', '1920/04/10', 'CABA'			
 GO
-Mana.ComprarOferta '2019/09/11', 1, 15000, 20000, 1, 5
+*/
+Mana.ComprarOferta '2019/12/11', 2, 7700, 12500, 10, 5
 GO
-Mana.ComprarOferta '2019/15/11', 1, 15000, 20000, 2, 7
+Mana.ComprarOferta '2019/15/11', 2, 15000, 20000, 2, 7
 GO
 
-/*Facturacion*/
+/*Facturacion
 
-Mana.FacturarOfertasAProveedor 15, '2019/09/10', '2019/09/12'
+Mana.FacturarOfertasAProveedor 12, '2018/05/10', '2024/30/12'
 GO
+*/
          

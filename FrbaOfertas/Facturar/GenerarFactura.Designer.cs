@@ -88,7 +88,8 @@
             this.tb1.Name = "tb1";
             this.tb1.ReadOnly = true;
             this.tb1.Size = new System.Drawing.Size(100, 20);
-            this.tb1.TabIndex = 5;
+            this.tb1.TabIndex = 5;             
+            this.tb1.TextChanged += new System.EventHandler(this.tb1_TextChanged);
             // 
             // tb2
             // 
@@ -167,6 +168,6 @@
         private System.Windows.Forms.TextBox tb3;
         private System.Windows.Forms.DataGridView d1;
         private System.Windows.Forms.Button b1;
-        private System.Windows.Forms.Button b2;
+        private System.Windows.Forms.Button b2;        
     }
 }

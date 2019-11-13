@@ -128,11 +128,23 @@
     <Compile Include="CragaCredito\CargarCredito.Designer.cs">
       <DependentUpon>CargarCredito.cs</DependentUpon>
     </Compile>
+    <Compile Include="CrearOferta\CanjearCupon.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CrearOferta\CanjearCupon.Designer.cs">
+      <DependentUpon>CanjearCupon.cs</DependentUpon>
+    </Compile>
     <Compile Include="CrearOferta\Generacion Exitosa.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="CrearOferta\Generacion Exitosa.Designer.cs">
       <DependentUpon>Generacion Exitosa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrearOferta\PantallaInicio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CrearOferta\PantallaInicio.Designer.cs">
+      <DependentUpon>PantallaInicio.cs</DependentUpon>
     </Compile>
     <Compile Include="DataBaseManager.cs" />
     <Compile Include="ComprarOferta\CompraExitosa.cs">
@@ -263,14 +275,26 @@
     <EmbeddedResource Include="CrearOferta\AltaOferta.resx">
       <DependentUpon>AltaOferta.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CrearOferta\CanjearCupon.resx">
+      <DependentUpon>CanjearCupon.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CrearOferta\Generacion Exitosa.resx">
       <DependentUpon>Generacion Exitosa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CrearOferta\PantallaInicio.resx">
+      <DependentUpon>PantallaInicio.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DateChooser.resx">
       <DependentUpon>DateChooser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ErrorConexion.resx">
       <DependentUpon>ErrorConexion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Facturar\GenerarFactura.resx">
+      <DependentUpon>GenerarFactura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Facturar\IngresoDatos.resx">
+      <DependentUpon>IngresoDatos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>

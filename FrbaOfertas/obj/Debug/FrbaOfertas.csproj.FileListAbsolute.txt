@@ -64,3 +64,7 @@ C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\bin\Debug\FrbaOfertas.pdb
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.AltaYModifCliente.resources
 >>>>>>> 5d1e6ea91a39a97ae81ba88eb13fd52e9f988784
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.CragaCredito.CargaExitosa.resources
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.CanjearCupon.resources
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.PantallaInicio.resources
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Facturar.IngresoDatos.resources
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Facturar.GenerarFactura.resources

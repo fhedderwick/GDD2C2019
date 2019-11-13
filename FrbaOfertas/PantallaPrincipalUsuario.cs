@@ -79,7 +79,7 @@ namespace FrbaOfertas
       
         private void button5_Click_1(object sender, EventArgs e)
         {
-            AltaOferta i = new AltaOferta(_dbm);
+            PantallaInicio i = new PantallaInicio(_dbm);
             i.Show();
         }
 

@@ -8,37 +8,38 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FrbaOfertas.Facturar
+namespace FrbaOfertas.CrearOferta
 {
-    public partial class GenerarFactura : Form
+    public partial class PantallaInicio : Form
     {
         private DataBaseManager _dbm;
 
-        public GenerarFactura(DataBaseManager dbm)
+        public PantallaInicio(DataBaseManager dbm)
         {
             _dbm = dbm;
             InitializeComponent();
         }
 
-        private void b1_Click(object sender, EventArgs e)
-        {
-            Hide();
-            IngresoDatos i = new IngresoDatos(_dbm);
-            i.Show();
-            this.Close();
-
-        }
-
         private void b2_Click(object sender, EventArgs e)
         {
             Hide();
+            AltaOferta i = new AltaOferta(_dbm);
+            i.Show();
             this.Close();
         }
 
-        private void tb1_TextChanged(object sender, EventArgs e)
-        {  //Codigo de Proveedor
-             
+        private void b3_Click(object sender, EventArgs e)
+        {
+            Hide();
+            CanjearCupon i = new CanjearCupon(_dbm);
+            i.Show();
+            this.Close();
         }
 
+        private void b1_Click(object sender, EventArgs e)
+        {
+            Hide();
+            this.Close();
+        }
     }
 }

@@ -33,8 +33,8 @@
             this.l3 = new System.Windows.Forms.Label();
             this.l4 = new System.Windows.Forms.Label();
             this.tb1 = new System.Windows.Forms.TextBox();
-            this.tb2 = new System.Windows.Forms.TextBox();
-            this.tb3 = new System.Windows.Forms.TextBox();
+            this.dtFechaInicio = new System.Windows.Forms.DateTimePicker();
+            this.dtFechaFinal = new System.Windows.Forms.DateTimePicker();
             this.VolverAtras = new System.Windows.Forms.Button();
             this.Facturar = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -78,19 +78,19 @@
             this.tb1.Size = new System.Drawing.Size(100, 20);
             this.tb1.TabIndex = 4;
             // 
-            // tb2
+            // dtFechaInicio
             // 
-            this.tb2.Location = new System.Drawing.Point(184, 152);
-            this.tb2.Name = "tb2";
-            this.tb2.Size = new System.Drawing.Size(100, 20);
-            this.tb2.TabIndex = 5;
+            this.dtFechaInicio.Location = new System.Drawing.Point(138, 149);
+            this.dtFechaInicio.Name = "dtFechaInicio";
+            this.dtFechaInicio.Size = new System.Drawing.Size(200, 20);
+            this.dtFechaInicio.TabIndex = 5;
             // 
-            // tb3
+            // dtFechaFinal
             // 
-            this.tb3.Location = new System.Drawing.Point(184, 205);
-            this.tb3.Name = "tb3";
-            this.tb3.Size = new System.Drawing.Size(100, 20);
-            this.tb3.TabIndex = 6;
+            this.dtFechaFinal.Location = new System.Drawing.Point(138, 208);
+            this.dtFechaFinal.Name = "dtFechaFinal";
+            this.dtFechaFinal.Size = new System.Drawing.Size(200, 20);
+            this.dtFechaFinal.TabIndex = 6;
             // 
             // VolverAtras
             // 
@@ -110,7 +110,7 @@
             this.Facturar.Text = "Facturar";
             this.Facturar.Click += new System.EventHandler(this.Facturar_Click);
             // 
-            // Form1
+            // IngresoDatos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -120,11 +120,11 @@
             this.Controls.Add(this.l3);
             this.Controls.Add(this.l4);
             this.Controls.Add(this.tb1);
-            this.Controls.Add(this.tb2);
-            this.Controls.Add(this.tb3);
+            this.Controls.Add(this.dtFechaInicio);
+            this.Controls.Add(this.dtFechaFinal);
             this.Controls.Add(this.VolverAtras);
             this.Controls.Add(this.Facturar);
-            this.Name = "Form1";
+            this.Name = "IngresoDatos";
             this.Text = "Form1";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -138,8 +138,8 @@
         private System.Windows.Forms.Label l3;
         private System.Windows.Forms.Label l4;
         private System.Windows.Forms.TextBox tb1;
-        private System.Windows.Forms.TextBox tb2;
-        private System.Windows.Forms.TextBox tb3;
+        private System.Windows.Forms.DateTimePicker dtFechaInicio;
+        private System.Windows.Forms.DateTimePicker dtFechaFinal;
         private System.Windows.Forms.Button VolverAtras;
         private System.Windows.Forms.Button Facturar;
     }
