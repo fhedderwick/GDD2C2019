@@ -14,7 +14,9 @@ namespace FrbaOfertas.CragaCredito
     public partial class CargarCredito : Form
     {
         private DataBaseManager _dbm;
-        public string clienteId;
+        private string clienteId;
+        private string querySaldo = "SELECT CLI_SALDO FROM MANA.CLIENTE WHERE CLI_ID = @ClienteId";
+
         public CargarCredito(DataBaseManager dbm)
         {
             _dbm = dbm;            
@@ -35,17 +37,19 @@ namespace FrbaOfertas.CragaCredito
                 {
                     clienteId = t1.Text;                    
                     Dictionary<string, object> map = new Dictionary<string, object>();                    
-                    map.Add("@FechaCarga", DateTime.Today);                      //Fecha del archivo de Configuracion
+                    map.Add("@FechaCarga", DateTime.Today);                      //Fecha del archivo de Configuracion (?
                     map.Add("ClienteId", t1.Text);
                     map.Add("@TipoPago", t3.SelectedItem.ToString());
                     map.Add("@Monto", t4.Text);
                     map.Add("NumeroTarjeta", t2.Text);
                     _dbm.executeProcedure("Mana.CargarCredito", map);
-                   
+
+                    this.obtenerNuevoSaldo(clienteId);                     
                     Hide();
-                    CargaExitosa i = new CargaExitosa(_dbm, clienteId);
+                    CargaExitosa i = new CargaExitosa(_dbm);
                     i.Show();
                     this.Close();
+                     
                 }
                 else { MessageBox.Show("Faltan ingresar algunos de los datos solicitados", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
             }
@@ -76,15 +80,12 @@ namespace FrbaOfertas.CragaCredito
         private bool pagoConTarjeta() { return this.pagoConCredito() || this.pagoConDebito(); }
         private bool ingresoNumeroTarjeta() { return t2.Text.Length != 0; }
 
-
-        /*
-         int saldo;
-                    string query = "SELECT C.CLI_SALDO FROM CLIENTE C WHERE CLI_ID = @ClienteId";
-                    Dictionary<string, object> map1 = new Dictionary<string, object>();
-                    map1.Add("@ClienteId", clienteId);
-                    SqlDataReader r = _dbm.executeSelect(query);
-                    saldo = r ??
-          MessageBox.Show("Su carga fue exitosa. Su nuevo saldo es:" + saldo, "Exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-         */
+        private void obtenerNuevoSaldo(string clienteId)
+        {            
+            Dictionary<string, object> map1 = new Dictionary<string, object>();
+            map1.Add("@ClienteId", clienteId);
+            decimal saldo = _dbm.executeSelectDecimal(querySaldo, map1);
+          MessageBox.Show("Su carga fue exitosa. Su nuevo saldo es:" + " " + saldo, "Exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }

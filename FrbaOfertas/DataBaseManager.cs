@@ -238,5 +238,28 @@ namespace FrbaOfertas
             command.ExecuteNonQuery();            
         }
 
+        internal decimal executeSelectDecimal(String query)
+        {
+            SqlCommand command = new SqlCommand(query, _conn);            
+           return  (Decimal)command.ExecuteScalar();             
+        }
+
+        internal decimal executeSelectDecimal(String query, Dictionary<string, object> map)
+        {
+            SqlCommand command = new SqlCommand(query, _conn);
+            foreach (var pair in map)
+            {
+                string key = pair.Key;
+                object value = pair.Value;
+                command.Parameters.AddWithValue(key, value);
+            }
+            return (Decimal)command.ExecuteScalar();
+        }
+
+        internal int executeSelectInt(String query)
+        {
+            SqlCommand command = new SqlCommand(query, _conn);
+            return (Int32)command.ExecuteScalar();
+        }
     }
 }

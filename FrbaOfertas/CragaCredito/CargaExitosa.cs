@@ -14,13 +14,11 @@ namespace FrbaOfertas.CragaCredito
 {
     public partial class CargaExitosa : Form
     {
-        private DataBaseManager _dbm;
-        private string id;       
+        private DataBaseManager _dbm;            
 
-        public CargaExitosa(DataBaseManager dbm, string clienteId)
+        public CargaExitosa(DataBaseManager dbm)
         {
-            _dbm = dbm;
-            id = clienteId;
+            _dbm = dbm;            
             InitializeComponent();
         }
 
@@ -42,20 +40,6 @@ namespace FrbaOfertas.CragaCredito
         {                       
            
         }
-        /*
-        private string saldo()
-        {
-            string query = "SELECT C.CLI_SALDO FROM CLIENTE C WHERE CLI_ID = @ClienteId";
-            Dictionary<string, string> map = new Dictionary<string, string>();
-            map.Add("@ClienteId", id);
-            SqlDataReader importe;
-            importe = _dbm.executeSelect(query, map);
-            while (importe.Read())
-            {
-               
-            }
-            return "Hola";
-        }
-       */
+        
     }
 }

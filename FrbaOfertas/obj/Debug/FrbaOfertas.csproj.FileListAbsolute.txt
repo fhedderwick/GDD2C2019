@@ -1,7 +1,7 @@
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\bin\Debug\FrbaOfertas.exe.config
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\bin\Debug\FrbaOfertas.exe
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\bin\Debug\FrbaOfertas.pdb
-D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.csprojResolveAssemblyReference.cache
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.AltaYModifCliente.resources
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.BajaCliente.resources
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.ListaCliente.resources
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmProveedor.AltaProveedor.resources
@@ -12,8 +12,18 @@ D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfert
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.ListaRol.resources
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.ModificarRol.resources
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.BajaRol.resources
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.ComprarOferta.CompraExitosa.resources
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.ComprarOferta.GenerarCupon.resources
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.ComprarOferta.OfertasPublicadas.resources
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.CragaCredito.CargaExitosa.resources
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.AltaOferta.resources
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.CanjearCupon.resources
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.Generacion_Exitosa.resources
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.PantallaInicio.resources
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.DateChooser.resources
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.ErrorConexion.resources
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Facturar.GenerarFactura.resources
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Facturar.IngresoDatos.resources
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Login.Login.resources
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Login.NewUser.resources
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Login.Password.resources
@@ -23,48 +33,4 @@ D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfert
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.csproj.GenerateResource.Cache
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.exe
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.pdb
-D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.ComprarOferta.CompraExitosa.resources
-D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.ComprarOferta.GenerarCupon.resources
-D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.ComprarOferta.OfertasPublicadas.resources
-D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.AltaOferta.resources
-D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.Generacion_Exitosa.resources
-<<<<<<< HEAD
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\bin\Debug\FrbaOfertas.exe.config
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.exe
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.pdb
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.csprojResolveAssemblyReference.cache
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.AltaYModifCliente.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.BajaCliente.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.ListaCliente.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmProveedor.AltaProveedor.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmProveedor.W.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmProveedor.ListaProveedor.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmProveedor.ModificarProveedor.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.AltaRol.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.ListaRol.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.ModificarRol.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.BajaRol.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.ComprarOferta.CompraExitosa.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.ComprarOferta.GenerarCupon.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.ComprarOferta.OfertasPublicadas.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.AltaOferta.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.Generacion_Exitosa.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.DateChooser.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.ErrorConexion.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Login.Login.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Login.NewUser.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Login.Password.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Login.UsuarioInexistente.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.PantallaPrincipalUsuario.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Properties.Resources.resources
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.csproj.GenerateResource.Cache
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\bin\Debug\FrbaOfertas.exe
-C:\Users\ALEXIS\Desktop\GDD2C2019\FrbaOfertas\bin\Debug\FrbaOfertas.pdb
-=======
-D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.AltaYModifCliente.resources
->>>>>>> 5d1e6ea91a39a97ae81ba88eb13fd52e9f988784
-D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.CragaCredito.CargaExitosa.resources
-D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.CanjearCupon.resources
-D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.PantallaInicio.resources
-D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Facturar.IngresoDatos.resources
-D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Facturar.GenerarFactura.resources
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.csprojResolveAssemblyReference.cache
