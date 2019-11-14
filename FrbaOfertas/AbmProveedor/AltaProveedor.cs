@@ -14,15 +14,22 @@ namespace FrbaOfertas.AbmProveedor
     public partial class AltaProveedor : Form
     {
         private DataBaseManager _dbm;
+        private String _user;
+        private String _pass;
         const String EXISTS_PROV_QUERY = "SELECT * FROM MANA.PROVEEDOR P WHERE P.PROV_CUIT = @CUIT AND P.PROV_RAZON_SOCIAL = @RSOCIAL";
         const String ADD_PROV_QUERY = "INSERT INTO MANA.PROVEEDOR (PROV_RAZON_SOCIAL,PROV_MAIL,PROV_TELEFONO,PROV_DIRECCION,PROV_CODIGO_POSTAL,PROV_CIUDAD,PROV_CUIT,PROV_RUBRO_ID,PROV_NOMBRE_CONTACTO,PROV_ESTADO) VALUES (@RSOCIAL,@MAIL,@TELEFONO,@DIRECCION,@CPOSTAL,@CIUDAD,@CUIT,@RUBRO,@NOMBRE,'Habilitado')";
         const String GET_RUBROS_QUERY = "SELECT RUBRO_ID ID, RUBRO_DESCRIPCION DESCRIPCION FROM MANA.RUBRO";
+        const String ADD_USUARIO = "INSERT INTO MANA.USUARIO (USER_USERNAME,USER_PASSWORD,USUARIO_ESTADO) VALUES (@USUARIO,@PASSWORD,'Habilitado')";
 
-        public AltaProveedor(DataBaseManager dbm)
+
+
+        public AltaProveedor(DataBaseManager dbm, String user, String pass)
         {
             InitializeComponent();
             _dbm = dbm;
             loadRubro();
+            _user = user;
+            _pass = pass;
         }
 
         private void AltaProveedor_Load(object sender, EventArgs e)
@@ -53,6 +60,13 @@ namespace FrbaOfertas.AbmProveedor
                 map.Add("@NOMBRE",nombreContactoBox1.Text);
                 _dbm.executeUpdate(ADD_PROV_QUERY, map);
                 MessageBox.Show("EL PROVEEDOR SE DIO DE ALTA");
+
+                Dictionary<string, object> mapUsuario = new Dictionary<string, object>();
+                mapUsuario.Add("@USUARIO", _user);
+                mapUsuario.Add("@PASSWORD", _pass);
+                _dbm.executeUpdate(ADD_USUARIO, mapUsuario);
+                MessageBox.Show("EL USUARIO SE DIO DE ALTA");
+
                 Close();
             }
 

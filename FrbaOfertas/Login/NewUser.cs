@@ -70,7 +70,7 @@ namespace FrbaOfertas.Login
             }
             else if ("Proveedor".Equals(eleccion))
             {
-                AltaProveedor altaProveedor = new AltaProveedor(_dbm);
+                AltaProveedor altaProveedor = new AltaProveedor(_dbm, user, pass);
                 altaProveedor.Show();
                 Close();
             }
