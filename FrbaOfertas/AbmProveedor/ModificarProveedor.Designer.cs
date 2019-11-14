@@ -233,6 +233,7 @@
             this.rubroComboBox.Name = "rubroComboBox";
             this.rubroComboBox.Size = new System.Drawing.Size(139, 21);
             this.rubroComboBox.TabIndex = 64;
+            this.rubroComboBox.SelectedIndexChanged += new System.EventHandler(this.rubroComboBox_SelectedIndexChanged);
             // 
             // ModificarProveedor
             // 

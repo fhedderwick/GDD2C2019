@@ -16,36 +16,23 @@ namespace FrbaOfertas.Login
     public partial class NewUser : Form
     {
         const String USER_EXISTS_QUERY = "SELECT * FROM MANA.USUARIO WHERE USER_USERNAME = @username";
-        const String GET_ROLES_QUERY = "SELECT ROL_ID, ROL_NOMBRE FROM MANA.ROL R WHERE R.ROL_ESTADO = 'Habilitado'";
+        const String GET_ROLES_QUERY = "SELECT ROL_ID ID, ROL_NOMBRE NOMBRE FROM MANA.ROL";
 
         DataBaseManager _dbm;
         String _username;
 
         public NewUser(DataBaseManager dbm, String username) : this(dbm, username, "") { }
-        public NewUser(DataBaseManager dbm, String username, String rol)
+
+
+        public NewUser(DataBaseManager dbm, String username,String rol)
         {
+            Console.Write("ALEXISSSSSSSSSS");
+
             _dbm = dbm;
             _username = username;
             InitializeComponent();
             textBox2.Text = _username;
-            if (rol.Length == 0)
-            {
-                SqlDataReader resultSet = _dbm.executeSelect(GET_ROLES_QUERY);
-                while (resultSet.Read())
-                {
-                    int id = (int)resultSet.GetValue(resultSet.GetOrdinal("ROL_ID"));
-                    String name = (String)resultSet.GetValue(resultSet.GetOrdinal("ROL_NOMBRE"));
-                    comboBox1.Items.Add(name);
-                }
-            }
-            else
-            {
-                textBox2.Enabled = true;
-                comboBox1.Items.Add(rol);
-                comboBox1.SelectedIndex = 0;
-                comboBox1.Enabled = false;
-            }
-
+            this.loadRol(); 
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -54,6 +41,11 @@ namespace FrbaOfertas.Login
             String pass = maskedTextBox1.Text;
             String passRep = maskedTextBox2.Text;
             String eleccion = comboBox1.Text;
+
+            String rol = comboBox1.SelectedValue.ToString();
+
+
+
             if (!checkUser(user) || !checkPass(pass, passRep))
             {
                 return;
@@ -70,7 +62,13 @@ namespace FrbaOfertas.Login
             }
             else if ("Proveedor".Equals(eleccion))
             {
-                AltaProveedor altaProveedor = new AltaProveedor(_dbm, user, pass);
+                String nRubro = comboBox1.Text;
+
+                Console.Write("Alexis");
+
+
+                Console.Write(nRubro);
+                AltaProveedor altaProveedor = new AltaProveedor(_dbm, user, pass,rol);
                 altaProveedor.Show();
                 Close();
             }
@@ -132,5 +130,26 @@ namespace FrbaOfertas.Login
         {
 
         }
+
+        private void loadRol()
+        {
+            SqlDataReader resultSet = _dbm.executeSelect(GET_ROLES_QUERY);
+            this.comboBox1.DisplayMember = "Text";
+            this.comboBox1.ValueMember = "Value";
+            List<Rol> list = new List<Rol>();
+
+            while (resultSet.Read())
+            {
+                list.Add(new Rol() { Text = resultSet["NOMBRE"].ToString(), Value = resultSet["ID"].ToString() });
+            }
+            comboBox1.DataSource = list;
+        }
     }
+
+    public class Rol
+    {
+        public string Text { get; set; }
+        public string Value { get; set; }
+    }
+
 }

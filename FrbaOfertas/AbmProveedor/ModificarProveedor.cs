@@ -162,6 +162,11 @@ namespace FrbaOfertas.AbmProveedor
             public string Text { get; set; }
             public string Value { get; set; }
         }
+
+        private void rubroComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 
     
