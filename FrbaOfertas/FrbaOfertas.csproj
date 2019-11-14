@@ -122,6 +122,12 @@
     <Compile Include="ComprarOferta\OfertasPublicadas.Designer.cs">
       <DependentUpon>OfertasPublicadas.cs</DependentUpon>
     </Compile>
+    <Compile Include="ComprarOferta\ValidarCompra.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComprarOferta\ValidarCompra.Designer.cs">
+      <DependentUpon>ValidarCompra.cs</DependentUpon>
+    </Compile>
     <Compile Include="CragaCredito\CargarCredito.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -268,6 +274,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ComprarOferta\OfertasPublicadas.resx">
       <DependentUpon>OfertasPublicadas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComprarOferta\ValidarCompra.resx">
+      <DependentUpon>ValidarCompra.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CragaCredito\CargaExitosa.resx">
       <DependentUpon>CargaExitosa.cs</DependentUpon>

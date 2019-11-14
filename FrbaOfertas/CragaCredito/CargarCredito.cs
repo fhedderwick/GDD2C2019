@@ -41,7 +41,7 @@ namespace FrbaOfertas.CragaCredito
                     map.Add("ClienteId", t1.Text);
                     map.Add("@TipoPago", t3.SelectedItem.ToString());
                     map.Add("@Monto", t4.Text);
-                    map.Add("NumeroTarjeta", t2.Text);
+                    map.Add("@NumeroTarjeta", t2.Text);
                     _dbm.executeProcedure("Mana.CargarCredito", map);
 
                     this.obtenerNuevoSaldo(clienteId);                     
@@ -53,7 +53,8 @@ namespace FrbaOfertas.CragaCredito
                 }
                 else { MessageBox.Show("Faltan ingresar algunos de los datos solicitados", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
             }
-            catch (Exception ex) { MessageBox.Show("Faltan ingresar algunos de los datos solicitados", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
+                //Valido que el cliente exista. Igualmente esta validado en el procedure de SQL
+            catch (Exception ex) { MessageBox.Show("Verifique que los datos ingresados sean correctos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
         }
 
         private bool validarModoPago()

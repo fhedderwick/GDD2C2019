@@ -261,5 +261,23 @@ namespace FrbaOfertas
             SqlCommand command = new SqlCommand(query, _conn);
             return (Int32)command.ExecuteScalar();
         }
+
+        internal string executeSelectString(String query)
+        {
+            SqlCommand command = new SqlCommand(query, _conn);
+            return (String)command.ExecuteScalar();
+        }
+
+        internal string executeSelectString(String query, Dictionary<string, object> map)
+        {
+            SqlCommand command = new SqlCommand(query, _conn);
+            foreach (var pair in map)
+            {
+                string key = pair.Key;
+                object value = pair.Value;
+                command.Parameters.AddWithValue(key, value);
+            }
+            return (String)command.ExecuteScalar();
+        }
     }
 }
