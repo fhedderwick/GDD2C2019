@@ -13,6 +13,7 @@ namespace FrbaOfertas.CrearOferta
     public partial class CanjearCupon : Form
     {
         private DataBaseManager _dbm;
+        private string queryEstadoCupon = "SELECT CUPON_ESTADO FROM MANA.CUPON WHERE CUPON_ID = @CuponId";
 
         public CanjearCupon(DataBaseManager dbm)
         {
@@ -30,10 +31,9 @@ namespace FrbaOfertas.CrearOferta
 
         private void b2_Click(object sender, EventArgs e)
         {
-            int cuponId;
+            
             if (this.camposObligatoriosCompletos() == true)
-            {
-                cuponId = Convert.ToInt32(t1.Text);
+            {                
                 Dictionary<string, object> map = new Dictionary<string, object>();
                 map.Add("@CuponId", t1.Text);
                 map.Add("@NumeroOferta", t2.Text);
@@ -48,15 +48,20 @@ namespace FrbaOfertas.CrearOferta
                 map.Add("@C_Dest_Fecha_Nac", Convert.ToDateTime(t10.Text));
                 map.Add("@C_Dest_Ciudad", t11.Text);
                 _dbm.executeProcedure("Mana.CanjearCupon", map);
-                //Si el cupon fue canjeado entonces tiene que estar deshabilitado. Las validaciones pedidas en el enunciado estan en el Procedure de SQL
-                /*
-                if (_dbm.executeSelect("SELECT CUPON_ESTADO FROM CUPON WHERE CUPON_ID = cuponId") == "Deshabilitado")
-                {
-                    Hide();
+                
+                Dictionary<string, object> map2 = new Dictionary<string, object>();
+                map2.Add("@CuponId", t1.Text);
+                string estadoCupon = _dbm.executeSelectString(queryEstadoCupon, map2);
+
+                if (estadoCupon == "Deshabilitado")  //Si el cupon fue canjeado entonces tiene que estar deshabilitado. Las validaciones pedidas en el enunciado estan en el Procedure de SQL
+                {                   
                     MessageBox.Show("El cupon fue canjeado exitosamente", "Exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Hide();
+                    Generacion_Exitosa i = new Generacion_Exitosa(_dbm);
+                    i.Show();
                     this.Close();
                 }
-                else { MessageBox.Show("El cupon no pudo darse de baja.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }  */
+                else { MessageBox.Show("El cupon no pudo darse de baja.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }  
             }
             else { MessageBox.Show("Faltan ingresar algunos de los datos solicitados", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
         }

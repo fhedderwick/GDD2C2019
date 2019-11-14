@@ -25,16 +25,7 @@ namespace FrbaOfertas.CrearOferta
         {
             Hide();
             this.Close();
-        }
-
-        private void btnGenerarNuevaOferta_Click(object sender, EventArgs e)
-        {
-            Hide();
-            AltaOferta i = new AltaOferta(_dbm);
-            i.Show();
-            this.Close();
-        }
-
-        
+        }       
+       
     }
 }

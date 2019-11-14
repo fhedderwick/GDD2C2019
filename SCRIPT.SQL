@@ -5,7 +5,7 @@ GO
 /*La primera vez que ejecuten el SCRIPT haganlo con los DROP CONSTRAINTS Comentado. 
   Desde la 2da en adelante saquen los comentarios a DROP CONSTRAINTS para ejecutar para que no tengan problemas con las FK y la consulta sea ejecutada siempre correctamente*/
 
- 
+
 ALTER TABLE [MANA].PROVEEDOR DROP CONSTRAINT FK_RUBRO_ID;
 ALTER TABLE [MANA].ITEM_FACTURA DROP CONSTRAINT FK_OF_VEN_ID;
 ALTER TABLE [MANA].CONSUMO_OFERTA DROP CONSTRAINT FK_CUPON_ID;
@@ -65,6 +65,8 @@ IF OBJECT_ID('MANA.PublicarOferta') IS NOT NULL
     DROP TRIGGER MANA.PublicarOferta;
 IF OBJECT_ID('MANA.ValidarVencimientoOferta') IS NOT NULL
     DROP TRIGGER MANA.ValidarVencimientoOferta;
+IF OBJECT_ID('MANA.ValidarStockOferta') IS NOT NULL
+    DROP TRIGGER MANA.ValidarStockOferta;
 IF OBJECT_ID('MANA.ValidarVencimientoCupon') IS NOT NULL
     DROP TRIGGER MANA.ValidarVencimientoCupon;
 	       /*Migracion*/
@@ -308,7 +310,7 @@ CREATE TABLE [MANA].CUPON (
 	CUPON_PRECIO_LISTA NUMERIC(18),	
 	CUPON_CANTIDAD_ADQUIRIDA INT,
 	CUPON_IMPORTE NUMERIC (18),	
-	CUPON_CLI_ID INT,
+	CUPON_CLI_ID INT,	
 	CUPON_ESTADO NVARCHAR(20),
 	
 	CONSTRAINT CUPON_PK PRIMARY KEY (CUPON_ID)
@@ -439,11 +441,11 @@ BEGIN
   Update OFERTA set OF_ESTADO = 'Habilitado' where OFERTA.OF_NUMERO in
   (select O.OF_NUMERO
     from OFERTA O
-	where O.OF_FECHA_PUBLICACION <= GETDATE())
+	where O.OF_FECHA_PUBLICACION >= '2020/12/12')        /*Fecha de Archivo de Configuracion*/
 END
 GO
 
-create TRIGGER MANA.ValidarVencimientoOferta 
+create TRIGGER MANA.ValidarVencimientoOferta           /*Cuando las ofertas vencen pasan a Deshabilitadas*/
 on MANA.OFERTA
    after INSERT
 AS
@@ -451,7 +453,19 @@ BEGIN
    Update OFERTA set OF_ESTADO = 'Deshabilitado' where OFERTA.OF_NUMERO in
    (select O.OF_NUMERO
     from OFERTA O
-	where O.OF_FECHA_VENCIMIENTO <= GETDATE())
+	where O.OF_FECHA_VENCIMIENTO <= GETDATE())           
+END
+GO
+
+create TRIGGER MANA.ValidarStockOferta              /*Cuando ya no hay stock las ofertas pasan a Deshabilitadas*/
+on MANA.OFERTA
+   after INSERT, UPDATE
+AS
+BEGIN
+   Update OFERTA SET OF_ESTADO = 'Deshabilitado' where OFERTA.OF_NUMERO in
+   (select O.OF_NUMERO
+    from OFERTA O
+	where O.OF_CANTIDAD_DISPONIBLE = 0) 
 END
 GO
 
@@ -554,8 +568,8 @@ GO
 
 CREATE PROCEDURE MANA.MigrarOferta
 AS
-insert into MANA.OFERTA
-select M.Oferta_Codigo, M.Oferta_Descripcion, M.Oferta_Fecha, M.Oferta_Fecha_Venc, M.Oferta_Precio, M.Oferta_Precio_Ficticio, P.PROV_ID, M.Oferta_Cantidad, NULL as Maximo_Unidad_Por_Cliente ,'En Espera'
+insert into MANA.OFERTA         /*Como en la tabla maestra no habia una restriccion de maximo de unidades por cliente, le asigno la cantidad disponible*/
+select M.Oferta_Codigo, M.Oferta_Descripcion, M.Oferta_Fecha, M.Oferta_Fecha_Venc, M.Oferta_Precio, M.Oferta_Precio_Ficticio, P.PROV_ID, M.Oferta_Cantidad, M.Oferta_Cantidad ,'En Espera'
 from gd_esquema.Maestra M, MANA.PROVEEDOR P 
 where
    (M.Provee_RS = P.PROV_RAZON_SOCIAL AND
@@ -563,7 +577,7 @@ where
 	M.Provee_Telefono = P.PROV_TELEFONO AND
 	M.Provee_Dom = P.PROV_DIRECCION AND
 	M.Provee_Ciudad = P.PROV_CIUDAD)	
-group by M.Oferta_Codigo, M.Oferta_Descripcion, M.Oferta_Fecha, M.Oferta_Fecha_Venc, M.Oferta_Precio, M.Oferta_Precio_Ficticio, P.PROV_ID, M.Oferta_Cantidad
+group by M.Oferta_Codigo, M.Oferta_Descripcion, M.Oferta_Fecha, M.Oferta_Fecha_Venc, M.Oferta_Precio, M.Oferta_Precio_Ficticio, P.PROV_ID, M.Oferta_Cantidad, M.Oferta_Cantidad
 ORDER BY P.PROV_ID	
 GO
 
@@ -1088,7 +1102,7 @@ GO
 CREATE PROCEDURE MANA.CrearOferta @Descripcion nvarchar(255), @FechaPublicacion datetime, @FechaVencimiento datetime, @PrecioOferta numeric(18), @PrecioLista numeric(18), 
 								  @ProveedorId int, @CantidadDisponible numeric (18), @MaximoUnidadesPorCliente int
 AS
-  IF(@FechaPublicacion >= CONVERT(DATE,GETDATE()) AND @FechaVencimiento >= CONVERT(DATE,GETDATE()) AND @CantidadDisponible>= @MaximoUnidadesPorCliente) /*Validado en visual*/
+  IF(@FechaPublicacion >= CONVERT(DATE,GETDATE()) AND @FechaVencimiento >= CONVERT(DATE,GETDATE())) /*Validado en visual tambien*/
   BEGIN
 declare @NumeroOferta nvarchar(50) = 1  /*Autogenerar Codigo de Oferta: Si no existe codigo -> Crea . Si existe codigo -> Lo aumento en 1 y luego crea*/
     IF(NOT EXISTS(SELECT OF_NUMERO FROM MANA.OFERTA where OF_NUMERO = @NumeroOferta))  
@@ -1204,21 +1218,20 @@ CREATE PROCEDURE MANA.ComprarOferta @FechaCompra datetime, @OfertaNumero nvarcha
 AS
        declare @Importe numeric(18)
        set @Importe = @PrecioOferta * @CantidadAdquirida
-                            /*Valido el saldo del Cliente y que la cantidad adquirida sea menor al MaxUnidadesPorCliente */
-  IF(Mana.ObtenerSaldo(@ClienteId) >= @Importe AND @CantidadAdquirida <= Mana.ObtenerMaximoUnidadOferta(@OfertaNumero)) 
- BEGIN   
-                            /* VALIDO QUE CUMPLA CON LA RESTRICCION DE MAX UNIDADES POR CLIENTE */    	   
+                            /*Valido el saldo del Cliente */
+  IF(Mana.ObtenerSaldo(@ClienteId) >= @Importe) 
+ BEGIN                                        /* VALIDO QUE CUMPLA CON LA RESTRICCION DE MAX UNIDADES POR CLIENTE */    	   
 	   declare @ProvId int
 	   declare @CuponId int	        	  
 	   set @ProvId = Mana.ObtenerProveedorOferta (@OfertaNumero)
-	                       /*Si es la primera vez que compras la Oferta -> Ya estas validado -> Compras la oferta */ 
-   IF(NOT EXISTS(SELECT L_CLIENTE_ID, L_OFERTA_NUMERO FROM LIMITE_OFERTA_CLIENTE WHERE L_CLIENTE_ID = @ClienteId AND L_OFERTA_NUMERO = @OfertaNumero))
+	                       /*Si es la primera vez que compras la Oferta -> Valido que la cantidad adquirida no supere el maxUnidXCliente -> Compras la oferta */ 
+   IF(NOT EXISTS(SELECT L_CLIENTE_ID, L_OFERTA_NUMERO FROM LIMITE_OFERTA_CLIENTE WHERE L_CLIENTE_ID = @ClienteId AND L_OFERTA_NUMERO = @OfertaNumero) AND @CantidadAdquirida <= Mana.ObtenerMaximoUnidadOferta(@OfertaNumero))
     BEGIN
 	   declare @Limite int	   
 	   set @Limite = Mana.ObtenerMaximoUnidadOferta (@OfertaNumero)   
 	   	                 /*Genero el Cupon*/
 	   EXECUTE Mana.CrearCupon @FechaCompra, @OfertaNumero, @PrecioOferta, @PrecioLista, @CantidadAdquirida, @Importe, @ClienteId
-	   EXECUTE Mana.CrearLimiteDisponibleOferta @OfertaNumero, @ClienteId, @Limite                 /*Registro el MaxUnidades que el Cliente puede comprar de la Oferta*/
+	   EXECUTE Mana.CrearLimiteDisponibleOferta @OfertaNumero, @ClienteId, @Limite                 /*Registro el MaxUnidades que el Cliente puede comprar de la Oferta para tener en cuenta en las proximas posibles compras*/
 	   EXECUTE Mana.DescontarSaldo @ClienteId, @Importe                                            /*Actualizo saldo de Cliente*/
        EXECUTE Mana.ActualizarStock @OfertaNumero, @CantidadAdquirida                              /*Actualizo el stock de la Oferta*/
 	   EXECUTE Mana.ActualizarLimiteDisponibleOferta @OfertaNumero, @ClienteId, @CantidadAdquirida /*Actualizo la tabla Limite Disponible descontando al limite disponible la cantidad adquirida */
@@ -1325,7 +1338,7 @@ GO
 
 /** Test **/ 
                           /*Formato Fechas AÑO/DIA/MES, no me pregunten porque*/
-/*ABM Cliente
+/*ABM Cliente*/
 Mana.CrearCliente 'Gregory', 'House', 88430112, 'house@hotmail.com', 15856682, 'HOSPITAL521', 1252, 'Miami', '1985/06/10'
 GO
 Mana.ModificarCliente 5, 'Patrick', 'Jane', 62525087, 'jane@hotmail.com', 15534689, 'FBI5212', 1456, 'California', '1990/07/11'
@@ -1336,7 +1349,7 @@ Mana.CargarCredito '2019/08/11', 5, 'Debito', 100000, 0855648989
 GO
 Mana.CargarCredito '2019/08/11', 7, 'Crédito', 50000, 0975423614
 GO
-*/
+
 
 /*ABM Proveedor
 Mana.CrearProveedor 'Proveedor Cortinas S.R.L.', '11-22445103-2',  'Cortinas Congreso', 'cortinas@gmail.com', 43825679, 'Pozos618', 1256, 'CABA', 'Hogar' 
@@ -1349,19 +1362,19 @@ GO
 
 /*ABM Oferta*/
 
-Mana.CrearOferta 'NotebookICoreI9', '2020/25/11', '2020/02/11', 15000, 20000, 15, 10, 2
+Mana.CrearOferta 'NotebookICoreI9', '2020/12/12', '2025/10/12', 15000, 20000, 15, 100, 2
 GO
-Mana.CrearOferta 'CelularMotorolaE5', '2019/12/11', '2025/05/11', 7700, 12500, 12, 100, 5
+Mana.CrearOferta 'CelularMotorolaE5', '2020/12/12', '2025/05/11', 7700, 12500, 12, 100, 5
 GO
 /*
 Mana.CanjearCupon 5, 'AZHEVYMSAC6', 26, '2020-01-08', 'Mirtha', 'Legrand', 00000001, NULL, 41114565, 'eltrece 99', '1920/04/10', 'CABA'			
 GO
-*/
-Mana.ComprarOferta '2019/12/11', 2, 7700, 12500, 10, 5
+
+Mana.ComprarOferta '2019/15/11', 2, 7700, 12500, 10, 5
 GO
 Mana.ComprarOferta '2019/15/11', 2, 15000, 20000, 2, 7
 GO
-
+*/
 /*Facturacion
 
 Mana.FacturarOfertasAProveedor 12, '2018/05/10', '2024/30/12'
