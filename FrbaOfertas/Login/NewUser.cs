@@ -26,8 +26,6 @@ namespace FrbaOfertas.Login
 
         public NewUser(DataBaseManager dbm, String username,String rol)
         {
-            Console.Write("ALEXISSSSSSSSSS");
-
             _dbm = dbm;
             _username = username;
             InitializeComponent();
@@ -56,7 +54,7 @@ namespace FrbaOfertas.Login
             }
             else if ("Cliente".Equals(eleccion))
             {
-                AltaYModifCliente altaCliente = new AltaYModifCliente(_dbm, user, pass);
+                AltaYModifCliente altaCliente = new AltaYModifCliente(_dbm, user, pass,rol);
                 altaCliente.Show();
                 Close();
             }
@@ -143,6 +141,11 @@ namespace FrbaOfertas.Login
                 list.Add(new Rol() { Text = resultSet["NOMBRE"].ToString(), Value = resultSet["ID"].ToString() });
             }
             comboBox1.DataSource = list;
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 

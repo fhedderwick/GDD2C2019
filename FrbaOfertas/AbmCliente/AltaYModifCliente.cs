@@ -14,14 +14,19 @@ namespace FrbaOfertas.AbmCliente
     public partial class AltaYModifCliente : Form
     {
         private String GET_CLIENT_DATA_QUERY = "SELECT C.CLI_ID ID, C.CLI_NOMBRE NOMBRE, C.CLI_APELLIDO APELLIDO, C.CLI_DNI DNI, C.CLI_MAIL MAIL, C.CLI_TELEFONO TELEFONO, C.CLI_DIRECCION DIRECCION, C.CLI_CODIGO_POSTAL CODIGO_POSTAL, C.CLI_CIUDAD CIUDAD, C.CLI_FECHA_NACIMIENTO FECHA, C.CLI_SALDO SALDO, C.CLI_ESTADO ESTADO FROM MANA.CLIENTE C WHERE C.CLI_ID = @clientId";
-        private String INSERT_QUERY = "INSERT INTO MANA.CLIENTE (CLI_NOMBRE,CLI_APELLIDO,CLI_DNI,CLI_MAIL,CLI_TELEFONO,CLI_DIRECCION,CLI_CODIGO_POSTAL,CLI_CIUDAD,CLI_FECHA_NACIMIENTO) VALUES (@nombre,@apellido,@dni,@mail,@telefono,@direccion,@codigoPostal,@ciudad,@fechaNacimiento)";
+        private String INSERT_QUERY = "INSERT INTO MANA.CLIENTE (CLI_NOMBRE,CLI_APELLIDO,CLI_DNI,CLI_MAIL,CLI_TELEFONO,CLI_DIRECCION,CLI_CODIGO_POSTAL,CLI_CIUDAD,CLI_FECHA_NACIMIENTO,CLI_SALDO,CLI_ESTADO) VALUES (@nombre,@apellido,@dni,@mail,@telefono,@direccion,@codigoPostal,@ciudad,@fechaNacimiento,'200','Habilitado')";
         private String UPDATE_QUERY = "UPDATE MANA.CLIENTE SET CLI_NOMBRE = @nombre,CLI_APELLIDO=@apellido,CLI_DNI=@dni,CLI_MAIL=@mail,CLI_TELEFONO=@telefono,CLI_DIRECCION=@direccion,CLI_CODIGO_POSTAL=@codigoPostal,CLI_CIUDAD=@ciudad,CLI_FECHA_NACIMIENTO=@fechaNacimiento WHERE CLI_ID=@clientId";
-        private String USER_EXISTS_QUERY = "SELECT COUNT(*) FROM MANA.CLIENTE C WHERE C.CLI_NOMBRE = @nombre AND C.CLI_APELLIDO = @apellido AND C.CLI_DNI = @dni AND C.CLI_MAIL = @mail";
+        private String USER_EXISTS_QUERY = "SELECT * FROM MANA.CLIENTE C WHERE C.CLI_NOMBRE = @nombre AND C.CLI_APELLIDO = @apellido AND C.CLI_DNI = @dni AND C.CLI_MAIL = @mail";
 
+        const String ADD_USUARIO = "INSERT INTO MANA.USUARIO (USER_USERNAME,USER_PASSWORD,USUARIO_ESTADO) VALUES (@USUARIO,@PASSWORD,'Habilitado')";
+        const String ADD_USUARIO_ROL = "INSERT INTO MANA.USUARIO_ROL (UR_USR_ID,UR_ROL_ID) VALUES (@USROLID,@ROL)";
+        const String GET_USUARIO_ID = "SELECT USER_ID FROM MANA.USUARIO WHERE USER_USERNAME = @USER_NAME";
+        
         private DataBaseManager _dbm;
         private int _id;
         private String _user;
         private String _pass;
+        private String _rol;
 
         public AltaYModifCliente(DataBaseManager dbm)
         {
@@ -40,11 +45,12 @@ namespace FrbaOfertas.AbmCliente
             cargarDatos();
         }
 
-        public AltaYModifCliente(DataBaseManager dbm, String user, String pass)
+        public AltaYModifCliente(DataBaseManager dbm, String user, String pass, String rol )
         {
             _dbm = dbm;
             _user = user;
             _pass = pass;
+            _rol = rol;
             _id = -1;
             InitializeComponent();
             this.Text = "Alta de cliente";
@@ -90,23 +96,29 @@ namespace FrbaOfertas.AbmCliente
                 map.Add("@fechaNacimiento", fechaTextBox.Text);
                 if (_id == -1)
                 {
-                    SqlTransaction transaction = _dbm.getTransaction();
-                    if (1 == _dbm.executeUpdate(transaction, false, INSERT_QUERY, map))
-                    {
-                        if (1 == _dbm.executeUpdate(transaction, true, INSERT_QUERY, map))
-                        {
-                            MessageBox.Show("El cliente fue dado de alta correctamente.");
-                            Close();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Error al dar de alta al cliente: fallo insertar cliente");
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Error al dar de alta al cliente: fallo insertar usuario");
-                    }
+
+                    //Se puede dar de alta un cliente
+                    _dbm.executeUpdate(INSERT_QUERY, map);
+                    MessageBox.Show("se dio de alta el cliente");
+
+                    Dictionary<string, object> mapUsuario = new Dictionary<string, object>();
+                    mapUsuario.Add("@USUARIO", _user);
+                    mapUsuario.Add("@PASSWORD", _pass);
+                    _dbm.executeUpdate(ADD_USUARIO, mapUsuario);
+
+
+                    Dictionary<string, string> mapUsuario_Id = new Dictionary<string, string>();
+                    mapUsuario_Id.Add("@USER_NAME", _user);
+                    SqlDataReader resultSet = _dbm.executeSelect(GET_USUARIO_ID, mapUsuario_Id);
+                    resultSet.Read();
+
+                    Dictionary<string, object> mapUsuarioRol = new Dictionary<string, object>();
+
+                    mapUsuarioRol.Add("@USROLID", resultSet["USER_ID"].ToString());
+                    mapUsuarioRol.Add("@ROL", _rol);
+                    _dbm.executeUpdate(ADD_USUARIO_ROL, mapUsuarioRol);
+
+
                 }
                 else
                 {

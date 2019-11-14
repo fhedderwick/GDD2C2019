@@ -62,13 +62,11 @@ namespace FrbaOfertas.AbmProveedor
                 map.Add("@RUBRO", rubroComboBox.SelectedValue);
                 map.Add("@NOMBRE",nombreContactoBox1.Text);
                 _dbm.executeUpdate(ADD_PROV_QUERY, map);
-                //MessageBox.Show("EL PROVEEDOR SE DIO DE ALTA");
 
                 Dictionary<string, object> mapUsuario = new Dictionary<string, object>();
                 mapUsuario.Add("@USUARIO", _user);
                 mapUsuario.Add("@PASSWORD", _pass);
                 _dbm.executeUpdate(ADD_USUARIO, mapUsuario);
-                //MessageBox.Show("EL USUARIO SE DIO DE ALTA");
 
                 Dictionary<string, string> mapUsuario_Id = new Dictionary<string, string>();
                 mapUsuario_Id.Add("@USER_NAME", _user);
@@ -80,7 +78,6 @@ namespace FrbaOfertas.AbmProveedor
                 mapUsuarioRol.Add("@USROLID", resultSet["USER_ID"].ToString());
                 mapUsuarioRol.Add("@ROL", _rol);
                 _dbm.executeUpdate(ADD_USUARIO_ROL, mapUsuarioRol);
-                //MessageBox.Show("EL USUARIO_ROL SE DIO DE ALTA");
                 
                 Close();
             }
