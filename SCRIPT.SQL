@@ -441,7 +441,7 @@ BEGIN
   Update OFERTA set OF_ESTADO = 'Habilitado' where OFERTA.OF_NUMERO in
   (select O.OF_NUMERO
     from OFERTA O
-	where O.OF_FECHA_PUBLICACION >= '2020/12/12')        /*Fecha de Archivo de Configuracion*/
+	where O.OF_FECHA_PUBLICACION <= GETDATE())        
 END
 GO
 
@@ -1360,21 +1360,20 @@ Mana.BajaProveedor 'Proveedor N°13S.R.L.', '13-52415793-5'
 GO
 */
 
-/*ABM Oferta*/
+/*ABM Oferta
 
 Mana.CrearOferta 'NotebookICoreI9', '2020/12/12', '2025/10/12', 15000, 20000, 15, 100, 2
 GO
 Mana.CrearOferta 'CelularMotorolaE5', '2020/12/12', '2025/05/11', 7700, 12500, 12, 100, 5
 GO
-/*
 Mana.CanjearCupon 5, 'AZHEVYMSAC6', 26, '2020-01-08', 'Mirtha', 'Legrand', 00000001, NULL, 41114565, 'eltrece 99', '1920/04/10', 'CABA'			
 GO
-
 Mana.ComprarOferta '2019/15/11', 2, 7700, 12500, 10, 5
 GO
 Mana.ComprarOferta '2019/15/11', 2, 15000, 20000, 2, 7
 GO
 */
+
 /*Facturacion
 
 Mana.FacturarOfertasAProveedor 12, '2018/05/10', '2024/30/12'

@@ -8,13 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace FrbaOfertas.ComprarOferta
 {
     public partial class OfertasPublicadas : Form
     {
         private DataBaseManager _dbm;
-        private string queryOfertasPublicadas = "SELECT * FROM MANA.OFERTA WHERE OF_ESTADO = @Estado";
+        private string queryOfertasPublicadas = "SELECT * FROM MANA.OFERTA WHERE OF_ESTADO != @Estado AND OF_FECHA_PUBLICACION >= @Fecha";
 
         public OfertasPublicadas(DataBaseManager dbm)
         {
@@ -44,13 +45,13 @@ namespace FrbaOfertas.ComprarOferta
             d1.Columns[7].Name = "Cantidad Disponible";
             d1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             d1.Columns[8].Name = "Maximo Unidades por Cliente";
-            d1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;           
-            d1.Columns[9].Name = "Estado";
             d1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            
-            string estadoOferta = "Habilitado";
+
+            string estadoOferta = "Deshabilitado";
+            string fechaArchivo = ConfigurationManager.AppSettings["fecha"];
             Dictionary<string, string> map = new Dictionary<string, string>();
             map.Add("@Estado", estadoOferta);
+            map.Add("@Fecha", fechaArchivo);  //Llamo a las ofertas que no esten deshabilitadas y que esten vigentes a la fecha
             SqlDataReader resultSet = _dbm.executeSelect(queryOfertasPublicadas, map);
             if (resultSet.HasRows)  //Valido que haya ofertas publicadas actualmente
             {
@@ -65,9 +66,8 @@ namespace FrbaOfertas.ComprarOferta
                     int codigoProv = (int)resultSet.GetValue(resultSet.GetOrdinal("OF_PROVEEDOR_ID"));
                     decimal cantidad = (decimal)resultSet.GetValue(resultSet.GetOrdinal("OF_CANTIDAD_DISPONIBLE"));
                     int maximo = (int)resultSet.GetValue(resultSet.GetOrdinal("OF_MAXIMO_UNIDAD_CLIENTE"));
-                    string estado = (String)resultSet.GetValue(resultSet.GetOrdinal("OF_ESTADO"));
 
-                    string[] row = new string[] { codigo, descripcion, fechaP.ToString(), fechaV.ToString(), precioO.ToString(), precioL.ToString(), codigoProv.ToString(), cantidad.ToString(), maximo.ToString(), estado };
+                    string[] row = new string[] { codigo, descripcion, fechaP.ToString(), fechaV.ToString(), precioO.ToString(), precioL.ToString(), codigoProv.ToString(), cantidad.ToString(), maximo.ToString() };
                     d1.Rows.Add(row);
 
                     for (int i = 0; i < d1.Rows.Count; i++)
@@ -76,9 +76,9 @@ namespace FrbaOfertas.ComprarOferta
                     }
                 }
                 d1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                d1.AllowUserToAddRows = false;               
+                d1.AllowUserToAddRows = false;
             }
-            else  { MessageBox.Show("No hay ofertas publicadas hasta la fecha", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
+            else { MessageBox.Show("No hay ofertas publicadas hasta la fecha", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
         }
 
         private void button4_Click(object sender, EventArgs e)
