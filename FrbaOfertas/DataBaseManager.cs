@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace FrbaOfertas
 {
@@ -12,10 +13,13 @@ namespace FrbaOfertas
     {
 
         private SqlConnection _conn;
+        string server = ConfigurationManager.AppSettings["server"].ToString();
+        string user = ConfigurationManager.AppSettings["user"].ToString();
+        string password = ConfigurationManager.AppSettings["password"].ToString();
 
         internal bool initialize()
         {
-            String uri = "data source=.\\SQLSERVER2012; initial catalog=GD2C2019; user id=gdCupon2019; password=gd2019; MultipleActiveResultSets=True";
+            String uri = "data source=.\\SQLSERVER2012; initial catalog=GD2C2019; user id=" + user + "; password=" + password + "; MultipleActiveResultSets=True";
             this._conn = new SqlConnection(uri);
             try
             {
@@ -225,6 +229,13 @@ namespace FrbaOfertas
 
         }
 
+        internal void executeProcedure(String procedure)
+        {
+            SqlCommand command = new SqlCommand(procedure, _conn);
+            command.CommandType = System.Data.CommandType.StoredProcedure;
+            command.ExecuteNonQuery();
+        }
+
         internal void executeProcedure(String procedure, Dictionary<string, object> map)
         {
             SqlCommand command = new SqlCommand(procedure, _conn);
@@ -279,5 +290,6 @@ namespace FrbaOfertas
             }
             return (String)command.ExecuteScalar();
         }
+      
     }
 }

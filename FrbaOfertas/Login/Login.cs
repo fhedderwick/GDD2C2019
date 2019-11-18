@@ -19,7 +19,7 @@ namespace FrbaOfertas.Login
         private DataBaseManager _dbm;
 
         public Login(DataBaseManager dbm)
-        {
+        {            
             this._dbm = dbm;
             InitializeComponent();
         }

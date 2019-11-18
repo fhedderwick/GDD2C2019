@@ -59,7 +59,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 20);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(292, 13);
+            this.label1.Size = new System.Drawing.Size(112, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "Ingrese la contraseña.";
             // 
@@ -67,6 +67,7 @@
             // 
             this.maskedTextBox1.Location = new System.Drawing.Point(15, 54);
             this.maskedTextBox1.Name = "maskedTextBox1";
+            this.maskedTextBox1.PasswordChar = '*';
             this.maskedTextBox1.Size = new System.Drawing.Size(289, 20);
             this.maskedTextBox1.TabIndex = 3;
             // 

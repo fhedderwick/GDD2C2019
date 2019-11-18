@@ -8,6 +8,7 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FrbaOfertas.Login;
 using FrbaOfertas.AbmRol;
 using FrbaOfertas.AbmProveedor;
 using FrbaOfertas.AbmCliente;
@@ -15,7 +16,6 @@ using FrbaOfertas.ComprarOferta;
 using FrbaOfertas.CrearOferta;
 using FrbaOfertas.Facturar;
 using FrbaOfertas.CragaCredito;
-
 
 namespace FrbaOfertas
 {
@@ -25,9 +25,10 @@ namespace FrbaOfertas
         const String GET_FUNC_QUERY = "SELECT F.FR_FUNCIONALIDAD_ID, FU.FUN_NOMBRE NOMBRE FROM MANA.USUARIO_ROL R INNER JOIN MANA.FUNCIONALIDAD_ROL F ON R.UR_ROL_ID = F.FR_ROL_ID INNER JOIN MANA.FUNCIONALIDAD FU ON F.FR_FUNCIONALIDAD_ID = FU.FUNC_ID WHERE R.UR_USR_ID = @USER_ID";
 
         private DataBaseManager _dbm;
-
+        private String _userId;
         public PantallaPrincipalUsuario(DataBaseManager dbm,String userId){
             _dbm = dbm;
+            _userId = userId;
             Dictionary<string, string> map = new Dictionary<string, string>();
             map.Add("@USER_ID", userId);
             SqlDataReader resultSet = _dbm.executeSelect(GET_FUNC_QUERY, map);
@@ -40,16 +41,18 @@ namespace FrbaOfertas
             button6.Hide();
             button7.Hide();
             button8.Hide();
+            button9.Hide();
             while (resultSet.Read())
             {
                 String nombreFuncionalidad = (String)resultSet.GetValue(resultSet.GetOrdinal("NOMBRE"));
                 switch (nombreFuncionalidad)
                 {
+                    case "Seguridad": button9.Show(); break;
                     case "Abm Rol": button1.Show(); break;
                     case "Abm Cliente": button3.Show(); break;
                     case "Abm Proveedor": button4.Show(); break;
                     case "Carga Credito": button2.Show(); break;
-                    case "Abm Oferta": button5.Show(); break;
+                    case "Ofertas": button5.Show(); break;
                     case "Comprar Oferta": button6.Show(); break;
                     case "Facturacion": button7.Show(); break;
                     case "Listado Estadistico": button8.Show(); break;
@@ -98,6 +101,12 @@ namespace FrbaOfertas
         private void button2_Click(object sender, EventArgs e)
         {
             CargarCredito i = new CargarCredito(_dbm);
+            i.Show();
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            Seguridad i = new Seguridad(_dbm, _userId);
             i.Show();
         }
     }
