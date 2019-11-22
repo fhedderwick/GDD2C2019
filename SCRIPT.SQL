@@ -13,8 +13,6 @@ ALTER TABLE [MANA].CONSUMO_OFERTA DROP CONSTRAINT FK_PROVEED_ID;
 ALTER TABLE [MANA].CARGA_CREDITO DROP CONSTRAINT FK_CLI_ID;
 ALTER TABLE [MANA].CARGA_CREDITO DROP CONSTRAINT FK_TP_ID; 
 ALTER TABLE [MANA].CUPON DROP CONSTRAINT FK_CLIENTE_ID;
-ALTER TABLE [MANA].LIMITE_OFERTA_CLIENTE DROP CONSTRAINT FK_L_CLI_ID;
-ALTER TABLE [MANA].LIMITE_OFERTA_CLIENTE DROP CONSTRAINT FK_L_OF_ID; 
 ALTER TABLE [MANA].OFERTA DROP CONSTRAINT FK_PROVEEDOR_ID;
 ALTER TABLE [MANA].OFERTA_VENDIDA DROP CONSTRAINT FK_CUP_ID;
 ALTER TABLE [MANA].OFERTA_VENDIDA DROP CONSTRAINT FK_PROVEE_ID;  
@@ -50,8 +48,6 @@ IF OBJECT_ID('MANA.OFERTA') IS NOT NULL
 DROP TABLE MANA.OFERTA;
 IF OBJECT_ID('MANA.CUPON') IS NOT NULL
 DROP TABLE MANA.CUPON;
-IF OBJECT_ID('MANA.LIMITE_OFERTA_CLIENTE') IS NOT NULL
-DROP TABLE MANA.LIMITE_OFERTA_CLIENTE;
 IF OBJECT_ID('MANA.USUARIO_ROL') IS NOT NULL
 DROP TABLE MANA.USUARIO_ROL;
 IF OBJECT_ID('MANA.ROL') IS NOT NULL
@@ -80,9 +76,7 @@ IF OBJECT_ID('MANA.MigrarRubro') IS NOT NULL
 IF OBJECT_ID('MANA.MigrarProveedor') IS NOT NULL
     DROP PROCEDURE MANA.MigrarProveedor;
 IF OBJECT_ID('MANA.MigrarCupon') IS NOT NULL
-    DROP PROCEDURE MANA.MigrarCupon;
-IF OBJECT_ID('MANA.MigrarLimiteOfertaCliente') IS NOT NULL
-    DROP PROCEDURE MANA.MigrarLimiteOfertaCliente;				
+    DROP PROCEDURE MANA.MigrarCupon;			
 IF OBJECT_ID('MANA.MigrarConsumoOferta') IS NOT NULL
     DROP PROCEDURE MANA.MigrarConsumoOferta;
 IF OBJECT_ID('MANA.MigrarCargaCredito') IS NOT NULL
@@ -199,14 +193,6 @@ IF OBJECT_ID('MANA.ObtenerMaximoUnidadOferta') IS NOT NULL
     DROP FUNCTION MANA.ObtenerMaximoUnidadOferta;
 IF OBJECT_ID('MANA.ActualizarStock') IS NOT NULL
     DROP PROCEDURE MANA.ActualizarStock;
-IF OBJECT_ID('MANA.CargarOfertasDisponibles') IS NOT NULL
-    DROP FUNCTION MANA.CargarOfertasDisponibles;
-IF OBJECT_ID('MANA.CrearLimiteDisponibleOferta') IS NOT NULL
-    DROP PROCEDURE MANA.CrearLimiteDisponibleOferta;
-IF OBJECT_ID('MANA.ObtenerLimiteDisponibleOferta') IS NOT NULL
-    DROP FUNCTION MANA.ObtenerLimiteDisponibleOferta;
-IF OBJECT_ID('MANA.ActualizarLimiteDisponibleOferta') IS NOT NULL
-    DROP PROCEDURE MANA.ActualizarLimiteDisponibleOferta;
 IF OBJECT_ID('MANA.RegistrarOfertaVendida') IS NOT NULL
     DROP PROCEDURE MANA.RegistrarOfertaVendida;
 IF OBJECT_ID('MANA.CanjearCupon') IS NOT NULL
@@ -224,7 +210,8 @@ IF OBJECT_ID('MANA.ObtenerNumeroFactura') IS NOT NULL
     DROP FUNCTION MANA.ObtenerNumeroFactura;		
 IF OBJECT_ID('MANA.FacturarOfertasAProveedor') IS NOT NULL
     DROP PROCEDURE MANA.FacturarOfertasAProveedor;					
-
+IF OBJECT_ID('MANA.BorrarFactura') IS NOT NULL
+    DROP PROCEDURE MANA.BorrarFactura;
 
 						
 --DROP SCHEMA
@@ -327,15 +314,6 @@ CREATE TABLE [MANA].CUPON (
 	CONSTRAINT CUPON_PK PRIMARY KEY (CUPON_ID)
 );
 
-CREATE TABLE [MANA].LIMITE_OFERTA_CLIENTE (
-    L_ID INT NOT NULL IDENTITY,
-    L_CLIENTE_ID INT,
-	L_OFERTA_NUMERO NVARCHAR(50),
-	L_DISPONIBLE INT,
-
-	CONSTRAINT LOC_PK PRIMARY KEY (L_ID)
-);
-
 CREATE TABLE [MANA].CONSUMO_OFERTA (
 	CONSOF_ID INT NOT NULL IDENTITY,
 	CONSOF_FECHA_ENTREGA DATETIME,
@@ -430,8 +408,6 @@ ALTER TABLE [MANA].CONSUMO_OFERTA ADD CONSTRAINT FK_CUPON_ID FOREIGN KEY (CONSOF
 ALTER TABLE [MANA].CARGA_CREDITO ADD CONSTRAINT FK_CLI_ID FOREIGN KEY (CC_CLIENTE_ID) REFERENCES [MANA].CLIENTE (CLI_ID);
 ALTER TABLE [MANA].CARGA_CREDITO ADD CONSTRAINT FK_TP_ID FOREIGN KEY (CC_TIPO_PAGO_ID) REFERENCES [MANA].TIPO_PAGO (TP_ID);
 ALTER TABLE [MANA].CUPON ADD CONSTRAINT FK_CLIENTE_ID FOREIGN KEY (CUPON_CLI_ID) REFERENCES [MANA].CLIENTE (CLI_ID);
-ALTER TABLE [MANA].LIMITE_OFERTA_CLIENTE ADD CONSTRAINT FK_L_CLI_ID FOREIGN KEY (L_CLIENTE_ID) REFERENCES [MANA].CLIENTE (CLI_ID);
-ALTER TABLE [MANA].LIMITE_OFERTA_CLIENTE ADD CONSTRAINT FK_L_OF_ID FOREIGN KEY (L_OFERTA_NUMERO) REFERENCES [MANA].OFERTA (OF_NUMERO);
 ALTER TABLE [MANA].OFERTA ADD CONSTRAINT FK_PROVEEDOR_ID FOREIGN KEY (OF_PROVEEDOR_ID) REFERENCES [MANA].PROVEEDOR (PROV_ID);
 ALTER TABLE [MANA].OFERTA_VENDIDA ADD CONSTRAINT FK_CUP_ID FOREIGN KEY (OF_VEN_CUPON_ID) REFERENCES [MANA].CUPON (CUPON_ID);
 ALTER TABLE [MANA].OFERTA_VENDIDA ADD CONSTRAINT FK_PROVEE_ID FOREIGN KEY (OF_VEN_PROV_ID) REFERENCES [MANA].PROVEEDOR (PROV_ID);
@@ -617,30 +593,6 @@ group by M.Oferta_Fecha_Compra, M.Oferta_Codigo, M.Oferta_Precio, M.Oferta_Preci
 GO
 
 MANA.MigrarCupon
-GO
-
-/*Limite Oferta Cliente*/
-
-CREATE PROCEDURE MANA.MigrarLimiteOfertaCliente
-AS
-insert into MANA.LIMITE_OFERTA_CLIENTE
-select C.CLI_ID, M.Oferta_Codigo, NULL
-from gd_esquema.Maestra M, MANA.CLIENTE C 
-where
-   (M.Cli_Nombre = C.CLI_NOMBRE AND
-	M.Cli_Apellido = C.CLI_APELLIDO AND
-	M.Cli_Dni = C.CLI_DNI AND
-	M.Cli_Mail = C.CLI_MAIL AND
-	M.Cli_Telefono = C.CLI_TELEFONO AND
-	M.Cli_Direccion = C.CLI_DIRECCION AND
-	M.Cli_Ciudad = C.CLI_CIUDAD AND
-	M.Cli_Fecha_Nac = C.CLI_FECHA_NACIMIENTO) AND
-	M.Oferta_Codigo IS NOT NULL
-group by C.CLI_ID, M.Oferta_Codigo
-ORDER BY M.Oferta_Codigo ASC
-GO
-
-Mana.MigrarLimiteOfertaCliente
 GO
 
 /*Consumo Oferta*/  
@@ -1252,26 +1204,6 @@ AS
  WHERE OF_NUMERO = @NumeroOferta
 GO
 
-CREATE PROCEDURE MANA.CrearLimiteDisponibleOferta (@NumeroOferta nvarchar(50), @ClienteId int, @MaximoUnidadCliente int)
-AS
-insert into MANA.LIMITE_OFERTA_CLIENTE values (@ClienteId, @NumeroOferta, @MaximoUnidadCliente)
-GO
-
-CREATE FUNCTION MANA.ObtenerLimiteDisponibleOferta (@NumeroOferta nvarchar(50), @ClienteId int)
-RETURNS INT
-AS
-BEGIN
- return (SELECT L_DISPONIBLE FROM MANA.LIMITE_OFERTA_CLIENTE WHERE L_CLIENTE_ID = @ClienteId AND L_OFERTA_NUMERO = @NumeroOferta)
-END
-GO
-
-CREATE PROCEDURE MANA.ActualizarLimiteDisponibleOferta (@NumeroOferta nvarchar(50), @ClienteId int, @CantidadAdquirida int)
-AS
- UPDATE LIMITE_OFERTA_CLIENTE
- SET L_DISPONIBLE = L_DISPONIBLE - @CantidadAdquirida
- WHERE L_CLIENTE_ID = @ClienteId AND L_OFERTA_NUMERO = @NumeroOferta
-GO
-
 CREATE PROCEDURE MANA.CrearConsumoOferta @FechaEntrega datetime, @ProveedorId int, @CuponId int, @C_Dest_Nombre nvarchar(255), @C_Dest_Apellido nvarchar(255), @C_Dest_Dni numeric(18), 
                                  @C_Dest_Direccion nvarchar(255), @C_Dest_Telefono numeric(18), @C_Dest_Mail nvarchar(255), @C_Dest_Fecha_Nac datetime, @C_Dest_Ciudad nvarchar(255)
 AS
@@ -1311,53 +1243,23 @@ AS
     insert into MANA.OFERTA_VENDIDA values (@FechaCompra, @CuponId, @ProveedorId, @OfertaNumero, @Importe)
 GO
 
-CREATE FUNCTION MANA.CargarOfertasDisponibles ()
-RETURNS TABLE
-AS
-     return (SELECT O.OF_NUMERO, O.OF_DESCRIPCION, O.OF_FECHA_PUBLICACION, O.OF_FECHA_VENCIMIENTO, O.OF_PRECIO_OFERTA, O.OF_PRECIO_LISTA, O.OF_CANTIDAD_DISPONIBLE, O.OF_MAXIMO_UNIDAD_CLIENTE
-	         FROM OFERTA O WHERE O.OF_ESTADO = 'Habilitado')
-GO
-
 CREATE PROCEDURE MANA.ComprarOferta @FechaCompra datetime, @OfertaNumero nvarchar(50), @PrecioOferta numeric(18), @PrecioLista numeric(18), @CantidadAdquirida int, @ClienteId int
 AS
        declare @Importe numeric(18)
        set @Importe = @PrecioOferta * @CantidadAdquirida
-                            /*Valido el saldo del Cliente */
-  IF(Mana.ObtenerSaldo(@ClienteId) >= @Importe) 
- BEGIN                                        /* VALIDO QUE CUMPLA CON LA RESTRICCION DE MAX UNIDADES POR CLIENTE */    	   
+                            /*Valido el saldo del Cliente y QUE CUMPLA CON LA RESTRICCION DE MAX UNIDADES POR COMPRA POR CLIENTE */  
+  IF(Mana.ObtenerSaldo(@ClienteId) >= @Importe AND @CantidadAdquirida <= Mana.ObtenerMaximoUnidadOferta(@OfertaNumero)) 
+ BEGIN                                          	   
 	   declare @ProvId int
 	   declare @CuponId int	        	  
 	   set @ProvId = Mana.ObtenerProveedorOferta (@OfertaNumero)
-	                       /*Si es la primera vez que compras la Oferta -> Valido que la cantidad adquirida no supere el maxUnidXCliente -> Compras la oferta */ 
-   IF(NOT EXISTS(SELECT L_CLIENTE_ID, L_OFERTA_NUMERO FROM LIMITE_OFERTA_CLIENTE WHERE L_CLIENTE_ID = @ClienteId AND L_OFERTA_NUMERO = @OfertaNumero) AND @CantidadAdquirida <= Mana.ObtenerMaximoUnidadOferta(@OfertaNumero))
-    BEGIN
-	   declare @Limite int	   
-	   set @Limite = Mana.ObtenerMaximoUnidadOferta (@OfertaNumero)   
-	   	                 /*Genero el Cupon*/
-	   EXECUTE Mana.CrearCupon @FechaCompra, @OfertaNumero, @PrecioOferta, @PrecioLista, @CantidadAdquirida, @Importe, @ClienteId
-	   EXECUTE Mana.CrearLimiteDisponibleOferta @OfertaNumero, @ClienteId, @Limite                 /*Registro el MaxUnidades que el Cliente puede comprar de la Oferta para tener en cuenta en las proximas posibles compras*/
+  	   	                                                                                           /*Genero el Cupon*/ 
+	   EXECUTE Mana.CrearCupon @FechaCompra, @OfertaNumero, @PrecioOferta, @PrecioLista, @CantidadAdquirida, @Importe, @ClienteId	  
 	   EXECUTE Mana.DescontarSaldo @ClienteId, @Importe                                            /*Actualizo saldo de Cliente*/
-       EXECUTE Mana.ActualizarStock @OfertaNumero, @CantidadAdquirida                              /*Actualizo el stock de la Oferta*/
-	   EXECUTE Mana.ActualizarLimiteDisponibleOferta @OfertaNumero, @ClienteId, @CantidadAdquirida /*Actualizo la tabla Limite Disponible descontando al limite disponible la cantidad adquirida */
+       EXECUTE Mana.ActualizarStock @OfertaNumero, @CantidadAdquirida                              /*Actualizo el stock de la Oferta*/	   
 
-	   set @CuponId = (select max(CUPON_ID) from CUPON)
-	   EXECUTE Mana.RegistrarOfertaVendida @FechaCompra, @CuponId, @ProvId, @OfertaNumero, @Importe          /*Registro la compra*/
-    END
-                         /*Si es la segunda o mas veces que compras la Oferta -> Valido que el cliente tenga limite disponible en la Oferta para adquiririr esa cantidad */
-   ELSE
-    BEGIN
-       IF(Mana.ObtenerLimiteDisponibleOferta (@OfertaNumero, @ClienteId) >= @CantidadAdquirida)
-	   BEGIN     	     
-		         /*Genero el Cupon*/
-	     EXECUTE Mana.CrearCupon @FechaCompra, @OfertaNumero, @PrecioOferta, @PrecioLista, @CantidadAdquirida, @Importe, @ClienteId   
-	     EXECUTE Mana.DescontarSaldo @ClienteId, @Importe                                         /*Actualizo saldo de Cliente*/
-         EXECUTE Mana.ActualizarStock @OfertaNumero, @CantidadAdquirida                                /*Actualizo el stock de la Oferta*/
-	     EXECUTE Mana.ActualizarLimiteDisponibleOferta @OfertaNumero, @ClienteId, @CantidadAdquirida   /*Actualizo la tabla Limite Disponible descontando al limite disponible la cantidad adquirida */
-       
-	     set @CuponId = (select max(CUPON_ID) from CUPON)
-	     EXECUTE Mana.RegistrarOfertaVendida @FechaCompra, @CuponId, @ProvId, @OfertaNumero, @Importe          /*Registro la compra*/
-	   END
-    END    
+	   set @CuponId = (select max(CUPON_ID) from CUPON)                                            /*Obtengo Id del Cupon Generado*/
+	   EXECUTE Mana.RegistrarOfertaVendida @FechaCompra, @CuponId, @ProvId, @OfertaNumero, @Importe          /*Registro la compra*/      
  END
 GO
 
@@ -1382,7 +1284,7 @@ AS
 	declare @Importe numeric
     set @FactNro =  (select max(FACT_NUMERO) from FACTURA) + 1
 	set @Importe =  (select CUPON_IMPORTE from CUPON where CUPON_ID = (SELECT OF_VEN_CUPON_ID FROM OFERTA_VENDIDA WHERE OF_VEN_ID = @OfertaVendidaId))
-  IF(NOT EXISTS(SELECT I_FACT_OF_VEN_ID FROM ITEM_FACTURA WHERE I_FACT_OF_VEN_ID = @OfertaVendidaId)) /*Valido que la oferta no se haya facturado*/
+  IF(NOT EXISTS(SELECT I_FACT_OF_VEN_ID FROM ITEM_FACTURA WHERE I_FACT_OF_VEN_ID = @OfertaVendidaId)) /*Valido que la Oferta NO se haya facturado*/
     insert into MANA.ITEM_FACTURA values (@FactNro, @OfertaVendidaId, @Importe)
 GO
 
@@ -1393,17 +1295,21 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE MANA.CrearFactura 
-AS  
-    declare @FactNro int	
-    set @FactNro = (select max(FACT_NUMERO) from FACTURA) + 1	
-	insert into MANA.FACTURA values(@FactNro, GETDATE(), NULL)
+CREATE PROCEDURE MANA.CrearFactura @FacturaNro int, @ImporteTotal numeric(18)
+AS     
+	insert into MANA.FACTURA values(@FacturaNro, GETDATE(), @ImporteTotal)
+GO
+
+CREATE PROCEDURE MANA.BorrarFactura @FacturaNro numeric(18)
+AS
+   DELETE FROM MANA.FACTURA
+    WHERE FACT_NUMERO = @FacturaNro
 GO
 
 CREATE PROCEDURE MANA.FacturarOfertasAProveedor @ProveedorId int, @FechaInicio datetime, @FechaFinal datetime
 AS   	
-   declare @OfertaVendidaId int 
-   declare @ImporteTotal numeric(18)
+   declare @OfertaVendidaId int    
+
  IF((select COUNT(OF_VEN_ID) from OFERTA_VENDIDA where OF_VEN_PROV_ID = @ProveedorId AND OF_VEN_FECHA_COMPRA BETWEEN @FechaInicio AND @FechaFinal) != 0) /*Valido que existan Ofertas entre esas fechas*/
   BEGIN
    declare OfertaVendida CURSOR FOR
@@ -1412,20 +1318,24 @@ AS
    FETCH NEXT FROM OfertaVendida into @OfertaVendidaId
    --check for a new row
    WHILE @@FETCH_STATUS = 0
-   BEGIN
+   BEGIN                                              
     EXECUTE MANA.CrearItemFactura @OfertaVendidaId     /*Facturo todas las Ofertas Vendidas y lo registro en Item Factura*/
 	FETCH NEXT FROM OfertaVendida into @OfertaVendidaId
    END
    close OfertaVendida
-   Deallocate OfertaVendida	
-  
-   EXECUTE MANA.CrearFactura              /*Creo la factura*/ 
-   declare @FactNro int  
-   set @FactNro = (SELECT MAX(FACT_NUMERO) FROM FACTURA)                                        
-   set @ImporteTotal = (select SUM(I_FACT_IMPORTE) FROM ITEM_FACTURA WHERE I_FACT_NUMERO = @FactNro)   /*Calculo el importe total de la factura */                                                                      
-	   UPDATE FACTURA
-	   SET FACT_IMPORTE_TOTAL = @ImporteTotal
-	   WHERE FACT_NUMERO = @FactNro                            /*Asigno el importe total a la factura creada*/
+   Deallocate OfertaVendida	  
+       
+     BEGIN TRANSACTION                    /*Si las todas las ofertas que estaban entre las fechas ya estaban facturadas -> No se factura ninguna oferta -> NO se Creo ningun Item en la Factura*/        
+       declare @FactNro int
+	   declare @ImporteTotal numeric(18)  
+	   set @FactNro = (select max(FACT_NUMERO) from FACTURA) + 1
+	   set @ImporteTotal = (select SUM(I_FACT_IMPORTE) FROM ITEM_FACTURA WHERE I_FACT_NUMERO = @FactNro)   /*Calculo el importe total de la factura */  
+       EXECUTE MANA.CrearFactura @FactNro, @ImporteTotal      /*Creo la factura*/          
+	                                                                  
+	 IF((SELECT COUNT(I_FACT_ID) FROM ITEM_FACTURA WHERE I_FACT_NUMERO = @FactNro) != 0)     
+	  COMMIT TRANSACTION          	               /*Si hubo ofertas facturadas -> Se genera la Factura*/
+	 ELSE                                          
+	  ROLLBACK TRANSACTION                         /*Si No hubo ofertas facturadas -> No se genera la Factura*/ 	  	   	 
   END     
 GO
 

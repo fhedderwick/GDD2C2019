@@ -47,8 +47,8 @@ namespace FrbaOfertas.ComprarOferta
             d1.Columns[8].Name = "Maximo Unidades por Cliente";
             d1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
-            string estadoOferta = "Deshabilitado";
-            string fechaArchivo = ConfigurationManager.AppSettings["fecha"];
+            string estadoOferta = "Deshabilitado";              
+            string fechaArchivo = ConfigurationManager.AppSettings["fecha"];  //Fecha Archivo Configuracion
             Dictionary<string, string> map = new Dictionary<string, string>();
             map.Add("@Estado", estadoOferta);
             map.Add("@Fecha", fechaArchivo);  //Llamo a las ofertas que no esten deshabilitadas y que esten vigentes a la fecha

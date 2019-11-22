@@ -13,8 +13,8 @@ namespace FrbaOfertas.Facturar
     public partial class IngresoDatos : Form
     {
         private DataBaseManager _dbm;
-        private string queryCantFact = "SELECT COUNT(FACT_ID) FROM MANA.FACTURA";        
-
+        private string queryCantFact = "SELECT COUNT(FACT_ID) FROM MANA.FACTURA";
+        private string queryProv = "SELECT COUNT(PROV_ID) FROM MANA.PROVEEDOR WHERE PROV_ID = @ProvId";
         public IngresoDatos(DataBaseManager dbm)
         {
             _dbm = dbm;
@@ -25,6 +25,10 @@ namespace FrbaOfertas.Facturar
         {
             if (this.camposObligatoriosCompletos() == true)
             {
+               Dictionary<string, object> m = new Dictionary<string, object>();
+               m.Add("@ProvId", tb1.Text);
+               if(_dbm.executeSelectInt(queryProv, m) != 0)           //Valido que exista el proveedor
+               {
                 int cantidadFacturas = _dbm.executeSelectInt(queryCantFact);             //Cuento las facturas que tengo antes de generar la nueva
                 Dictionary<string, object> map = new Dictionary<string, object>();
                 map.Add("@ProveedorId", tb1.Text);
@@ -33,15 +37,16 @@ namespace FrbaOfertas.Facturar
                 _dbm.executeProcedure("Mana.FacturarOfertasAProveedor", map);
 
                 int nuevaCantidadFacturas = _dbm.executeSelectInt(queryCantFact);       //Si se genero una nueva factura entonces tiene que haber 1 mas que antes
-                if (nuevaCantidadFacturas == cantidadFacturas + 1)
-                {
+                 if (nuevaCantidadFacturas == cantidadFacturas + 1)
+                 {
                     Hide();
                     GenerarFactura i = new GenerarFactura(_dbm);                        //Muestro la factura generada
                     i.Show();
                     this.Close();
-                }
-                else                                                                    //Las validaciones de porque no se genero estan en SQL
-                { MessageBox.Show("No se pudo realizar la operacion. Verifique los datos ingresados", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
+                 }                                                                                    
+                 else { MessageBox.Show("No se pudo realizar la operacion. No existen Ofertas a Facturar en esas fechas para el proveedor ingresado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
+               }
+                else { MessageBox.Show("El proveedor ingresado no existe", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
             }
             else { MessageBox.Show("Faltan ingresar algunos de los datos solicitados", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
         }
