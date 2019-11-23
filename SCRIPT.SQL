@@ -1160,16 +1160,9 @@ CREATE PROCEDURE MANA.CrearOferta @Descripcion nvarchar(255), @FechaPublicacion 
 AS
   IF(@FechaPublicacion >= CONVERT(DATE,GETDATE()) AND @FechaVencimiento >= CONVERT(DATE,GETDATE())) /*Validado en visual tambien*/
   BEGIN
-declare @NumeroOferta nvarchar(50) = 1  /*Autogenerar Codigo de Oferta: Si no existe codigo -> Crea . Si existe codigo -> Lo aumento en 1 y luego crea*/
-    IF(NOT EXISTS(SELECT OF_NUMERO FROM MANA.OFERTA where OF_NUMERO = @NumeroOferta))  
-     BEGIN
-       insert into MANA.OFERTA values (@NumeroOferta, @Descripcion, @FechaPublicacion, @FechaVencimiento, @PrecioOferta, @PrecioLista, @ProveedorId , @CantidadDisponible, @MaximoUnidadesPorCliente,'En Espera');
-     END
-    ELSE
-     BEGIN
+       declare @NumeroOferta nvarchar(50) = (select COUNT(OF_NUMERO) from MANA.OFERTA) 
        set @NumeroOferta = @NumeroOferta +1
-       insert into MANA.OFERTA values (@NumeroOferta, @Descripcion, @FechaPublicacion, @FechaVencimiento, @PrecioOferta, @PrecioLista, @ProveedorId , @CantidadDisponible, @MaximoUnidadesPorCliente,'En Espera');
-     END
+  insert into MANA.OFERTA values (@NumeroOferta, @Descripcion, @FechaPublicacion, @FechaVencimiento, @PrecioOferta, @PrecioLista, @ProveedorId , @CantidadDisponible, @MaximoUnidadesPorCliente,'En Espera');     
   END
 GO
 

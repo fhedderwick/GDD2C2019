@@ -15,7 +15,8 @@ namespace FrbaOfertas.CrearOferta
     public partial class AltaOferta : Form
     {
         private DataBaseManager _dbm;
-       
+        private string queryProv = "SELECT COUNT(PROV_ID) FROM MANA.PROVEEDOR WHERE PROV_ID = @ProvId";
+
         public AltaOferta(DataBaseManager dbm)
         {
             _dbm = dbm;
@@ -36,6 +37,10 @@ namespace FrbaOfertas.CrearOferta
             {
                 if (this.validacionesRequeridas() == true && this.validarFechas() == true)
                 {
+                     Dictionary<string, object> m = new Dictionary<string, object>();
+                     m.Add("@ProvId", tbProveedorId.Text);
+                  if(_dbm.executeSelectInt(queryProv, m) != 0)           //Valido que exista el proveedor
+                 {
                     Dictionary<string, object> map = new Dictionary<string, object>();
                     map.Add("@Descripcion", tbDescripcion.Text);
                     map.Add("@FechaPublicacion", Convert.ToDateTime(dtFechaPublicacion.Text));
@@ -51,6 +56,8 @@ namespace FrbaOfertas.CrearOferta
                     Generacion_Exitosa i = new Generacion_Exitosa(_dbm);
                     i.Show();
                     this.Close();
+                 }
+                  else { MessageBox.Show("El proveedor ingresado no existe", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
                 }
                 else { MessageBox.Show("Los datos ingresados no son validos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
             }

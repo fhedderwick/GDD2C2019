@@ -51,10 +51,10 @@
             this.t7 = new System.Windows.Forms.TextBox();
             this.t8 = new System.Windows.Forms.TextBox();
             this.t9 = new System.Windows.Forms.TextBox();
-            this.t10 = new System.Windows.Forms.TextBox();
             this.t11 = new System.Windows.Forms.TextBox();
             this.b1 = new System.Windows.Forms.Button();
             this.b2 = new System.Windows.Forms.Button();
+            this.dtFecha = new System.Windows.Forms.DateTimePicker();
             this.SuspendLayout();
             // 
             // l1
@@ -233,13 +233,6 @@
             this.t9.Size = new System.Drawing.Size(100, 20);
             this.t9.TabIndex = 22;
             // 
-            // t10
-            // 
-            this.t10.Location = new System.Drawing.Point(127, 357);
-            this.t10.Name = "t10";
-            this.t10.Size = new System.Drawing.Size(100, 20);
-            this.t10.TabIndex = 23;
-            // 
             // t11
             // 
             this.t11.Location = new System.Drawing.Point(127, 394);
@@ -265,11 +258,19 @@
             this.b2.Text = "Canjear Cupon";
             this.b2.Click += new System.EventHandler(this.b2_Click);
             // 
+            // dtFecha
+            // 
+            this.dtFecha.Location = new System.Drawing.Point(127, 360);
+            this.dtFecha.Name = "dtFecha";
+            this.dtFecha.Size = new System.Drawing.Size(100, 20);
+            this.dtFecha.TabIndex = 27;
+            // 
             // CanjearCupon
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(626, 475);
+            this.Controls.Add(this.dtFecha);
             this.Controls.Add(this.l1);
             this.Controls.Add(this.l2);
             this.Controls.Add(this.l3);
@@ -293,7 +294,6 @@
             this.Controls.Add(this.t7);
             this.Controls.Add(this.t8);
             this.Controls.Add(this.t9);
-            this.Controls.Add(this.t10);
             this.Controls.Add(this.t11);
             this.Controls.Add(this.b1);
             this.Controls.Add(this.b2);
@@ -329,9 +329,9 @@
         private System.Windows.Forms.TextBox t7;
         private System.Windows.Forms.TextBox t8;
         private System.Windows.Forms.TextBox t9;
-        private System.Windows.Forms.TextBox t10;
         private System.Windows.Forms.TextBox t11;
         private System.Windows.Forms.Button b1;
         private System.Windows.Forms.Button b2;
+        private System.Windows.Forms.DateTimePicker dtFecha;
     }
 }

@@ -15,7 +15,7 @@ namespace FrbaOfertas.ComprarOferta
     public partial class OfertasPublicadas : Form
     {
         private DataBaseManager _dbm;
-        private string queryOfertasPublicadas = "SELECT * FROM MANA.OFERTA WHERE OF_ESTADO != @Estado AND OF_FECHA_PUBLICACION >= @Fecha";
+        private string queryOfertasPublicadas = "SELECT * FROM MANA.OFERTA WHERE OF_ESTADO = @Estado AND OF_FECHA_PUBLICACION >= @Fecha";
 
         public OfertasPublicadas(DataBaseManager dbm)
         {
@@ -47,11 +47,11 @@ namespace FrbaOfertas.ComprarOferta
             d1.Columns[8].Name = "Maximo Unidades por Cliente";
             d1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
-            string estadoOferta = "Deshabilitado";              
+            string estadoOferta = "Habilitado";              
             string fechaArchivo = ConfigurationManager.AppSettings["fecha"];  //Fecha Archivo Configuracion
             Dictionary<string, string> map = new Dictionary<string, string>();
             map.Add("@Estado", estadoOferta);
-            map.Add("@Fecha", fechaArchivo);  //Llamo a las ofertas que no esten deshabilitadas y que esten vigentes a la fecha
+            map.Add("@Fecha", fechaArchivo);  //Llamo a las ofertas Habilitadas y que esten vigentes a la fecha
             SqlDataReader resultSet = _dbm.executeSelect(queryOfertasPublicadas, map);
             if (resultSet.HasRows)  //Valido que haya ofertas publicadas actualmente
             {

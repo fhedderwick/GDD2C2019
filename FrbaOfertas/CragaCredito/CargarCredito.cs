@@ -17,6 +17,7 @@ namespace FrbaOfertas.CragaCredito
         private DataBaseManager _dbm;
         private string clienteId;
         private string querySaldo = "SELECT CLI_SALDO FROM MANA.CLIENTE WHERE CLI_ID = @ClienteId";
+        private string queryCliente = "SELECT COUNT(CLI_ID) FROM MANA.CLIENTE WHERE CLI_ID = @ClienteId";
         private string queryEstado = "SELECT CLI_ESTADO FROM MANA.CLIENTE WHERE CLI_ID = @ClienteId";
 
         public CargarCredito(DataBaseManager dbm)
@@ -38,33 +39,39 @@ namespace FrbaOfertas.CragaCredito
                 if (this.validarModoPago() == true && this.ingresoCampos() == true)
                 {
                     clienteId = t1.Text;
-                    Dictionary<string, object> map2 = new Dictionary<string, object>();
-                    map2.Add("@ClienteId", clienteId);
-                    string estado = _dbm.executeSelectString(queryEstado, map2);
-                    if (estado == "Habilitado")  //Valido que el cliente exista y este Habilitado
+                    Dictionary<string, object> map3 = new Dictionary<string, object>();
+                    map3.Add("@ClienteId", clienteId);
+                    if (_dbm.executeSelectInt(queryCliente, map3) != 0)           //Valido que exista el Cliente
                     {
-                        DateTime fechaArchivo = Convert.ToDateTime(ConfigurationManager.AppSettings["fecha"]);
-                        Dictionary<string, object> map = new Dictionary<string, object>();
-                        map.Add("@FechaCarga", fechaArchivo);                      //Fecha del archivo de Configuracion (?
-                        map.Add("ClienteId", t1.Text);
-                        map.Add("@TipoPago", t3.SelectedItem.ToString());
-                        map.Add("@Monto", t4.Text);
-                        map.Add("@NumeroTarjeta", t2.Text);
-                        _dbm.executeProcedure("Mana.CargarCredito", map);
+                        Dictionary<string, object> map2 = new Dictionary<string, object>();
+                        map2.Add("@ClienteId", clienteId);
+                        string estado = _dbm.executeSelectString(queryEstado, map2);
+                        if (estado == "Habilitado")  //Valido que el cliente este Habilitado
+                        {
+                            DateTime fechaArchivo = Convert.ToDateTime(ConfigurationManager.AppSettings["fecha"]);
+                            Dictionary<string, object> map = new Dictionary<string, object>();
+                            map.Add("@FechaCarga", fechaArchivo);                      //Fecha del archivo de Configuracion
+                            map.Add("ClienteId", t1.Text);
+                            map.Add("@TipoPago", t3.SelectedItem.ToString());
+                            map.Add("@Monto", t4.Text);
+                            map.Add("@NumeroTarjeta", t2.Text);
+                            _dbm.executeProcedure("Mana.CargarCredito", map);
 
-                        this.obtenerNuevoSaldo(clienteId);
-                        Hide();
-                        CargaExitosa i = new CargaExitosa(_dbm);
-                        i.Show();
-                        this.Close();
+                            this.obtenerNuevoSaldo(clienteId);
+                            Hide();
+                            CargaExitosa i = new CargaExitosa(_dbm);
+                            i.Show();
+                            this.Close();
+                        }
+                        else { MessageBox.Show("El cliente no puede realizar esta operacion porque se encuentra Deshabilitado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
                     }
-                    else { MessageBox.Show("El cliente no puede realizar esta operacion porque no Existe o se encuentra Deshabilitado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
+                    else { MessageBox.Show("El cliente ingresado no existe", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
                 }
                 else { MessageBox.Show("Faltan ingresar algunos de los datos solicitados", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
+            }  //Si no seleccionas el modo de pago tira error null, lo atrapo con una excepcion
+            catch (Exception ex) { MessageBox.Show("Debe seleccionar el modo de pago correspondiente", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
+
             }
-            //Valido que el cliente exista. Igualmente esta validado en el procedure de SQL
-            catch (Exception ex) { MessageBox.Show("Verifique que los datos ingresados sean correctos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
-        }
 
         private bool validarModoPago()
         {
