@@ -36,6 +36,7 @@ namespace FrbaOfertas.Login
                 List<Par> list = new List<Par>();
                 list.Add(new Par() { Text = rol.Text, Value = rol.Value });
                 comboBox1.DataSource = list;
+                comboBox1.Enabled = false;
             }
             else 
             {
