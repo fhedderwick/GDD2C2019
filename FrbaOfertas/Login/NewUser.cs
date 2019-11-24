@@ -17,20 +17,31 @@ namespace FrbaOfertas.Login
     {
         const String USER_EXISTS_QUERY = "SELECT * FROM MANA.USUARIO WHERE USER_USERNAME = @username";
         const String GET_ROLES_QUERY = "SELECT ROL_ID ID, ROL_NOMBRE NOMBRE FROM MANA.ROL";
-
+        
         DataBaseManager _dbm;
         String _username;
 
-        public NewUser(DataBaseManager dbm, String username) : this(dbm, username, "") { }
+        public NewUser(DataBaseManager dbm, String username) : this(dbm, username, null) { }
 
-
-        public NewUser(DataBaseManager dbm, String username,String rol)
+        public NewUser(DataBaseManager dbm, String username, Par rol)
         {
             _dbm = dbm;
             _username = username;
             InitializeComponent();
+            this.comboBox1.DisplayMember = "Text";
+            this.comboBox1.ValueMember = "Value";
             textBox2.Text = _username;
-            this.loadRol(); 
+            if (rol != null)
+            {
+                List<Par> list = new List<Par>();
+                list.Add(new Par() { Text = rol.Text, Value = rol.Value });
+                comboBox1.DataSource = list;
+            }
+            else 
+            {
+                this.loadRol();
+            }
+            
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -38,35 +49,27 @@ namespace FrbaOfertas.Login
             String user = textBox2.Text;
             String pass = maskedTextBox1.Text;
             String passRep = maskedTextBox2.Text;
-            String eleccion = comboBox1.Text;
+            String rolNombre = comboBox1.Text;
 
-            String rol = comboBox1.SelectedValue.ToString();
-
-
-
+            String rolId = comboBox1.SelectedValue.ToString();
+            
             if (!checkUser(user) || !checkPass(pass, passRep))
             {
                 return;
             }
-            if (eleccion.Length == 0)
+            if (rolNombre.Length == 0)
             {
                 MessageBox.Show("Elija un rol");
             }
-            else if ("Cliente".Equals(eleccion))
+            else if ("Cliente".Equals(rolNombre))
             {
-                AltaYModifCliente altaCliente = new AltaYModifCliente(_dbm, user, pass,rol);
+                AltaYModifCliente altaCliente = new AltaYModifCliente(_dbm, user, pass, rolId);
                 altaCliente.Show();
                 Close();
             }
-            else if ("Proveedor".Equals(eleccion))
+            else if ("Proveedor".Equals(rolNombre))
             {
-                String nRubro = comboBox1.Text;
-
-                Console.Write("Alexis");
-
-
-                Console.Write(nRubro);
-                AltaProveedor altaProveedor = new AltaProveedor(_dbm, user, pass,rol);
+                AltaProveedor altaProveedor = new AltaProveedor(_dbm, user, pass, rolId);
                 altaProveedor.Show();
                 Close();
             }
@@ -124,35 +127,20 @@ namespace FrbaOfertas.Login
             Close();
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void loadRol()
         {
             SqlDataReader resultSet = _dbm.executeSelect(GET_ROLES_QUERY);
-            this.comboBox1.DisplayMember = "Text";
-            this.comboBox1.ValueMember = "Value";
-            List<Rol> list = new List<Rol>();
+            //this.comboBox1.DisplayMember = "Text";
+            //this.comboBox1.ValueMember = "Value";
+            List<Par> list = new List<Par>();
 
             while (resultSet.Read())
             {
-                list.Add(new Rol() { Text = resultSet["NOMBRE"].ToString(), Value = resultSet["ID"].ToString() });
+                list.Add(new Par() { Text = resultSet["NOMBRE"].ToString(), Value = resultSet["ID"].ToString() });
             }
             comboBox1.DataSource = list;
         }
 
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-    }
-
-    public class Rol
-    {
-        public string Text { get; set; }
-        public string Value { get; set; }
     }
 
 }

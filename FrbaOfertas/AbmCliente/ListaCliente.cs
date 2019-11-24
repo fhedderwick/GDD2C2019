@@ -16,18 +16,34 @@ namespace FrbaOfertas.AbmCliente
     public partial class ListaCliente : Form
     {
 
-        private String GET_CLIENTES_QUERY = "SELECT C.CLI_ID ID, C.CLI_NOMBRE NOMBRE, C.CLI_APELLIDO APELLIDO, C.CLI_DNI DNI, C.CLI_MAIL MAIL, C.CLI_TELEFONO TELEFONO, C.CLI_DIRECCION DIRECCION, C.CLI_CODIGO_POSTAL CODIGO_POSTAL, C.CLI_CIUDAD CIUDAD, C.CLI_FECHA_NACIMIENTO FECHA, C.CLI_SALDO SALDO, C.CLI_ESTADO ESTADO FROM MANA.CLIENTE C";
+        private String GET_CLIENTES_QUERY = "SELECT C.CLI_ID ID, C.CLI_NOMBRE NOMBRE, C.CLI_APELLIDO APELLIDO, C.CLI_DNI DNI, C.CLI_MAIL MAIL, C.CLI_TELEFONO TELEFONO, C.CLI_DIRECCION DIRECCION, C.CLI_CODIGO_POSTAL CODIGO_POSTAL, C.CLI_CIUDAD CIUDAD, C.CLI_FECHA_NACIMIENTO FECHA, C.CLI_SALDO SALDO, C.CLI_USER_ID USER_ID, U.USUARIO_ESTADO ESTADO FROM MANA.CLIENTE C INNER JOIN MANA.USUARIO U ON C.CLI_USER_ID = U.USER_ID";
         private String FILTRO_NOMBRE_QUERY = " WHERE C.CLI_NOMBRE = @nombre OR C.CLI_APELLIDO = @apellido OR C.CLI_DNI = @dni OR C.CLI_MAIL = @mail OR C.CLI_TELEFONO = @telefono OR C.CLI_DIRECCION = @direccion OR C.CLI_CODIGO_POSTAL = @codigoPostal OR C.CLI_CIUDAD = @ciudad";
         private String FILTRO_APELLIDO_QUERY = " WHERE C.CLI_NOMBRE LIKE @nombre OR C.CLI_APELLIDO LIKE @apellido OR C.CLI_DNI LIKE @dni OR C.CLI_MAIL LIKE @mail OR C.CLI_TELEFONO LIKE @telefono OR C.CLI_DIRECCION LIKE @direccion OR C.CLI_CODIGO_POSTAL LIKE @codigoPostal OR C.CLI_CIUDAD LIKE @ciudad";
         private String FILTRO_DNI_QUERY = " WHERE C.CLI_NOMBRE LIKE @nombre OR C.CLI_APELLIDO LIKE @apellido OR C.CLI_DNI LIKE @dni OR C.CLI_MAIL LIKE @mail OR C.CLI_TELEFONO LIKE @telefono OR C.CLI_DIRECCION LIKE @direccion OR C.CLI_CODIGO_POSTAL LIKE @codigoPostal OR C.CLI_CIUDAD LIKE @ciudad";
         private String FILTRO_EMAIL_QUERY = " WHERE C.CLI_NOMBRE LIKE @nombre OR C.CLI_APELLIDO LIKE @apellido OR C.CLI_DNI LIKE @dni OR C.CLI_MAIL LIKE @mail OR C.CLI_TELEFONO LIKE @telefono OR C.CLI_DIRECCION LIKE @direccion OR C.CLI_CODIGO_POSTAL LIKE @codigoPostal OR C.CLI_CIUDAD LIKE @ciudad";
+        private String GET_ROLID_CLIENT_QUERY = "SELECT R.ROL_ID FROM MANA.ROL R WHERE R.ROL_NOMBRE = 'Cliente' AND ROL_ESTADO = 'Habilitado'";
 
         private DataBaseManager _dbm;
+        private Par _rol;
 
         public ListaCliente(DataBaseManager dbm)
         {
             _dbm = dbm;
             InitializeComponent();
+            _rol = crearRolUsuario();
+        }
+
+        private Par crearRolUsuario(){
+            Par par = new Par();
+            SqlDataReader resultSet = _dbm.executeSelect(GET_ROLID_CLIENT_QUERY);
+            if (resultSet.HasRows)
+            {
+                resultSet.Read();
+                par.Value = ((int)resultSet.GetValue(resultSet.GetOrdinal("ROL_ID"))).ToString();
+                par.Text = "Cliente";
+                return par;
+            }
+            return null;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -37,8 +53,15 @@ namespace FrbaOfertas.AbmCliente
 
         private void button2_Click(object sender, EventArgs e)
         {
-            NewUser altaUsuario = new NewUser(_dbm,"","Cliente");
-            altaUsuario.Show();
+            if (_rol == null)
+            {
+                MessageBox.Show("No se pueden dar de alta clientes: el rol está deshabilitado.");
+            }
+            else
+            {
+                NewUser altaUsuario = new NewUser(_dbm, "", _rol);
+                altaUsuario.Show();
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -101,34 +124,37 @@ namespace FrbaOfertas.AbmCliente
             dataGridView1.Rows.Clear();
             dataGridView1.AllowUserToAddRows = true;
 
-            dataGridView1.ColumnCount = 12;
+            dataGridView1.ColumnCount = 13;
             dataGridView1.Columns[0].Name = "ID";
             dataGridView1.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridView1.Columns[1].Name = "Nombre";
+            dataGridView1.Columns[1].Name = "USER ID";
             dataGridView1.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridView1.Columns[2].Name = "Apellido";
+            dataGridView1.Columns[2].Name = "Nombre";
             dataGridView1.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridView1.Columns[3].Name = "DNI";
+            dataGridView1.Columns[3].Name = "Apellido";
             dataGridView1.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridView1.Columns[4].Name = "Mail";
+            dataGridView1.Columns[4].Name = "DNI";
             dataGridView1.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridView1.Columns[5].Name = "Telefono";
+            dataGridView1.Columns[5].Name = "Mail";
             dataGridView1.Columns[5].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridView1.Columns[6].Name = "Direccion";
+            dataGridView1.Columns[6].Name = "Telefono";
             dataGridView1.Columns[6].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridView1.Columns[7].Name = "Codigo Postal";
+            dataGridView1.Columns[7].Name = "Direccion";
             dataGridView1.Columns[7].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridView1.Columns[8].Name = "Ciudad";
+            dataGridView1.Columns[8].Name = "Codigo Postal";
             dataGridView1.Columns[8].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridView1.Columns[9].Name = "Fecha Nacimiento";
+            dataGridView1.Columns[9].Name = "Ciudad";
             dataGridView1.Columns[9].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridView1.Columns[10].Name = "Saldo";
+            dataGridView1.Columns[10].Name = "Fecha Nacimiento";
             dataGridView1.Columns[10].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridView1.Columns[11].Name = "Estado";
+            dataGridView1.Columns[11].Name = "Saldo";
             dataGridView1.Columns[11].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridView1.Columns[12].Name = "Estado";
+            dataGridView1.Columns[12].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             while (resultSet.Read())
             {
                 int id = _dbm.getIntFromResultSet(resultSet,"ID");
+                int userId = _dbm.getIntFromResultSet(resultSet, "USER_ID");
                 String nombre = _dbm.getStringFromResultSet(resultSet,"NOMBRE");
                 String apellido = _dbm.getStringFromResultSet(resultSet,"APELLIDO");
                 String dni = _dbm.getStringFromResultSet(resultSet,"DNI");

@@ -229,14 +229,14 @@ namespace FrbaOfertas
 
         }
 
-        internal void executeProcedure(String procedure)
+        internal int executeProcedure(String procedure)
         {
             SqlCommand command = new SqlCommand(procedure, _conn);
             command.CommandType = System.Data.CommandType.StoredProcedure;
-            command.ExecuteNonQuery();
+            return command.ExecuteNonQuery();
         }
 
-        internal void executeProcedure(String procedure, Dictionary<string, object> map)
+        internal int executeProcedure(String procedure, Dictionary<string, object> map)
         {
             SqlCommand command = new SqlCommand(procedure, _conn);
             command.CommandType = System.Data.CommandType.StoredProcedure;
@@ -246,7 +246,7 @@ namespace FrbaOfertas
                     object value = pair.Value;
                     command.Parameters.AddWithValue(key, value);
                 }
-            command.ExecuteNonQuery();            
+            return command.ExecuteNonQuery();            
         }
 
         internal decimal executeSelectDecimal(String query)

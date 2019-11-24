@@ -129,6 +129,7 @@
     <Compile Include="ComprarOferta\ValidarCompra.Designer.cs">
       <DependentUpon>ValidarCompra.cs</DependentUpon>
     </Compile>
+    <Compile Include="Par.cs" />
     <Compile Include="CragaCredito\CargarCredito.cs">
       <SubType>Form</SubType>
     </Compile>
