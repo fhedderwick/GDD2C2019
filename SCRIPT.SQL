@@ -1126,6 +1126,25 @@ BEGIN
 END	   
 GO   
 
+CREATE PROCEDURE MANA.CrearUsuarioProveedor
+@RolId int, @Username nvarchar(200), @Password nvarchar(200),
+@RazonSocial nvarchar(100), @CUIT nvarchar(20), @NombreContacto nvarchar(20), @Mail nvarchar(100), 
+@Telefono numeric(18), @Direccion nvarchar(100), @CodigoPostal nvarchar(18), @Ciudad nvarchar(255), @Rubro nvarchar(100)
+AS
+BEGIN TRANSACTION
+BEGIN TRY
+DECLARE @idGenerado int
+INSERT INTO MANA.USUARIO VALUES(@Username, @Password, 0, 'Habilitado');
+SET @idGenerado = (SELECT SCOPE_IDENTITY());
+INSERT INTO MANA.USUARIO_ROL VALUES(@idGenerado,@RolId)
+INSERT INTO MANA.PROVEEDOR values(@RazonSocial, @CUIT, @NombreContacto, @Mail, @Telefono, @Direccion, @CodigoPostal, @Ciudad, MANA.ObtenerIdRubro(@Rubro),@idGenerado);
+COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+ROLLBACK TRANSACTION
+END CATCH
+GO
+
 CREATE PROCEDURE MANA.CrearProveedor @RazonSocial nvarchar(100), @CUIT nvarchar(20), @NombreContacto nvarchar(20), @Mail nvarchar(100), 
                                    @Telefono numeric(18), @Direccion nvarchar(100), @CodigoPostal nvarchar(18), @Ciudad nvarchar(255), @Rubro nvarchar(100)
 AS
