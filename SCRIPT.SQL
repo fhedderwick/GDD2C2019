@@ -915,11 +915,11 @@ GO
 Mana.CrearUsuario 'admin', 'w23e'
 GO
 
-CREATE PROCEDURE MANA.BajaUsuario @UserId int
+CREATE PROCEDURE MANA.BajaUsuario @Username nvarchar(200)
 AS
 UPDATE MANA.USUARIO
 SET USUARIO_ESTADO = 'Deshabilitado'
-WHERE USER_ID = @UserId
+WHERE USER_ID = @Username
 GO
 
 CREATE PROCEDURE MANA.CambiarPassword @Username nvarchar(200), @Password nvarchar(200)

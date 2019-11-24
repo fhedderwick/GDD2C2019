@@ -202,11 +202,23 @@
     <Compile Include="ListadoEstadistico\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Login\BajaUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\BajaUser.Designer.cs">
+      <DependentUpon>BajaUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login\Login.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Login\Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login\ModificacionPassword.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\ModificacionPassword.Designer.cs">
+      <DependentUpon>ModificacionPassword.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\NewUser.cs">
       <SubType>Form</SubType>
@@ -220,11 +232,11 @@
     <Compile Include="Login\Password.Designer.cs">
       <DependentUpon>Password.cs</DependentUpon>
     </Compile>
-    <Compile Include="Login\Seguridad.cs">
+    <Compile Include="Login\SeguridadAdministrativo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Login\Seguridad.Designer.cs">
-      <DependentUpon>Seguridad.cs</DependentUpon>
+    <Compile Include="Login\SeguridadAdministrativo.Designer.cs">
+      <DependentUpon>SeguridadAdministrativo.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\UsuarioInexistente.cs">
       <SubType>Form</SubType>
@@ -312,8 +324,14 @@
     <EmbeddedResource Include="Facturar\IngresoDatos.resx">
       <DependentUpon>IngresoDatos.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Login\BajaUser.resx">
+      <DependentUpon>BajaUser.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\ModificacionPassword.resx">
+      <DependentUpon>ModificacionPassword.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\NewUser.resx">
       <DependentUpon>NewUser.cs</DependentUpon>
@@ -321,8 +339,8 @@
     <EmbeddedResource Include="Login\Password.resx">
       <DependentUpon>Password.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Login\Seguridad.resx">
-      <DependentUpon>Seguridad.cs</DependentUpon>
+    <EmbeddedResource Include="Login\SeguridadAdministrativo.resx">
+      <DependentUpon>SeguridadAdministrativo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\UsuarioInexistente.resx">
       <DependentUpon>UsuarioInexistente.cs</DependentUpon>

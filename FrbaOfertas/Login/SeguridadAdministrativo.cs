@@ -10,11 +10,12 @@ using System.Windows.Forms;
 
 namespace FrbaOfertas.Login
 {
-    public partial class Seguridad : Form
+    public partial class SeguridadAdministrativo : Form
     {
         private DataBaseManager _dbm;
         private String _userId;
-        public Seguridad(DataBaseManager dbm, String userId)
+
+        public SeguridadAdministrativo(DataBaseManager dbm, String userId)
         {
             _dbm = dbm;
             _userId = userId;
@@ -25,6 +26,21 @@ namespace FrbaOfertas.Login
         {
             Hide();
             this.Close();
+        }
+
+        private void b2_Click(object sender, EventArgs e)  //Cambiar Password
+        {
+            Hide();
+            ModificacionPassword i = new ModificacionPassword(_dbm);
+            i.Show();
+            
+        }
+
+        private void b1_Click(object sender, EventArgs e)  //Baja Usuario
+        {
+            Hide();
+            BajaUser i = new BajaUser(_dbm);
+            i.Show();
         }
     }
 }

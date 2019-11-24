@@ -1,6 +1,6 @@
 ﻿namespace FrbaOfertas.Login
 {
-    partial class Seguridad
+    partial class SeguridadAdministrativo
     {
         /// <summary>
         /// Required designer variable.
@@ -42,28 +42,31 @@
             this.l1.Size = new System.Drawing.Size(100, 23);
             this.l1.TabIndex = 0;
             this.l1.Text = "Seguridad";
+            this.l1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // b1
             // 
-            this.b1.Location = new System.Drawing.Point(95, 111);
+            this.b1.Location = new System.Drawing.Point(28, 81);
             this.b1.Name = "b1";
-            this.b1.Size = new System.Drawing.Size(75, 42);
+            this.b1.Size = new System.Drawing.Size(98, 65);
             this.b1.TabIndex = 1;
             this.b1.Text = "Baja de Usuario";
+            this.b1.Click += new System.EventHandler(this.b1_Click);
             // 
             // b2
             // 
-            this.b2.Location = new System.Drawing.Point(95, 63);
+            this.b2.Location = new System.Drawing.Point(169, 81);
             this.b2.Name = "b2";
-            this.b2.Size = new System.Drawing.Size(75, 42);
+            this.b2.Size = new System.Drawing.Size(98, 65);
             this.b2.TabIndex = 2;
-            this.b2.Text = "Cambiar Password";
+            this.b2.Text = "Cambio Password de Usuario";
+            this.b2.Click += new System.EventHandler(this.b2_Click);
             // 
             // b3
             // 
-            this.b3.Location = new System.Drawing.Point(12, 111);
+            this.b3.Location = new System.Drawing.Point(95, 167);
             this.b3.Name = "b3";
-            this.b3.Size = new System.Drawing.Size(75, 40);
+            this.b3.Size = new System.Drawing.Size(88, 53);
             this.b3.TabIndex = 3;
             this.b3.Text = "Volver Atras";
             this.b3.Click += new System.EventHandler(this.b3_Click);
@@ -72,7 +75,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 164);
+            this.ClientSize = new System.Drawing.Size(308, 245);
             this.Controls.Add(this.l1);
             this.Controls.Add(this.b1);
             this.Controls.Add(this.b2);

@@ -35,4 +35,6 @@ D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfert
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.pdb
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.csprojResolveAssemblyReference.cache
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.ComprarOferta.ValidarCompra.resources
-D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Login.Seguridad.resources
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Login.BajaUser.resources
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Login.ModificacionPassword.resources
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Login.SeguridadAdministrativo.resources
