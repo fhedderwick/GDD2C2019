@@ -37,6 +37,10 @@ namespace FrbaOfertas.Login
                 string nuevaPassword = t3.Text;
                  Dictionary<string, object> map = new Dictionary<string, object>();
                         map.Add("@Username", username);
+                 Dictionary<string, object> mapp = new Dictionary<string, object>();
+                        mapp.Add("@Password", password);
+                        _dbm.executeProcedure("Mana.ValidarPassword", mapp);
+                        password = _dbm.executeSelectString("SELECT USER_PASSWORD FROM MANA.TT");
                                                            //Valido que el usuario Exista y que la contraseña actual ingresada sea correcta
                 if(_dbm.executeSelectString(queryUser, map) == username && _dbm.executeSelectString(queryPassword, map) == password) 
                 {
@@ -45,9 +49,12 @@ namespace FrbaOfertas.Login
                         m.Add("@Password", nuevaPassword);
                       _dbm.executeProcedure("MANA.CambiarPassword", m);
                   
-                     MessageBox.Show("La operacion se ha realizado con exito", "Exito", MessageBoxButtons.OK, MessageBoxIcon.Information);                 
+                     MessageBox.Show("La operacion se ha realizado con exito", "Exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                     Hide();
+                     this.Close();
                 }
                 else{MessageBox.Show("El usuario o la contraseña ingresada no son validos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);}
+              _dbm.executeProcedure("Mana.BorrarTT");
             }
             else { MessageBox.Show("Faltan ingresar algunos de los datos solicitados", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
         }

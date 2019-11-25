@@ -29,7 +29,7 @@ namespace FrbaOfertas.AbmProveedor
         {
             //AltaProveedor altaProv = new AltaProveedor(_dbm);
             //altaProv.Show();
-            NewUser altaUsuarioProveedor = new NewUser(_dbm, "", "Proveedor");
+            NewUser altaUsuarioProveedor = new NewUser(_dbm, "Proveedor");
             altaUsuarioProveedor.Show();
         }
 

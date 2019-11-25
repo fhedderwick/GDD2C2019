@@ -13,22 +13,12 @@ namespace FrbaOfertas.ComprarOferta
 {    
     public partial class GenerarCupon : Form
     {
-        private DataBaseManager _dbm;
-        private string codigoOferta;
-        private string precioOferta;
-        private string precioLista;
-        private string codigoCliente;
-        private string cantidadAdquirida;
+        private DataBaseManager _dbm;      
         private string queryCupon = "SELECT TOP 1 * FROM MANA.CUPON ORDER BY CUPON_ID DESC";
 
-        public GenerarCupon(DataBaseManager dbm, string codigoDeOferta, string precioDeOferta, string precioDeLista, string codigoDeCliente, string cantAdquirida)
+        public GenerarCupon(DataBaseManager dbm)
         {
-            _dbm = dbm;
-            codigoOferta = codigoDeOferta;
-            precioOferta = precioDeOferta;
-            precioLista = precioDeLista;
-            codigoCliente = codigoDeCliente;
-            cantidadAdquirida = cantAdquirida;
+            _dbm = dbm;           
             InitializeComponent();
         }
       
@@ -70,7 +60,7 @@ namespace FrbaOfertas.ComprarOferta
                 decimal importe = (decimal)resultSet.GetValue(resultSet.GetOrdinal("CUPON_IMPORTE"));
                 int clienteId = (int)resultSet.GetValue(resultSet.GetOrdinal("CUPON_CLI_ID"));
                 string estado = (String)resultSet.GetValue(resultSet.GetOrdinal("CUPON_ESTADO"));
-                DateTime fechaV = (DateTime.Now).AddMonths(1);               
+                DateTime fechaV = (DateTime)resultSet.GetValue(resultSet.GetOrdinal("CUPON_FECHA_VALIDEZ"));              
                 
                 string[] row = new string[] { id.ToString(), fecha.ToString(), nroOferta, precioO.ToString(), precioL.ToString(), cantidad.ToString(), importe.ToString(), clienteId.ToString(), estado, fechaV.ToString() };
                 d1.Rows.Add(row);

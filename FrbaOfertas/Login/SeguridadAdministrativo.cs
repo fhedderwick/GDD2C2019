@@ -14,12 +14,22 @@ namespace FrbaOfertas.Login
     {
         private DataBaseManager _dbm;
         private String _userId;
-
+        private string queryUserRol = "SELECT ROL_NOMBRE FROM MANA.ROL WHERE ROL_ID = (SELECT UR_ROL_ID FROM MANA.USUARIO_ROL WHERE UR_USR_ID = @UserId)";
+        private string rol;
         public SeguridadAdministrativo(DataBaseManager dbm, String userId)
         {
             _dbm = dbm;
-            _userId = userId;
+            _userId = userId;                        
             InitializeComponent();
+            this.load();
+        }
+
+        private void load()
+        {
+            Dictionary<string, object> map = new Dictionary<string, object>();
+            map.Add("@UserId", _userId);
+            rol = _dbm.executeSelectString(queryUserRol, map);
+            if (rol == "AdministradorGral") { b1.Visible = true; }
         }
 
         private void b3_Click(object sender, EventArgs e)
@@ -29,16 +39,14 @@ namespace FrbaOfertas.Login
         }
 
         private void b2_Click(object sender, EventArgs e)  //Cambiar Password
-        {
-            Hide();
+        {            
             ModificacionPassword i = new ModificacionPassword(_dbm);
             i.Show();
             
         }
 
         private void b1_Click(object sender, EventArgs e)  //Baja Usuario
-        {
-            Hide();
+        {            
             BajaUser i = new BajaUser(_dbm);
             i.Show();
         }

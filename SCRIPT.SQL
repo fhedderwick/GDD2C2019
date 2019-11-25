@@ -20,10 +20,10 @@ ALTER TABLE [MANA].USUARIO_ROL DROP CONSTRAINT FK_USER_ID;
 ALTER TABLE [MANA].USUARIO_ROL DROP CONSTRAINT FK_ROL_ID; 
 ALTER TABLE [MANA].FUNCIONALIDAD_ROL DROP CONSTRAINT FK_R_ID; 
 ALTER TABLE [MANA].FUNCIONALIDAD_ROL DROP CONSTRAINT FK_FUNC_ID;
-
+ALTER TABLE [MANA].CLIENTE DROP CONSTRAINT FK_CLI_USER_ID;
+ALTER TABLE [MANA].PROVEEDOR DROP CONSTRAINT FK_PROV_USER_ID;
 
 --DROP TABLES
-
 IF OBJECT_ID('MANA.PROVEEDOR') IS NOT NULL
 DROP TABLE MANA.PROVEEDOR;
 IF OBJECT_ID('MANA.RUBRO') IS NOT NULL
@@ -58,8 +58,6 @@ IF OBJECT_ID('MANA.FUNCIONALIDAD') IS NOT NULL
 DROP TABLE MANA.FUNCIONALIDAD;
 
 --DROP PROCEDURES, FUNCIONES, TRIGGERS
-IF OBJECT_ID('MANA.EncriptarPassword') IS NOT NULL
-    DROP TRIGGER MANA.EncriptarPassword;
 IF OBJECT_ID('MANA.PublicarOferta') IS NOT NULL
     DROP TRIGGER MANA.PublicarOferta;
 IF OBJECT_ID('MANA.ValidarVencimientoOferta') IS NOT NULL
@@ -136,19 +134,19 @@ IF OBJECT_ID('MANA.BajaUsuario') IS NOT NULL
     DROP PROCEDURE MANA.BajaUsuario;
 IF OBJECT_ID('MANA.CambiarPassword') IS NOT NULL
     DROP PROCEDURE MANA.CambiarPassword;
+IF OBJECT_ID('MANA.AsignarUserIdCliente') IS NOT NULL
+    DROP PROCEDURE MANA.AsignarUserIdCliente;
+IF OBJECT_ID('MANA.AsignarUserIdProveedor') IS NOT NULL
+    DROP PROCEDURE MANA.AsignarUserIdProveedor;
 IF OBJECT_ID('MANA.CrearUsuariosParaClientesMigrados') IS NOT NULL
     DROP PROCEDURE MANA.CrearUsuariosParaClientesMigrados;
 IF OBJECT_ID('MANA.CrearUsuariosParaProveedoresMigrados') IS NOT NULL
     DROP PROCEDURE MANA.CrearUsuariosParaProveedoresMigrados;
              /*Cliente*/
-IF OBJECT_ID('MANA.CrearCliente') IS NOT NULL
-    DROP PROCEDURE MANA.CrearCliente;	
+IF OBJECT_ID('MANA.CrearUsuarioCliente') IS NOT NULL
+    DROP PROCEDURE MANA.CrearUsuarioCliente;
 IF OBJECT_ID('MANA.ModificarCliente') IS NOT NULL
     DROP PROCEDURE MANA.ModificarCliente;
-IF OBJECT_ID('MANA.HabilitarCliente') IS NOT NULL
-    DROP PROCEDURE MANA.HabilitarCliente;
-IF OBJECT_ID('MANA.BajaCliente') IS NOT NULL
-    DROP PROCEDURE MANA.BajaCliente;
 IF OBJECT_ID('MANA.CargarTipoPago') IS NOT NULL
     DROP PROCEDURE MANA.CargarTipoPago;
 IF OBJECT_ID('MANA.ObtenerIdTipopago') IS NOT NULL
@@ -162,18 +160,12 @@ IF OBJECT_ID('MANA.ObtenerSaldo') IS NOT NULL
 IF OBJECT_ID('MANA.CargarCredito') IS NOT NULL
     DROP PROCEDURE MANA.CargarCredito;
             /*Proveedor*/
-IF OBJECT_ID('MANA.CrearRubro') IS NOT NULL
-    DROP PROCEDURE MANA.CrearRubro;	
 IF OBJECT_ID('MANA.ObtenerIdRubro') IS NOT NULL
-    DROP FUNCTION MANA.ObtenerIdRubro;		
-IF OBJECT_ID('MANA.CrearProveedor') IS NOT NULL
-    DROP PROCEDURE MANA.CrearProveedor;	
+    DROP FUNCTION MANA.ObtenerIdRubro;
+IF OBJECT_ID('MANA.CrearUsuarioProveedor') IS NOT NULL
+    DROP PROCEDURE MANA.CrearUsuarioProveedor;				
 IF OBJECT_ID('MANA.ModificarProveedor') IS NOT NULL
     DROP PROCEDURE MANA.ModificarProveedor;
-IF OBJECT_ID('MANA.HabilitarProveedor') IS NOT NULL
-    DROP PROCEDURE MANA.HabilitarProveedor;
-IF OBJECT_ID('MANA.BajaProveedor') IS NOT NULL
-    DROP PROCEDURE MANA.BajaProveedor;
 	        /*Oferta*/
 IF OBJECT_ID('MANA.CrearConsumoOferta') IS NOT NULL
     DROP PROCEDURE MANA.CrearConsumoOferta;
@@ -187,8 +179,6 @@ IF OBJECT_ID('MANA.ObtenerEstadoCupon') IS NOT NULL
     DROP FUNCTION MANA.ObtenerEstadoCupon;
 IF OBJECT_ID('MANA.ObtenerProveedorOferta') IS NOT NULL
     DROP FUNCTION MANA.ObtenerProveedorOferta;
-IF OBJECT_ID('MANA.ObtenerPrecioOferta') IS NOT NULL
-    DROP FUNCTION MANA.ObtenerPrecioOferta;
 IF OBJECT_ID('MANA.ObtenerMaximoUnidadOferta') IS NOT NULL
     DROP FUNCTION MANA.ObtenerMaximoUnidadOferta;
 IF OBJECT_ID('MANA.ActualizarStock') IS NOT NULL
@@ -205,13 +195,9 @@ IF OBJECT_ID('MANA.ComprarOferta') IS NOT NULL
 IF OBJECT_ID('MANA.CrearItemFactura') IS NOT NULL
     DROP PROCEDURE MANA.CrearItemFactura;
 IF OBJECT_ID('MANA.CrearFactura') IS NOT NULL
-    DROP PROCEDURE MANA.CrearFactura;
-IF OBJECT_ID('MANA.ObtenerNumeroFactura') IS NOT NULL
-    DROP FUNCTION MANA.ObtenerNumeroFactura;		
+    DROP PROCEDURE MANA.CrearFactura;	
 IF OBJECT_ID('MANA.FacturarOfertasAProveedor') IS NOT NULL
     DROP PROCEDURE MANA.FacturarOfertasAProveedor;					
-IF OBJECT_ID('MANA.BorrarFactura') IS NOT NULL
-    DROP PROCEDURE MANA.BorrarFactura;
 
 						
 --DROP SCHEMA
@@ -310,7 +296,8 @@ CREATE TABLE [MANA].CUPON (
 	CUPON_IMPORTE NUMERIC (18),	
 	CUPON_CLI_ID INT,	
 	CUPON_ESTADO NVARCHAR(20),
-	
+	CUPON_FECHA_VALIDEZ DATETIME,
+
 	CONSTRAINT CUPON_PK PRIMARY KEY (CUPON_ID)
 );
 
@@ -459,12 +446,11 @@ BEGIN
 END
 GO
 
-/*El cupon vence 1 MES despues de comprar la Oferta, lo elegimos asi al no especificar el cuando en el enunciado*/
 create TRIGGER MANA.ValidarVencimientoCupon
    on MANA.CUPON
    after INSERT
 AS
-BEGIN
+BEGIN   /*El cupon vence 1 MES despues de comprar la Oferta, lo elegimos asi al no especificar el cuando en el enunciado*/
    update CUPON set CUPON_ESTADO = 'Deshabilitado' where CUPON_ID in
    (select CUPON_ID
     from CUPON C
@@ -480,8 +466,8 @@ GO
 
 CREATE PROCEDURE MANA.MigrarCliente
 AS
-insert into MANA.CLIENTE
-select M.Cli_Nombre, M.Cli_Apellido, M.Cli_Dni, M.Cli_Mail, M.Cli_Telefono, M.Cli_Direccion, NULL as CODIGO_POSTAL, M.Cli_Ciudad, M.Cli_Fecha_Nac, 200 as SALDO, 'Habilitado'
+insert into MANA.CLIENTE         /*Como todavia no estan creados los usuarios para los clientes migrados user id es null; se asigna el userId mas abajo*/
+select M.Cli_Nombre, M.Cli_Apellido, M.Cli_Dni, M.Cli_Mail, M.Cli_Telefono, M.Cli_Direccion, NULL as CODIGO_POSTAL, M.Cli_Ciudad, M.Cli_Fecha_Nac, 200 as SALDO, NULL as USER_ID
 from gd_esquema.Maestra M
 group by M.Cli_Nombre, M.Cli_Apellido, M.Cli_Dni, M.Cli_Mail, M.Cli_Telefono, M.Cli_Direccion, M.Cli_Ciudad, M.Cli_Fecha_Nac
 GO
@@ -507,8 +493,8 @@ GO
 
 CREATE PROCEDURE MANA.MigrarProveedor
 AS
-insert into MANA.PROVEEDOR
-select M.Provee_RS, M.Provee_CUIT, NULL as NOMBRE_CONTACO, NULL as EMAIL, M.Provee_Telefono, M.Provee_Dom, NULL as CODIGO_POSTAL, M.Provee_Ciudad, R.RUBRO_ID, 'Habilitado'
+insert into MANA.PROVEEDOR  /*Como todavia no estan creados los usuarios para los proveedores migrados user id es null; se asigna el userId mas abajo*/
+select M.Provee_RS, M.Provee_CUIT, NULL as NOMBRE_CONTACO, NULL as EMAIL, M.Provee_Telefono, M.Provee_Dom, NULL as CODIGO_POSTAL, M.Provee_Ciudad, R.RUBRO_ID, NULL
 from gd_esquema.Maestra M, MANA.RUBRO R
 where  M.Provee_Rubro = R.RUBRO_DESCRIPCION
 group by M.Provee_RS, M.Provee_CUIT, M.Provee_Telefono, M.Provee_Dom, M.Provee_Ciudad, R.RUBRO_ID
@@ -568,7 +554,6 @@ where
 	M.Provee_Dom = P.PROV_DIRECCION AND
 	M.Provee_Ciudad = P.PROV_CIUDAD)	
 group by M.Oferta_Codigo, M.Oferta_Descripcion, M.Oferta_Fecha, M.Oferta_Fecha_Venc, M.Oferta_Precio, M.Oferta_Precio_Ficticio, P.PROV_ID, M.Oferta_Cantidad, M.Oferta_Cantidad
-ORDER BY P.PROV_ID	
 GO
 
 MANA.MigrarOferta
@@ -578,8 +563,8 @@ GO
 
 CREATE PROCEDURE MANA.MigrarCupon    
 AS          /*Importe = PrecioOferta * CantAdq pero como no tengo registrada la cantidad en la Maestra, elegimos ponerle el PrecioOferta como importe para correcto func de App(Facturacion Ofertas) */
-insert into MANA.CUPON 
-select M.Oferta_Fecha_Compra, M.Oferta_Codigo, M.Oferta_Precio, M.Oferta_Precio_Ficticio, NULL as Cantidad_Adquirida, M.Oferta_Precio as Importe, C.CLI_ID, 'Habilitado'
+insert into MANA.CUPON                                        /*Fecha Validez = Fecha Compra + 1 mes*/
+select M.Oferta_Fecha_Compra, M.Oferta_Codigo, M.Oferta_Precio, M.Oferta_Precio_Ficticio, NULL as Cantidad_Adquirida, M.Oferta_Precio as Importe, C.CLI_ID, 'Habilitado', DATEADD(MONTH, 1,M.Oferta_Fecha_Compra) as Validez
 from gd_esquema.Maestra M, MANA.CLIENTE C
 where
     M.Oferta_Fecha_Compra IS NOT NULL AND	
@@ -591,7 +576,7 @@ where
 	M.Cli_Direccion = C.CLI_DIRECCION AND
 	M.Cli_Ciudad = C.CLI_CIUDAD AND
 	M.Cli_Fecha_Nac = C.CLI_FECHA_NACIMIENTO		
-group by M.Oferta_Fecha_Compra, M.Oferta_Codigo, M.Oferta_Precio, M.Oferta_Precio_Ficticio, C.CLI_ID
+group by M.Oferta_Fecha_Compra, M.Oferta_Codigo, M.Oferta_Precio, M.Oferta_Precio_Ficticio, C.CLI_ID, DATEADD(MONTH, 1,M.Oferta_Fecha_Compra)
 GO
 
 MANA.MigrarCupon
@@ -917,17 +902,19 @@ GO
 Mana.CrearUsuario 'admin', 'w23e'
 GO
 
-CREATE PROCEDURE MANA.BajaUsuario @Username nvarchar(200)
+CREATE PROCEDURE MANA.BajaUsuario @UserId int
 AS
 UPDATE MANA.USUARIO
 SET USUARIO_ESTADO = 'Deshabilitado'
-WHERE USER_ID = @Username
+WHERE USER_ID = @UserId
 GO
 
 CREATE PROCEDURE MANA.CambiarPassword @Username nvarchar(200), @Password nvarchar(200)
 AS
+ declare @PasswordEncriptado nvarchar(200)
+ set @PasswordEncriptado = MANA.Encriptar (@Password)
 UPDATE MANA.USUARIO
-SET USER_PASSWORD = @Password
+SET USER_PASSWORD = @PasswordEncriptado
 WHERE USER_USERNAME = @Username
 GO
 
@@ -948,6 +935,16 @@ GO
 Mana.AsignarUsuarioRol 'admin', 'AdministradorGral'
 GO
 
+/*Usuarios para Clientes y Proveedores Migrados*/
+CREATE PROCEDURE MANA.AsignarUserIdCliente @Nombre nvarchar(255), @Apellido nvarchar(255), @Dni numeric(18), @UserId int
+AS
+  declare @ClienteId int
+  set @ClienteId = (select CLI_ID from MANA.CLIENTE where CLI_NOMBRE = @Nombre and CLI_APELLIDO = @Apellido and CLI_DNI = @Dni)
+  UPDATE MANA.CLIENTE
+  SET CLI_USER_ID = @UserId
+  where CLI_ID = @ClienteId
+GO
+
 CREATE PROCEDURE MANA.CrearUsuariosParaClientesMigrados
 AS
   declare @Username nvarchar(200)
@@ -955,26 +952,38 @@ AS
   declare @Nombre nvarchar(255)
   declare @Apellido nvarchar(255)
   declare @Dni numeric(18)
+  declare @UserId int
 
   declare Cliente CURSOR FOR
-   select CLI_NOMBRE, CLI_APELLIDO, CLI_DNI from CLIENTE 
+   select CLI_NOMBRE, CLI_APELLIDO, CLI_DNI, CLI_USER_ID from CLIENTE 
    Open Cliente
-   FETCH NEXT FROM Cliente into @Nombre, @Apellido, @Dni
+   FETCH NEXT FROM Cliente into @Nombre, @Apellido, @Dni, @UserId
    --check for a new row
    WHILE @@FETCH_STATUS = 0
    BEGIN                                                               /*Username = Nombre + Primer y Segundo Caracter del Apellido*/
     set @Username = @Nombre + substring(@Apellido, 1, 1) + UPPER(SUBSTRING(@Apellido, 2, 1))   
-	set @Password = @Dni
-    EXECUTE MANA.CrearUsuario @Username, @Password                     /*Creo el usuario*/
+	set @Password = @Dni	
+
+    EXECUTE MANA.CrearUsuario @Username, @Password                     /*Creo el usuario*/	
 	EXECUTE MANA.AsignarUsuarioRol @Username, 'Cliente'                /*Asigno rol al usuario*/
-	FETCH NEXT FROM Cliente into @Nombre, @Apellido, @Dni
+	set @UserId = (select max(USER_ID) from MANA.USUARIO)
+	EXECUTE MANA.AsignarUserIdCliente @Nombre, @Apellido, @Dni, @UserId   /*Asigno el Id de Usuario correspondiente a cada Cliente Migrado*/
+	FETCH NEXT FROM Cliente into @Nombre, @Apellido, @Dni, @UserId
    END
    close Cliente
    Deallocate Cliente
-
 GO
 
 Mana.CrearUsuariosParaClientesMigrados
+GO
+
+CREATE PROCEDURE MANA.AsignarUserIdProveedor @RazonSocial nvarchar(255), @Cuit nvarchar(255), @UserId int
+AS
+  declare @ProvId int
+  set @ProvId = (select PROV_ID from MANA.PROVEEDOR where PROV_RAZON_SOCIAL = @RazonSocial and  PROV_CUIT= @Cuit)
+  UPDATE MANA.PROVEEDOR
+  SET PROV_USER_ID = @UserId
+  where PROV_ID = @ProvId
 GO
 
 CREATE PROCEDURE MANA.CrearUsuariosParaProveedoresMigrados
@@ -983,11 +992,12 @@ AS
   declare @Password nvarchar(200)
   declare @RazonSocial nvarchar(255)
   declare @Cuit nvarchar(255)
- 
+  declare @UserId int
+
   declare Proveedor CURSOR FOR
-   select PROV_RAZON_SOCIAL, PROV_CUIT from PROVEEDOR
+   select PROV_RAZON_SOCIAL, PROV_CUIT, PROV_USER_ID from PROVEEDOR
    Open Proveedor
-   FETCH NEXT FROM Proveedor into @RazonSocial, @Cuit
+   FETCH NEXT FROM Proveedor into @RazonSocial, @Cuit, @UserId
    --check for a new row
    WHILE @@FETCH_STATUS = 0
    BEGIN                                                     
@@ -995,7 +1005,9 @@ AS
 	set @Password = @Cuit
     EXECUTE MANA.CrearUsuario @Username, @Password                     /*Creo el usuario*/
 	EXECUTE MANA.AsignarUsuarioRol @Username,'Proveedor'               /*Asigno rol al usuario*/
-	FETCH NEXT FROM Proveedor into @RazonSocial, @Cuit
+	set @UserId = (select max(USER_ID) from MANA.USUARIO)
+	EXECUTE Mana.AsignarUserIdProveedor @RazonSocial, @Cuit, @UserId   /*Asigno el Id de Usuario correspondiente a cada Proveedor Migrado*/
+	FETCH NEXT FROM Proveedor into @RazonSocial, @Cuit, @UserId
    END
    close Proveedor
    Deallocate Proveedor
@@ -1017,25 +1029,15 @@ AS
 BEGIN TRANSACTION
 BEGIN TRY
 DECLARE @idGenerado int
-INSERT INTO MANA.USUARIO VALUES(@Username, @Password, 0, 'Habilitado');
+EXECUTE MANA.CrearUsuario @Username, @Password
 SET @idGenerado = (SELECT SCOPE_IDENTITY());
-INSERT INTO MANA.USUARIO_ROL VALUES(@idGenerado,@RolId)
+INSERT INTO MANA.USUARIO_ROL VALUES(@idGenerado, @RolId)
 INSERT INTO MANA.CLIENTE values(@Nombre, @Apellido, @Dni, @Mail, @Telefono, @Direccion, @CodigoPostal, @Ciudad, @FechaNac, 200, @idGenerado);
 COMMIT TRANSACTION
 END TRY
 BEGIN CATCH
 ROLLBACK TRANSACTION
 END CATCH
-GO
-
-CREATE PROCEDURE MANA.CrearCliente @Nombre nvarchar(255), @Apellido nvarchar(255), @Dni numeric(18), @Mail nvarchar(255), 
-                                   @Telefono numeric(18), @Direccion nvarchar(255), @CodigoPostal nvarchar(18), @Ciudad nvarchar(255), @FechaNac datetime
-AS
-IF(NOT EXISTS(SELECT CLI_NOMBRE, CLI_APELLIDO, CLI_DNI FROM MANA.CLIENTE 
-              where CLI_NOMBRE = @Nombre AND CLI_APELLIDO = @Apellido AND CLI_DNI = @Dni))
-BEGIN
-insert into MANA.CLIENTE values(@Nombre, @Apellido, @Dni, @Mail, @Telefono, @Direccion, @CodigoPostal, @Ciudad, @FechaNac, 200, 'Habilitado');
-END
 GO
 
 CREATE PROCEDURE MANA.ModificarCliente @ID int, @Nombre nvarchar(255), @Apellido nvarchar(255), @Dni numeric(18), @Mail nvarchar(255), 
@@ -1049,20 +1051,6 @@ BEGIN
 	    CLI_DIRECCION = @Direccion, CLI_CODIGO_POSTAL = @CodigoPostal, CLI_CIUDAD = @Ciudad, CLI_FECHA_NACIMIENTO = @FechaNac
 	  WHERE CLI_ID = @ID
 END
-GO
-
-CREATE PROCEDURE MANA.HabilitarCliente @ClienteId int
-AS
-  UPDATE MANA.CLIENTE
-  SET CLI_ESTADO = 'Habilitado'
-  WHERE CLI_ID = @ClienteId
-GO
-
-CREATE PROCEDURE MANA.BajaCliente @Nombre nvarchar(255), @Apellido nvarchar(255), @Dni numeric(18), @Mail nvarchar(255)
-AS
-   UPDATE MANA.CLIENTE
-      SET   CLI_ESTADO = 'Deshabilitado'
-	  WHERE CLI_NOMBRE = @Nombre AND CLI_APELLIDO = @Apellido AND CLI_DNI = @Dni AND CLI_MAIL = @Mail
 GO
 
 CREATE PROCEDURE MANA.CargarTipoPago @TipoPago nvarchar(100)
@@ -1113,11 +1101,6 @@ GO
 
 /*ABM Proveedor*/
 
-CREATE PROCEDURE MANA.CrearRubro @Rubro nvarchar(100)
-AS
- insert into MANA.RUBRO values (@Rubro)
-GO
-
 CREATE FUNCTION MANA.ObtenerIdRubro (@Rubro nvarchar(100))
 RETURNS INT
 AS
@@ -1134,33 +1117,15 @@ AS
 BEGIN TRANSACTION
 BEGIN TRY
 DECLARE @idGenerado int
-INSERT INTO MANA.USUARIO VALUES(@Username, @Password, 0, 'Habilitado');
+EXECUTE MANA.CrearUsuario @Username, @Password
 SET @idGenerado = (SELECT SCOPE_IDENTITY());
-INSERT INTO MANA.USUARIO_ROL VALUES(@idGenerado,@RolId)
+INSERT INTO MANA.USUARIO_ROL VALUES(@idGenerado, @RolId)
 INSERT INTO MANA.PROVEEDOR values(@RazonSocial, @CUIT, @NombreContacto, @Mail, @Telefono, @Direccion, @CodigoPostal, @Ciudad, MANA.ObtenerIdRubro(@Rubro),@idGenerado);
 COMMIT TRANSACTION
 END TRY
 BEGIN CATCH
 ROLLBACK TRANSACTION
 END CATCH
-GO
-
-CREATE PROCEDURE MANA.CrearProveedor @RazonSocial nvarchar(100), @CUIT nvarchar(20), @NombreContacto nvarchar(20), @Mail nvarchar(100), 
-                                   @Telefono numeric(18), @Direccion nvarchar(100), @CodigoPostal nvarchar(18), @Ciudad nvarchar(255), @Rubro nvarchar(100)
-AS
- IF(NOT EXISTS(SELECT PROV_RAZON_SOCIAL, PROV_CUIT FROM MANA.PROVEEDOR 
-              where PROV_RAZON_SOCIAL = @RazonSocial AND PROV_CUIT = @CUIT))  /*Valido que el Prov No exista*/
-  BEGIN
-   IF(NOT EXISTS(SELECT RUBRO_DESCRIPCION FROM RUBRO WHERE RUBRO_DESCRIPCION = @Rubro))  /*Si el rubro no existe lo creo*/
-    BEGIN
-	 EXECUTE Mana.CrearRubro @Rubro
-     insert into MANA.PROVEEDOR values(@RazonSocial, @CUIT, @NombreContacto, @Mail, @Telefono, @Direccion, @CodigoPostal, @Ciudad, MANA.ObtenerIdRubro(@Rubro),'Habilitado');
-    END
-   ELSE
-    BEGIN
-     insert into MANA.PROVEEDOR values(@RazonSocial, @CUIT, @NombreContacto, @Mail, @Telefono, @Direccion, @CodigoPostal, @Ciudad, MANA.ObtenerIdRubro(@Rubro),'Habilitado');
-    END
-  END
 GO
 
 CREATE PROCEDURE MANA.ModificarProveedor @ID int, @RazonSocial nvarchar(100), @NombreContacto nvarchar(20), @CUIT nvarchar(20), @Mail nvarchar(100), 
@@ -1177,22 +1142,6 @@ END
 GO
 
 
-CREATE PROCEDURE MANA.HabilitarProveedor @RazonSocial nvarchar(100), @CUIT nvarchar(20)
-AS
-   UPDATE MANA.PROVEEDOR
-      SET   PROV_ESTADO = 'Habilitado'
-	  WHERE PROV_RAZON_SOCIAL = @RazonSocial AND PROV_CUIT = @CUIT
-GO
-
-CREATE PROCEDURE MANA.BajaProveedor @RazonSocial nvarchar(100), @CUIT nvarchar(20)
-AS
-   UPDATE MANA.PROVEEDOR
-      SET   PROV_ESTADO = 'Deshabilitado'
-	  WHERE PROV_RAZON_SOCIAL = @RazonSocial AND PROV_CUIT = @CUIT
-GO
-
-
-
 
 /*ABM Oferta*/
 
@@ -1205,14 +1154,6 @@ AS
        set @NumeroOferta = @NumeroOferta +1
   insert into MANA.OFERTA values (@NumeroOferta, @Descripcion, @FechaPublicacion, @FechaVencimiento, @PrecioOferta, @PrecioLista, @ProveedorId , @CantidadDisponible, @MaximoUnidadesPorCliente,'En Espera');     
   END
-GO
-
-CREATE FUNCTION MANA.ObtenerPrecioOferta (@NumeroOferta nvarchar(50))
-RETURNS INT
-AS
-BEGIN
-  return (SELECT OF_PRECIO_OFERTA FROM MANA.OFERTA WHERE OF_NUMERO = @NumeroOferta)
-END
 GO
 
 CREATE FUNCTION MANA.ObtenerMaximoUnidadOferta (@NumeroOferta nvarchar(50))
@@ -1244,9 +1185,9 @@ AS
 insert into MANA.CONSUMO_OFERTA values (@FechaEntrega, @ProveedorId, @CuponId, @C_Dest_Nombre, @C_Dest_Apellido, @C_Dest_Dni, @C_Dest_Direccion, @C_Dest_Telefono, @C_Dest_Mail, @C_Dest_Fecha_Nac, @C_Dest_Ciudad)
 GO
 
-CREATE PROCEDURE MANA.CrearCupon @FechaCompra datetime, @OfertaNumero nvarchar(50), @PrecioOferta numeric(18), @PrecioLista numeric(18), @CantidadAdquirida int, @Importe numeric (18), @ClienteId int
+CREATE PROCEDURE MANA.CrearCupon @FechaCompra datetime, @OfertaNumero nvarchar(50), @PrecioOferta numeric(18), @PrecioLista numeric(18), @CantidadAdquirida int, @Importe numeric (18), @ClienteId int, @FechaValidez datetime
 AS
-insert into MANA.CUPON values (@FechaCompra, @OfertaNumero, @PrecioOferta, @PrecioLista, @CantidadAdquirida, @Importe, @ClienteId, 'Habilitado')
+insert into MANA.CUPON values (@FechaCompra, @OfertaNumero, @PrecioOferta, @PrecioLista, @CantidadAdquirida, @Importe, @ClienteId, 'Habilitado', @FechaValidez)
 GO
 
 CREATE PROCEDURE MANA.BajaCupon (@CuponId int, @NumeroOferta nvarchar(50))
@@ -1277,7 +1218,7 @@ AS
     insert into MANA.OFERTA_VENDIDA values (@FechaCompra, @CuponId, @ProveedorId, @OfertaNumero, @Importe)
 GO
 
-CREATE PROCEDURE MANA.ComprarOferta @FechaCompra datetime, @OfertaNumero nvarchar(50), @PrecioOferta numeric(18), @PrecioLista numeric(18), @CantidadAdquirida int, @ClienteId int
+CREATE PROCEDURE MANA.ComprarOferta @FechaCompra datetime, @OfertaNumero nvarchar(50), @PrecioOferta numeric(18), @PrecioLista numeric(18), @CantidadAdquirida int, @ClienteId int, @FechaValidez datetime
 AS
        declare @Importe numeric(18)
        set @Importe = @PrecioOferta * @CantidadAdquirida
@@ -1288,7 +1229,7 @@ AS
 	   declare @CuponId int	        	  
 	   set @ProvId = Mana.ObtenerProveedorOferta (@OfertaNumero)
   	   	                                                                                           /*Genero el Cupon*/ 
-	   EXECUTE Mana.CrearCupon @FechaCompra, @OfertaNumero, @PrecioOferta, @PrecioLista, @CantidadAdquirida, @Importe, @ClienteId	  
+	   EXECUTE Mana.CrearCupon @FechaCompra, @OfertaNumero, @PrecioOferta, @PrecioLista, @CantidadAdquirida, @Importe, @ClienteId, @FechaValidez	  
 	   EXECUTE Mana.DescontarSaldo @ClienteId, @Importe                                            /*Actualizo saldo de Cliente*/
        EXECUTE Mana.ActualizarStock @OfertaNumero, @CantidadAdquirida                              /*Actualizo el stock de la Oferta*/	   
 
@@ -1322,22 +1263,9 @@ AS
     insert into MANA.ITEM_FACTURA values (@FactNro, @OfertaVendidaId, @Importe)
 GO
 
-CREATE FUNCTION MANA.ObtenerNumeroFactura (@OfertaVendidaId int)
-RETURNS INT
-BEGIN
-  return (select FACT_NUMERO from MANA.FACTURA where FACT_ID = (SELECT I_FACT_ID FROM ITEM_FACTURA WHERE I_FACT_OF_VEN_ID = @OfertaVendidaId ))
-END
-GO
-
 CREATE PROCEDURE MANA.CrearFactura @FacturaNro int, @ImporteTotal numeric(18)
 AS     
 	insert into MANA.FACTURA values(@FacturaNro, GETDATE(), @ImporteTotal)
-GO
-
-CREATE PROCEDURE MANA.BorrarFactura @FacturaNro numeric(18)
-AS
-   DELETE FROM MANA.FACTURA
-    WHERE FACT_NUMERO = @FacturaNro
 GO
 
 CREATE PROCEDURE MANA.FacturarOfertasAProveedor @ProveedorId int, @FechaInicio datetime, @FechaFinal datetime
@@ -1378,7 +1306,7 @@ GO
 
 /** Test **/ 
                           /*Formato Fechas AÑO/DIA/MES, no me pregunten porque*/
-/*ABM Cliente*/
+/*ABM Cliente
 Mana.CrearCliente 'Gregory', 'House', 88430112, 'house@hotmail.com', 15856682, 'HOSPITAL521', 1252, 'Miami', '1985/06/10'
 GO
 Mana.ModificarCliente 5, 'Patrick', 'Jane', 62525087, 'jane@hotmail.com', 15534689, 'FBI5212', 1456, 'California', '1990/07/11'
@@ -1389,7 +1317,7 @@ Mana.CargarCredito '2019/08/11', 5, 'Debito', 100000, 0855648989
 GO
 Mana.CargarCredito '2019/08/11', 7, 'Crédito', 50000, 0975423614
 GO
-
+*/
 
 /*ABM Proveedor
 Mana.CrearProveedor 'Proveedor Cortinas S.R.L.', '11-22445103-2',  'Cortinas Congreso', 'cortinas@gmail.com', 43825679, 'Pozos618', 1256, 'CABA', 'Hogar' 

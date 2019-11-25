@@ -17,8 +17,8 @@ namespace FrbaOfertas.CragaCredito
         private DataBaseManager _dbm;
         private string clienteId;
         private string querySaldo = "SELECT CLI_SALDO FROM MANA.CLIENTE WHERE CLI_ID = @ClienteId";
-        private string queryCliente = "SELECT COUNT(CLI_ID) FROM MANA.CLIENTE WHERE CLI_ID = @ClienteId";
-        private string queryEstado = "SELECT CLI_ESTADO FROM MANA.CLIENTE WHERE CLI_ID = @ClienteId";
+        private string queryCliente = "SELECT COUNT(CLI_ID) FROM MANA.CLIENTE WHERE CLI_ID = @ClienteId";        
+        private string queryEstado = "SELECT USUARIO_ESTADO FROM MANA.USUARIO WHERE USER_ID = (SELECT CLI_USER_ID FROM MANA.CLIENTE WHERE CLI_ID = @ClienteId)";
 
         public CargarCredito(DataBaseManager dbm)
         {
@@ -42,16 +42,17 @@ namespace FrbaOfertas.CragaCredito
                     Dictionary<string, object> map3 = new Dictionary<string, object>();
                     map3.Add("@ClienteId", clienteId);
                     if (_dbm.executeSelectInt(queryCliente, map3) != 0)           //Valido que exista el Cliente
-                    {
+                    {                      
                         Dictionary<string, object> map2 = new Dictionary<string, object>();
                         map2.Add("@ClienteId", clienteId);
                         string estado = _dbm.executeSelectString(queryEstado, map2);
+
                         if (estado == "Habilitado")  //Valido que el cliente este Habilitado
                         {
                             DateTime fechaArchivo = Convert.ToDateTime(ConfigurationManager.AppSettings["fecha"]);
                             Dictionary<string, object> map = new Dictionary<string, object>();
                             map.Add("@FechaCarga", fechaArchivo);                      //Fecha del archivo de Configuracion
-                            map.Add("ClienteId", t1.Text);
+                            map.Add("@ClienteId", t1.Text);
                             map.Add("@TipoPago", t3.SelectedItem.ToString());
                             map.Add("@Monto", t4.Text);
                             map.Add("@NumeroTarjeta", t2.Text);
@@ -86,15 +87,14 @@ namespace FrbaOfertas.CragaCredito
 
         private void t3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.pagoConEfectivo()) { t2.ReadOnly = true; }
+            if (this.pagoConEfectivo()) { t2.ReadOnly = true; t2.Clear(); }
             if (this.pagoConCredito()) { t2.ReadOnly = false; }
             if (this.pagoConDebito()) { t2.ReadOnly = false; }
         }
         
         private bool pagoConEfectivo() { return t3.SelectedItem.Equals("Efectivo"); }
         private bool pagoConCredito() { return t3.SelectedItem.Equals("Crédito"); }
-        private bool pagoConDebito() { return t3.SelectedItem.Equals("Debito"); }
-        private bool pagoConTarjeta() { return this.pagoConCredito() || this.pagoConDebito(); }
+        private bool pagoConDebito() { return t3.SelectedItem.Equals("Debito"); }        
         private bool ingresoNumeroTarjeta() { return t2.Text.Length != 0; }
 
         private void obtenerNuevoSaldo(string clienteId)

@@ -68,10 +68,11 @@ namespace FrbaOfertas.ComprarOferta
                             map.Add("@PrecioLista", precioLista);
                             map.Add("@CantidadAdquirida", t1.Text);
                             map.Add("@ClienteId", t2.Text);
+                            map.Add("@FechaValidez", (DateTime.Now).AddMonths(1));
                             _dbm.executeProcedure("Mana.ComprarOferta", map);
 
                             MessageBox.Show("La operacion se ha realizado Exitosamente!");
-                            GenerarCupon i = new GenerarCupon(_dbm, codigoOferta, precioOferta, precioLista, codigoCliente, cantidadAdquirida);
+                            GenerarCupon i = new GenerarCupon(_dbm);
                             i.Show();
                             this.Close();
                         }

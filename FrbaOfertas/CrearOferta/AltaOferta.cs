@@ -26,8 +26,9 @@ namespace FrbaOfertas.CrearOferta
         private void btnVolverAtras_Click(object sender, EventArgs e)
         {
             Hide();
+            PantallaInicio i = new PantallaInicio(_dbm);
+            i.Show();
             this.Close();
-
         }
 
         private void btnSiguiente_Click(object sender, EventArgs e)

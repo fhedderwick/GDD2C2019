@@ -109,5 +109,12 @@ namespace FrbaOfertas
             SeguridadAdministrativo i = new SeguridadAdministrativo(_dbm, _userId);
             i.Show();
         }
+
+        private void button10_Click(object sender, EventArgs e)
+        {  //Cerrar Sesion
+            Hide();
+            this.Close();
+            Application.Exit();
+        }
     }
 }
