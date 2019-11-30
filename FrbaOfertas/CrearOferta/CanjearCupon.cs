@@ -14,6 +14,8 @@ namespace FrbaOfertas.CrearOferta
     {
         private DataBaseManager _dbm;
         private string _userId;
+        private string rol;
+        private string queryUserRol = "SELECT ROL_NOMBRE FROM MANA.ROL WHERE ROL_ID = (SELECT UR_ROL_ID FROM MANA.USUARIO_ROL WHERE UR_USR_ID = @UserId)"; 
         private string queryEstadoCupon = "SELECT CUPON_ESTADO FROM MANA.CUPON WHERE CUPON_ID = @CuponId";
         private string queryCupon = "SELECT COUNT(CUPON_ID) FROM MANA.CUPON WHERE CUPON_ID = @CuponId";
 
@@ -22,6 +24,22 @@ namespace FrbaOfertas.CrearOferta
             _dbm = dbm;
             _userId = userId;
             InitializeComponent();
+            this.load();
+        }
+
+        private void load()
+        { //Si el usuario es un Proveedor su userId se va a cargar automaticamente.
+            Dictionary<string, object> map = new Dictionary<string, object>();
+            map.Add("@UserId", _userId);
+            rol = _dbm.executeSelectString(queryUserRol, map);
+            if (rol == "Proveedor")
+            {
+                string query = "SELECT PROV_ID FROM MANA.PROVEEDOR WHERE PROV_USER_ID = @UserId";
+                Dictionary<string, object> map2 = new Dictionary<string, object>();
+                map2.Add("@UserId", _userId);
+                t3.Text = _dbm.executeSelectInt(query, map).ToString();
+                t3.ReadOnly = true;
+            }
         }
 
         private void b1_Click(object sender, EventArgs e)

@@ -102,8 +102,6 @@ IF OBJECT_ID('MANA.BorrarTT') IS NOT NULL
     DROP PROCEDURE MANA.BorrarTT	
 IF OBJECT_ID('MANA.CrearRol') IS NOT NULL
     DROP PROCEDURE MANA.CrearRol;
-IF OBJECT_ID('MANA.ObtenerRoles') IS NOT NULL
-    DROP PROCEDURE MANA.ObtenerRoles;
 IF OBJECT_ID('MANA.FuncionalidadRol_VW') IS NOT NULL
     DROP VIEW MANA.FuncionalidadRol_VW;
 IF OBJECT_ID('MANA.ObtenerFuncionalidadesDeRol') IS NOT NULL
@@ -111,11 +109,7 @@ IF OBJECT_ID('MANA.ObtenerFuncionalidadesDeRol') IS NOT NULL
 IF OBJECT_ID('MANA.EliminarFuncionalidadesDeRol') IS NOT NULL
     DROP PROCEDURE MANA.EliminarFuncionalidadesDeRol;
 IF OBJECT_ID('MANA.EliminarUsuariosDeRol') IS NOT NULL
-    DROP PROCEDURE MANA.EliminarUsuariosDeRol;	
-IF OBJECT_ID('MANA.CambiarNombreDeRol') IS NOT NULL
-    DROP PROCEDURE MANA.CambiarNombreDeRol;
-IF OBJECT_ID('MANA.HabilitarRol') IS NOT NULL
-    DROP PROCEDURE MANA.HabilitarRol;			
+    DROP PROCEDURE MANA.EliminarUsuariosDeRol;			
 IF OBJECT_ID('MANA.BajaDeRol') IS NOT NULL
     DROP PROCEDURE MANA.BajaDeRol;	
 IF OBJECT_ID('MANA.AsignarFuncionRol') IS NOT NULL
@@ -130,6 +124,8 @@ IF OBJECT_ID('MANA.AsignarUsuarioRol') IS NOT NULL
     DROP PROCEDURE MANA.AsignarUsuarioRol;
 IF OBJECT_ID('MANA.CrearUsuario') IS NOT NULL
     DROP PROCEDURE MANA.CrearUsuario;
+IF OBJECT_ID('MANA.AltaUsuario') IS NOT NULL
+    DROP PROCEDURE MANA.AltaUsuario;
 IF OBJECT_ID('MANA.BajaUsuario') IS NOT NULL
     DROP PROCEDURE MANA.BajaUsuario;
 IF OBJECT_ID('MANA.CambiarPassword') IS NOT NULL
@@ -744,12 +740,6 @@ GO
 MANA.CrearRol 'Administrativo'       
 GO          
 
-CREATE PROCEDURE MANA.ObtenerRoles  
-AS
-   	select R.ROL_ID, R.ROL_NOMBRE, R.ROL_ESTADO
-	from MANA.ROL R
-GO
-
 CREATE VIEW MANA.FuncionalidadRol_VW
 AS 
 select R.ROL_ID, R.ROL_NOMBRE,F.FUNC_ID, F.FUN_NOMBRE
@@ -777,20 +767,6 @@ CREATE PROCEDURE MANA.EliminarUsuariosDeRol @RolID int
 AS
     delete from MANA.USUARIO_ROL
     where MANA.USUARIO_ROL.UR_ROL_ID = @RolID
-GO
-
-CREATE PROCEDURE MANA.CambiarNombreDeRol @RolID int, @Nombre nvarchar(20)
-AS
-    update MANA.ROL
-    SET MANA.ROL.ROL_NOMBRE = @Nombre
-    where MANA.ROL.ROL_ID = @RolID
-GO
-
-CREATE PROCEDURE MANA.HabilitarRol @RolId int
-AS
-    update MANA.ROL
-    SET ROL_ESTADO = 'Habilitado'
-    where ROL_ID = @RolId
 GO
 
 CREATE PROCEDURE MANA.BajaDeRol @RolID int
@@ -859,13 +835,6 @@ GO
 /*Funcionalidades de Administrador General*/
 MANA.AsignarFuncionesAdministrador
 GO
-/*Funcionalidades de Usuario
-Mana.AsignarFuncionRol 2, 1
-GO
-Mana.AsignarFuncionRol 3, 1
-GO
-Mana.AsignarFuncionRol 4, 1
-GO*/
 /*Funcionalidades de Cliente*/
 Mana.AsignarFuncionRol 2, 1
 GO
@@ -904,6 +873,13 @@ END
 GO
 /*Creo el Usuario Admin, pedido en enunciado*/
 Mana.CrearUsuario 'admin', 'w23e'
+GO
+
+CREATE PROCEDURE MANA.AltaUsuario @UserId int
+AS
+UPDATE MANA.USUARIO
+SET USUARIO_ESTADO = 'Habilitado'
+WHERE USER_ID = @UserId
 GO
 
 CREATE PROCEDURE MANA.BajaUsuario @UserId int
