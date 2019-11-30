@@ -1,6 +1,6 @@
 ﻿namespace FrbaOfertas.Login
 {
-    partial class SeguridadAdministrativo
+    partial class Seguridad
     {
         /// <summary>
         /// Required designer variable.

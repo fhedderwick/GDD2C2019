@@ -13,13 +13,29 @@ namespace FrbaOfertas.Login
     public partial class ModificacionPassword : Form
     {
         private DataBaseManager _dbm;
+        private string _userId;
+        private string _rol;
         private string queryUser = "SELECT USER_USERNAME FROM MANA.USUARIO WHERE USER_USERNAME = @Username";
         private string queryPassword = "SELECT USER_PASSWORD FROM MANA.USUARIO WHERE USER_USERNAME = @Username";
 
-        public ModificacionPassword(DataBaseManager dbm)
+        public ModificacionPassword(DataBaseManager dbm, String userId, String rol)
         {
             _dbm = dbm;
+            _userId = userId;
+            _rol = rol;
             InitializeComponent();
+            this.load();
+        }
+
+        private void load()
+        { //Si el usuario es un Cliente o un Proveedor su username se va a cargar automaticamente.
+            if (_rol != "AdministradorGral" || _rol != "Administrativo") 
+            {
+                string query = "SELECT USER_USERNAME FROM MANA.USUARIO WHERE USER_ID = @UserId";
+                Dictionary<string, object> map = new Dictionary<string, object>();
+                map.Add("@UserId", _userId);
+                t1.Text = _dbm.executeSelectString(query, map); 
+                t1.ReadOnly = true; }
         }
 
         private void button1_Click(object sender, EventArgs e)

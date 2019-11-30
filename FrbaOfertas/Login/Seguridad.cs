@@ -10,13 +10,13 @@ using System.Windows.Forms;
 
 namespace FrbaOfertas.Login
 {
-    public partial class SeguridadAdministrativo : Form
+    public partial class Seguridad : Form
     {
         private DataBaseManager _dbm;
         private String _userId;
         private string queryUserRol = "SELECT ROL_NOMBRE FROM MANA.ROL WHERE ROL_ID = (SELECT UR_ROL_ID FROM MANA.USUARIO_ROL WHERE UR_USR_ID = @UserId)";
         private string rol;
-        public SeguridadAdministrativo(DataBaseManager dbm, String userId)
+        public Seguridad(DataBaseManager dbm, String userId)
         {
             _dbm = dbm;
             _userId = userId;                        
@@ -40,7 +40,7 @@ namespace FrbaOfertas.Login
 
         private void b2_Click(object sender, EventArgs e)  //Cambiar Password
         {            
-            ModificacionPassword i = new ModificacionPassword(_dbm);
+            ModificacionPassword i = new ModificacionPassword(_dbm, _userId, rol);
             i.Show();
             
         }

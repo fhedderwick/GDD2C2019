@@ -233,11 +233,11 @@
     <Compile Include="Login\Password.Designer.cs">
       <DependentUpon>Password.cs</DependentUpon>
     </Compile>
-    <Compile Include="Login\SeguridadAdministrativo.cs">
+    <Compile Include="Login\Seguridad.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Login\SeguridadAdministrativo.Designer.cs">
-      <DependentUpon>SeguridadAdministrativo.cs</DependentUpon>
+    <Compile Include="Login\Seguridad.Designer.cs">
+      <DependentUpon>Seguridad.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\UsuarioInexistente.cs">
       <SubType>Form</SubType>
@@ -340,8 +340,8 @@
     <EmbeddedResource Include="Login\Password.resx">
       <DependentUpon>Password.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Login\SeguridadAdministrativo.resx">
-      <DependentUpon>SeguridadAdministrativo.cs</DependentUpon>
+    <EmbeddedResource Include="Login\Seguridad.resx">
+      <DependentUpon>Seguridad.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\UsuarioInexistente.resx">
       <DependentUpon>UsuarioInexistente.cs</DependentUpon>

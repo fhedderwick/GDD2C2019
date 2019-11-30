@@ -106,7 +106,7 @@ namespace FrbaOfertas
 
         private void button9_Click(object sender, EventArgs e)
         {
-            SeguridadAdministrativo i = new SeguridadAdministrativo(_dbm, _userId);
+            Seguridad i = new Seguridad(_dbm, _userId);
             i.Show();
         }
 

@@ -29,7 +29,6 @@ D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfert
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Login.ModificacionPassword.resources
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Login.NewUser.resources
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Login.Password.resources
-D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Login.SeguridadAdministrativo.resources
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Login.UsuarioInexistente.resources
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.PantallaPrincipalUsuario.resources
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Properties.Resources.resources
@@ -38,3 +37,4 @@ D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfert
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\bin\Debug\FrbaOfertas.pdb
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.exe
 D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.pdb
+D:\NELSON\Gestion de Datos\TP Cupon Frba 2C 2019\TP Solucion\GDD2C2019\FrbaOfertas\obj\Debug\FrbaOfertas.Login.Seguridad.resources
