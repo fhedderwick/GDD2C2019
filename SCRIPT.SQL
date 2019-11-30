@@ -1122,7 +1122,7 @@ BEGIN TRANSACTION
 BEGIN TRY
 DECLARE @idGenerado int
 EXECUTE MANA.CrearUsuario @Username, @Password
-SET @idGenerado = (SELECT MAX(PROV_ID) FROM MANA.PROVEEDOR)
+SET @idGenerado = (SELECT MAX(USER_ID) FROM MANA.USUARIO)
 INSERT INTO MANA.USUARIO_ROL VALUES(@idGenerado, @RolId)
 INSERT INTO MANA.PROVEEDOR values(@RazonSocial, @CUIT, @NombreContacto, @Mail, @Telefono, @Direccion, @CodigoPostal, @Ciudad, MANA.ObtenerIdRubro(@Rubro),@idGenerado);
 COMMIT TRANSACTION
