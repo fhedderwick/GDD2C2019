@@ -1034,7 +1034,7 @@ BEGIN TRANSACTION
 BEGIN TRY
 DECLARE @idGenerado int
 EXECUTE MANA.CrearUsuario @Username, @Password
-SET @idGenerado = (SELECT SCOPE_IDENTITY());
+SET @idGenerado = (SELECT MAX(USER_ID) FROM MANA.USUARIO)
 INSERT INTO MANA.USUARIO_ROL VALUES(@idGenerado, @RolId)
 INSERT INTO MANA.CLIENTE values(@Nombre, @Apellido, @Dni, @Mail, @Telefono, @Direccion, @CodigoPostal, @Ciudad, @FechaNac, 200, @idGenerado);
 COMMIT TRANSACTION
@@ -1122,7 +1122,7 @@ BEGIN TRANSACTION
 BEGIN TRY
 DECLARE @idGenerado int
 EXECUTE MANA.CrearUsuario @Username, @Password
-SET @idGenerado = (SELECT SCOPE_IDENTITY());
+SET @idGenerado = (SELECT MAX(PROV_ID) FROM MANA.PROVEEDOR)
 INSERT INTO MANA.USUARIO_ROL VALUES(@idGenerado, @RolId)
 INSERT INTO MANA.PROVEEDOR values(@RazonSocial, @CUIT, @NombreContacto, @Mail, @Telefono, @Direccion, @CodigoPostal, @Ciudad, MANA.ObtenerIdRubro(@Rubro),@idGenerado);
 COMMIT TRANSACTION
