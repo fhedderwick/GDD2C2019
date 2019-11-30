@@ -169,14 +169,14 @@
             this.ciudadTextBox.Location = new System.Drawing.Point(98, 207);
             this.ciudadTextBox.Name = "ciudadTextBox";
             this.ciudadTextBox.Size = new System.Drawing.Size(139, 20);
-            this.ciudadTextBox.TabIndex = 14;
+            this.ciudadTextBox.TabIndex = 15;
             // 
             // guardarButton
             // 
             this.guardarButton.Location = new System.Drawing.Point(17, 273);
             this.guardarButton.Name = "guardarButton";
             this.guardarButton.Size = new System.Drawing.Size(75, 23);
-            this.guardarButton.TabIndex = 16;
+            this.guardarButton.TabIndex = 17;
             this.guardarButton.Text = "Guardar";
             this.guardarButton.UseVisualStyleBackColor = true;
             this.guardarButton.Click += new System.EventHandler(this.guardarButton_Click);
@@ -186,7 +186,7 @@
             this.cancelarButton.Location = new System.Drawing.Point(98, 273);
             this.cancelarButton.Name = "cancelarButton";
             this.cancelarButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelarButton.TabIndex = 17;
+            this.cancelarButton.TabIndex = 18;
             this.cancelarButton.Text = "Cancelar";
             this.cancelarButton.UseVisualStyleBackColor = true;
             this.cancelarButton.Click += new System.EventHandler(this.cancelarButton_Click);
@@ -197,7 +197,7 @@
             this.fechaTextBox.Name = "fechaTextBox";
             this.fechaTextBox.ReadOnly = true;
             this.fechaTextBox.Size = new System.Drawing.Size(100, 20);
-            this.fechaTextBox.TabIndex = 18;
+            this.fechaTextBox.TabIndex = 16;
             this.fechaTextBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.abrirCalendario);
             // 
             // label9
@@ -214,9 +214,9 @@
             this.codigoPostalTextBox.Location = new System.Drawing.Point(108, 186);
             this.codigoPostalTextBox.Name = "codigoPostalTextBox";
             this.codigoPostalTextBox.Size = new System.Drawing.Size(106, 20);
-            this.codigoPostalTextBox.TabIndex = 20;
+            this.codigoPostalTextBox.TabIndex = 14;
             // 
-            // AltaCliente
+            // AltaYModifCliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -241,7 +241,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.nombreTextBox);
-            this.Name = "AltaCliente";
+            this.Name = "AltaYModifCliente";
             this.Text = "Alta de Cliente";
             this.ResumeLayout(false);
             this.PerformLayout();

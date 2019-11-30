@@ -66,14 +66,18 @@ namespace FrbaOfertas.AbmCliente
             {
                 MessageBox.Show("Debe seleccionar un cliente.");
             }
-            else if (!"Habilitado".Equals(dataGridView1.SelectedRows[0].Cells[11].Value.ToString()))
+            else if (!"Habilitado".Equals(dataGridView1.SelectedRows[0].Cells[12].Value.ToString()))
             {
-                MessageBox.Show("El cliente elegido ya está deshabilitado.");
+                String id = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
+                String userId = dataGridView1.SelectedRows[0].Cells[1].Value.ToString();
+                RehabilitarCliente rehabilitarCliente = new RehabilitarCliente(_dbm, this, id, userId);
+                rehabilitarCliente.Show();
             } 
             else
             {
                 String id = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
-                BajaCliente bajaCliente = new BajaCliente(_dbm,this, id);
+                String userId = dataGridView1.SelectedRows[0].Cells[1].Value.ToString();
+                BajaCliente bajaCliente = new BajaCliente(_dbm,this, id, userId);
                 bajaCliente.Show();
             }
         }
@@ -163,7 +167,7 @@ namespace FrbaOfertas.AbmCliente
                 Decimal saldo = _dbm.getNumericFromResultSet(resultSet,"SALDO");
                 String estado = _dbm.getStringFromResultSet(resultSet,"ESTADO");
 
-                string[] row = new string[] { id.ToString(), nombre, apellido, dni.ToString(), mail, telefono.ToString(), direccion, codigoPostal, ciudad, fechaNacimiento.ToShortDateString(), saldo.ToString(), estado };
+                string[] row = new string[] { id.ToString(), userId.ToString(), nombre, apellido, dni.ToString(), mail, telefono.ToString(), direccion, codigoPostal, ciudad, fechaNacimiento.ToShortDateString(), saldo.ToString(), estado };
                 dataGridView1.Rows.Add(row);
             }
             for (int i = 0; i < dataGridView1.Rows.Count; i++)
