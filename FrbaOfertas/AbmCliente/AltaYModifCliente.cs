@@ -17,7 +17,7 @@ namespace FrbaOfertas.AbmCliente
         private String NEW_CLIENT_PROCEDURE = "MANA.CrearUsuarioCliente";
         private String UPDATE_CLIENT_PROCEDURE = "MANA.ModificarCliente";
 
-        private String GET_CLIENT_DATA_QUERY = "SELECT C.CLI_ID ID, C.CLI_NOMBRE NOMBRE, C.CLI_APELLIDO APELLIDO, C.CLI_DNI DNI, C.CLI_MAIL MAIL, C.CLI_TELEFONO TELEFONO, C.CLI_DIRECCION DIRECCION, C.CLI_CODIGO_POSTAL CODIGO_POSTAL, C.CLI_CIUDAD CIUDAD, C.CLI_FECHA_NACIMIENTO FECHA, C.CLI_SALDO SALDO, C.CLI_ESTADO ESTADO FROM MANA.CLIENTE C WHERE C.CLI_ID = @clientId";
+        private String GET_CLIENT_DATA_QUERY = "SELECT C.CLI_ID ID, C.CLI_NOMBRE NOMBRE, C.CLI_APELLIDO APELLIDO, C.CLI_DNI DNI, C.CLI_MAIL MAIL, C.CLI_TELEFONO TELEFONO, C.CLI_DIRECCION DIRECCION, C.CLI_CODIGO_POSTAL CODIGO_POSTAL, C.CLI_CIUDAD CIUDAD, C.CLI_FECHA_NACIMIENTO FECHA, C.CLI_SALDO SALDO, U.USUARIO_ESTADO ESTADO FROM MANA.CLIENTE C INNER JOIN MANA.USUARIO U ON U.USER_ID = C.CLI_USER_ID WHERE C.CLI_ID = @clientId";
         private String USER_EXISTS_QUERY = "SELECT * FROM MANA.CLIENTE C WHERE C.CLI_NOMBRE = @nombre AND C.CLI_APELLIDO = @apellido AND C.CLI_DNI = @dni AND C.CLI_MAIL = @mail";
       
         private DataBaseManager _dbm;
@@ -60,14 +60,19 @@ namespace FrbaOfertas.AbmCliente
             {
                 nombreTextBox.Text = _dbm.getStringFromResultSet(resultSet, "NOMBRE");
                 apellidoTextBox.Text = _dbm.getStringFromResultSet(resultSet, "APELLIDO");
-                dniTextBox.Text = _dbm.getStringFromResultSet(resultSet, "DNI");
+                dniTextBox.Text = _dbm.getNumericFromResultSet(resultSet, "DNI").ToString();
                 mailTextBox.Text = _dbm.getStringFromResultSet(resultSet, "MAIL");
-                telefonoTextBox.Text = _dbm.getStringFromResultSet(resultSet, "TELEFONO");
+                telefonoTextBox.Text = _dbm.getNumericFromResultSet(resultSet, "TELEFONO").ToString();
                 direccionTextBox.Text = _dbm.getStringFromResultSet(resultSet, "DIRECCION");
                 codigoPostalTextBox.Text = _dbm.getStringFromResultSet(resultSet, "CODIGO_POSTAL");
                 ciudadTextBox.Text = _dbm.getStringFromResultSet(resultSet, "CIUDAD");
-                fechaTextBox.Text = _dbm.getStringFromResultSet(resultSet, "FECHA");
+                fechaTextBox.Text = formatDateTime(_dbm.getDatetimeFromResultSet(resultSet, "FECHA"));
             }
+        }
+
+        private string formatDateTime(DateTime datetime)
+        {
+            return datetime.ToShortDateString();
         }
 
         private void guardarButton_Click(object sender, EventArgs e)
@@ -75,21 +80,21 @@ namespace FrbaOfertas.AbmCliente
             if (validarDatos())
             {
                 Dictionary<string, object> map = new Dictionary<string, object>();
-                map.Add("@rolId", _rolId);
-                map.Add("@username", _user);
-                map.Add("@password", _pass);
-                map.Add("@nombre", nombreTextBox.Text);
-                map.Add("@apellido", apellidoTextBox.Text);
-                map.Add("@dni", dniTextBox.Text);
-                map.Add("@mail", mailTextBox.Text);
-                map.Add("@telefono", telefonoTextBox.Text);
-                map.Add("@direccion", direccionTextBox.Text);
-                map.Add("@codigoPostal", codigoPostalTextBox.Text);
-                map.Add("@ciudad", ciudadTextBox.Text);
-                map.Add("@fechaNac", Convert.ToDateTime(fechaTextBox.Text));
                 if (_id == -1)
                 {
-                    if (1 == _dbm.executeProcedure(NEW_CLIENT_PROCEDURE, map))
+                    map.Add("@rolId", _rolId);
+                    map.Add("@username", _user);
+                    map.Add("@password", _pass);
+                    map.Add("@nombre", nombreTextBox.Text);
+                    map.Add("@apellido", apellidoTextBox.Text);
+                    map.Add("@dni", dniTextBox.Text);
+                    map.Add("@mail", mailTextBox.Text);
+                    map.Add("@telefono", telefonoTextBox.Text);
+                    map.Add("@direccion", direccionTextBox.Text);
+                    map.Add("@codigoPostal", codigoPostalTextBox.Text);
+                    map.Add("@ciudad", ciudadTextBox.Text);
+                    map.Add("@fechaNac", Convert.ToDateTime(fechaTextBox.Text));
+                    if (3 == _dbm.executeProcedure(NEW_CLIENT_PROCEDURE, map))
                     {
                         MessageBox.Show("Se ha agregado correctamente el cliente.");
                         Close();
@@ -101,8 +106,17 @@ namespace FrbaOfertas.AbmCliente
                 }
                 else
                 {
-                    map.Add("@clientId", _id.ToString());
-                    if (1 == _dbm.executeUpdate(UPDATE_CLIENT_PROCEDURE, map))
+                    map.Add("@ID", _id);
+                    map.Add("@Nombre", nombreTextBox.Text);
+                    map.Add("@Apellido", apellidoTextBox.Text);
+                    map.Add("@Dni", Convert.ToInt64(dniTextBox.Text));
+                    map.Add("@Mail", mailTextBox.Text);
+                    map.Add("@Telefono", Convert.ToInt64(telefonoTextBox.Text));
+                    map.Add("@Direccion", direccionTextBox.Text);
+                    map.Add("@CodigoPostal", codigoPostalTextBox.Text);
+                    map.Add("@Ciudad", ciudadTextBox.Text);
+                    map.Add("@FechaNac", Convert.ToDateTime(fechaTextBox.Text));
+                    if (1 == _dbm.executeProcedure(UPDATE_CLIENT_PROCEDURE, map))
                     {
                         MessageBox.Show("El cliente fue modificado correctamente.");
                         Close();
@@ -203,7 +217,7 @@ namespace FrbaOfertas.AbmCliente
             else
             {
                 map.Add("@clientId", _id.ToString());
-                resultSet = _dbm.executeSelect(USER_EXISTS_QUERY + " WHERE CLI_ID <> @clientId", map);
+                resultSet = _dbm.executeSelect(USER_EXISTS_QUERY + " AND CLI_ID <> @clientId", map);
             }
             return resultSet.HasRows;
         }
