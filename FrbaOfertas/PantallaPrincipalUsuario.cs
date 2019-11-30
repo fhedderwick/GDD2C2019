@@ -82,13 +82,13 @@ namespace FrbaOfertas
       
         private void button5_Click_1(object sender, EventArgs e)
         {
-            PantallaInicio i = new PantallaInicio(_dbm);
+            MenuOferta i = new MenuOferta(_dbm, _userId);
             i.Show();
         }
 
         private void button6_Click_1(object sender, EventArgs e)
         {
-            OfertasPublicadas i = new OfertasPublicadas(_dbm);
+            OfertasPublicadas i = new OfertasPublicadas(_dbm, _userId);
             i.Show();
         }
 

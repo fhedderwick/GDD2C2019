@@ -13,13 +13,14 @@ namespace FrbaOfertas.CrearOferta
     public partial class Generacion_Exitosa : Form
     {
         private DataBaseManager _dbm;
+        private string _userid;
 
-        public Generacion_Exitosa(DataBaseManager dbm)
+        public Generacion_Exitosa(DataBaseManager dbm, string userId)
         {
             _dbm = dbm;
+            _userid = userId;
             InitializeComponent();
         }
-
         
         private void btnVolverAtras_Click(object sender, EventArgs e)
         {

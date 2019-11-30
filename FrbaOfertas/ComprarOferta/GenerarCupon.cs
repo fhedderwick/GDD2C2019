@@ -13,19 +13,21 @@ namespace FrbaOfertas.ComprarOferta
 {    
     public partial class GenerarCupon : Form
     {
-        private DataBaseManager _dbm;      
+        private DataBaseManager _dbm;
+        private string _userId;
         private string queryCupon = "SELECT TOP 1 * FROM MANA.CUPON ORDER BY CUPON_ID DESC";
 
-        public GenerarCupon(DataBaseManager dbm)
+        public GenerarCupon(DataBaseManager dbm, String userId)
         {
-            _dbm = dbm;           
+            _dbm = dbm;
+            _userId = userId;
             InitializeComponent();
         }
       
         private void btnSiguiente_Click(object sender, EventArgs e)
         {
             Hide();
-            CompraExitosa i = new CompraExitosa(_dbm);
+            CompraExitosa i = new CompraExitosa(_dbm, _userId);
             i.Show();
             this.Close();
         }

@@ -10,20 +10,22 @@ using System.Windows.Forms;
 
 namespace FrbaOfertas.CrearOferta
 {
-    public partial class PantallaInicio : Form
+    public partial class MenuOferta : Form
     {
         private DataBaseManager _dbm;
+        private string _userId;
 
-        public PantallaInicio(DataBaseManager dbm)
+        public MenuOferta(DataBaseManager dbm, String userId)
         {
             _dbm = dbm;
+            _userId = userId;
             InitializeComponent();
         }
 
         private void b2_Click(object sender, EventArgs e)
         {
             Hide();
-            AltaOferta i = new AltaOferta(_dbm);
+            AltaOferta i = new AltaOferta(_dbm, _userId);
             i.Show();
             this.Close();
         }
@@ -31,7 +33,7 @@ namespace FrbaOfertas.CrearOferta
         private void b3_Click(object sender, EventArgs e)
         {
             Hide();
-            CanjearCupon i = new CanjearCupon(_dbm);
+            CanjearCupon i = new CanjearCupon(_dbm, _userId);
             i.Show();
             this.Close();
         }

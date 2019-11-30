@@ -13,19 +13,21 @@ namespace FrbaOfertas.CrearOferta
     public partial class CanjearCupon : Form
     {
         private DataBaseManager _dbm;
+        private string _userId;
         private string queryEstadoCupon = "SELECT CUPON_ESTADO FROM MANA.CUPON WHERE CUPON_ID = @CuponId";
         private string queryCupon = "SELECT COUNT(CUPON_ID) FROM MANA.CUPON WHERE CUPON_ID = @CuponId";
 
-        public CanjearCupon(DataBaseManager dbm)
+        public CanjearCupon(DataBaseManager dbm, string userId)
         {
             _dbm = dbm;
+            _userId = userId;
             InitializeComponent();
         }
 
         private void b1_Click(object sender, EventArgs e)
         {
             Hide();
-            PantallaInicio i = new PantallaInicio(_dbm);
+            MenuOferta i = new MenuOferta(_dbm, _userId);
             i.Show();
             this.Close();
         }
@@ -62,7 +64,7 @@ namespace FrbaOfertas.CrearOferta
                         {
                             MessageBox.Show("El cupon fue canjeado exitosamente", "Exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             Hide();
-                            Generacion_Exitosa i = new Generacion_Exitosa(_dbm);
+                            Generacion_Exitosa i = new Generacion_Exitosa(_dbm, _userId);
                             i.Show();
                             this.Close();
                         }  //Si no fue canjeado -> Hay datos incorrectos: puede ser el codigo de proveedor o el de la oferta

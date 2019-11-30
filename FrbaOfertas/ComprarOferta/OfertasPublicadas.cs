@@ -15,11 +15,13 @@ namespace FrbaOfertas.ComprarOferta
     public partial class OfertasPublicadas : Form
     {
         private DataBaseManager _dbm;
+        private string _userId;
         private string queryOfertasPublicadas = "SELECT * FROM MANA.OFERTA WHERE OF_ESTADO = @Estado AND OF_FECHA_PUBLICACION >= @Fecha";
 
-        public OfertasPublicadas(DataBaseManager dbm)
+        public OfertasPublicadas(DataBaseManager dbm, String userId)
         {
             _dbm = dbm;
+            _userId = userId;
             InitializeComponent();
         }
 
@@ -95,7 +97,7 @@ namespace FrbaOfertas.ComprarOferta
                 string precioOferta = d1.SelectedRows[0].Cells[4].Value.ToString();
                 string precioLista = d1.SelectedRows[0].Cells[5].Value.ToString();
                 Hide();
-                ValidarCompra i = new ValidarCompra(_dbm, codigoOferta, precioOferta, precioLista);
+                ValidarCompra i = new ValidarCompra(_dbm, _userId, codigoOferta, precioOferta, precioLista);
                 i.Show();
                 this.Close();
             }

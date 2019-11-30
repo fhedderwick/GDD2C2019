@@ -14,22 +14,41 @@ namespace FrbaOfertas.ComprarOferta
     public partial class ValidarCompra : Form
     {
         private DataBaseManager _dbm;
+        private string _userId;
+        private string rol;
         private string codigoOferta;
         private string precioOferta;
         private string precioLista;
         private string codigoCliente;
         private string cantidadAdquirida;
-        private string querySaldoCliente = "SELECT CLI_SALDO FROM MANA.CLIENTE WHERE CLI_ID = @ClienteId";
-        private string queryCantCupones = "SELECT COUNT(CUPON_ID) FROM MANA.CUPON";
+        private string queryUserRol = "SELECT ROL_NOMBRE FROM MANA.ROL WHERE ROL_ID = (SELECT UR_ROL_ID FROM MANA.USUARIO_ROL WHERE UR_USR_ID = @UserId)";   
+        private string querySaldoCliente = "SELECT CLI_SALDO FROM MANA.CLIENTE WHERE CLI_ID = @ClienteId";       
         private string queryMaxUnidad = "SELECT OF_MAXIMO_UNIDAD_CLIENTE FROM MANA.OFERTA WHERE OF_NUMERO = @OfertaNro";
 
-        public ValidarCompra(DataBaseManager dbm, string codigoDeOferta, string precioDeOferta, string precioDeLista)
+        public ValidarCompra(DataBaseManager dbm, string userId, string codigoDeOferta, string precioDeOferta, string precioDeLista)
         {
             _dbm = dbm;
+            _userId = userId;
             codigoOferta = codigoDeOferta;
             precioOferta = precioDeOferta;
             precioLista = precioDeLista;
             InitializeComponent();
+            this.load();
+        }
+
+        private void load()
+        { //Si el usuario es un Cliente su userId se va a cargar automaticamente.
+            Dictionary<string, object> map = new Dictionary<string, object>();
+            map.Add("@UserId", _userId);
+            rol = _dbm.executeSelectString(queryUserRol, map);
+            if (rol == "Cliente")
+            {
+                string query = "SELECT CLI_ID FROM MANA.CLIENTE WHERE CLI_USER_ID = @UserId";
+                Dictionary<string, object> map2 = new Dictionary<string, object>();
+                map2.Add("@UserId", _userId);
+                t2.Text = _dbm.executeSelectInt(query, map).ToString();
+                t2.ReadOnly = true;
+            }
         }
 
         private void b2_Click(object sender, EventArgs e)
@@ -41,8 +60,7 @@ namespace FrbaOfertas.ComprarOferta
         private void b1_Click(object sender, EventArgs e)
         {
             codigoCliente = t2.Text;
-            cantidadAdquirida = t1.Text;
-            int cantidadCupones = _dbm.executeSelectInt(queryCantCupones);
+            cantidadAdquirida = t1.Text;            
             decimal saldoCliente;
 
             if (this.camposObligatoriosCompletos() == true)  //Valido que se hayan ingresado datos
@@ -72,7 +90,7 @@ namespace FrbaOfertas.ComprarOferta
                             _dbm.executeProcedure("Mana.ComprarOferta", map);
 
                             MessageBox.Show("La operacion se ha realizado Exitosamente!");
-                            GenerarCupon i = new GenerarCupon(_dbm);
+                            GenerarCupon i = new GenerarCupon(_dbm, _userId);
                             i.Show();
                             this.Close();
                         }

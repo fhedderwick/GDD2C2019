@@ -1,6 +1,6 @@
 ﻿namespace FrbaOfertas.CrearOferta
 {
-    partial class PantallaInicio
+    partial class MenuOferta
     {
         /// <summary>
         /// Required designer variable.

@@ -15,18 +15,20 @@ namespace FrbaOfertas.CrearOferta
     public partial class AltaOferta : Form
     {
         private DataBaseManager _dbm;
+        private string _userId;
         private string queryProv = "SELECT COUNT(PROV_ID) FROM MANA.PROVEEDOR WHERE PROV_ID = @ProvId";
 
-        public AltaOferta(DataBaseManager dbm)
+        public AltaOferta(DataBaseManager dbm, String userId)
         {
             _dbm = dbm;
+            _userId = userId;
             InitializeComponent();
         }
 
         private void btnVolverAtras_Click(object sender, EventArgs e)
         {
             Hide();
-            PantallaInicio i = new PantallaInicio(_dbm);
+            MenuOferta i = new MenuOferta(_dbm, _userId);
             i.Show();
             this.Close();
         }
@@ -54,7 +56,7 @@ namespace FrbaOfertas.CrearOferta
                     _dbm.executeProcedure("Mana.CrearOferta", map);
 
                     Hide();
-                    Generacion_Exitosa i = new Generacion_Exitosa(_dbm);
+                    Generacion_Exitosa i = new Generacion_Exitosa(_dbm, _userId);
                     i.Show();
                     this.Close();
                  }

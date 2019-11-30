@@ -148,11 +148,11 @@
     <Compile Include="CrearOferta\Generacion Exitosa.Designer.cs">
       <DependentUpon>Generacion Exitosa.cs</DependentUpon>
     </Compile>
-    <Compile Include="CrearOferta\PantallaInicio.cs">
+    <Compile Include="CrearOferta\MenuOferta.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CrearOferta\PantallaInicio.Designer.cs">
-      <DependentUpon>PantallaInicio.cs</DependentUpon>
+    <Compile Include="CrearOferta\MenuOferta.Designer.cs">
+      <DependentUpon>MenuOferta.cs</DependentUpon>
     </Compile>
     <Compile Include="DataBaseManager.cs" />
     <Compile Include="ComprarOferta\CompraExitosa.cs">
@@ -310,8 +310,8 @@
     <EmbeddedResource Include="CrearOferta\Generacion Exitosa.resx">
       <DependentUpon>Generacion Exitosa.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CrearOferta\PantallaInicio.resx">
-      <DependentUpon>PantallaInicio.cs</DependentUpon>
+    <EmbeddedResource Include="CrearOferta\MenuOferta.resx">
+      <DependentUpon>MenuOferta.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DateChooser.resx">
       <DependentUpon>DateChooser.cs</DependentUpon>
