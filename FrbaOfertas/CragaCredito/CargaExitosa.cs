@@ -14,11 +14,13 @@ namespace FrbaOfertas.CragaCredito
 {
     public partial class CargaExitosa : Form
     {
-        private DataBaseManager _dbm;            
+        private DataBaseManager _dbm;
+        private string _userId;    
 
-        public CargaExitosa(DataBaseManager dbm)
+        public CargaExitosa(DataBaseManager dbm, String userId)
         {
-            _dbm = dbm;            
+            _dbm = dbm;
+            _userId = userId;
             InitializeComponent();
         }
 
@@ -31,7 +33,7 @@ namespace FrbaOfertas.CragaCredito
         private void b2_Click(object sender, EventArgs e)
         {
             Hide();
-            CargarCredito i = new CargarCredito(_dbm);
+            CargarCredito i = new CargarCredito(_dbm, _userId);
             i.Show();
             this.Close();
         }

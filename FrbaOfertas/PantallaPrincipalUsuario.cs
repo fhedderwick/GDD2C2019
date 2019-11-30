@@ -100,7 +100,7 @@ namespace FrbaOfertas
 
         private void button2_Click(object sender, EventArgs e)
         {
-            CargarCredito i = new CargarCredito(_dbm);
+            CargarCredito i = new CargarCredito(_dbm, _userId);
             i.Show();
         }
 

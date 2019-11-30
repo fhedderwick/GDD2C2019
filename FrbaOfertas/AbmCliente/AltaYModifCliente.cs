@@ -14,8 +14,8 @@ namespace FrbaOfertas.AbmCliente
     public partial class AltaYModifCliente : Form
     {
 
-        private String NEW_CLIENT_PROCEDURE = "EXEC MANA.CrearUsuarioCliente";
-        private String UPDATE_CLIENT_PROCEDURE = "EXEC MANA.ModificarCliente";
+        private String NEW_CLIENT_PROCEDURE = "MANA.CrearUsuarioCliente";
+        private String UPDATE_CLIENT_PROCEDURE = "MANA.ModificarCliente";
 
         private String GET_CLIENT_DATA_QUERY = "SELECT C.CLI_ID ID, C.CLI_NOMBRE NOMBRE, C.CLI_APELLIDO APELLIDO, C.CLI_DNI DNI, C.CLI_MAIL MAIL, C.CLI_TELEFONO TELEFONO, C.CLI_DIRECCION DIRECCION, C.CLI_CODIGO_POSTAL CODIGO_POSTAL, C.CLI_CIUDAD CIUDAD, C.CLI_FECHA_NACIMIENTO FECHA, C.CLI_SALDO SALDO, C.CLI_ESTADO ESTADO FROM MANA.CLIENTE C WHERE C.CLI_ID = @clientId";
         private String USER_EXISTS_QUERY = "SELECT * FROM MANA.CLIENTE C WHERE C.CLI_NOMBRE = @nombre AND C.CLI_APELLIDO = @apellido AND C.CLI_DNI = @dni AND C.CLI_MAIL = @mail";
@@ -86,7 +86,7 @@ namespace FrbaOfertas.AbmCliente
                 map.Add("@direccion", direccionTextBox.Text);
                 map.Add("@codigoPostal", codigoPostalTextBox.Text);
                 map.Add("@ciudad", ciudadTextBox.Text);
-                map.Add("@fechaNacimiento", fechaTextBox.Text);
+                map.Add("@fechaNac", Convert.ToDateTime(fechaTextBox.Text));
                 if (_id == -1)
                 {
                     if (1 == _dbm.executeProcedure(NEW_CLIENT_PROCEDURE, map))

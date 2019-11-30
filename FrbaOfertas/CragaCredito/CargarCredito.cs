@@ -15,15 +15,35 @@ namespace FrbaOfertas.CragaCredito
     public partial class CargarCredito : Form
     {
         private DataBaseManager _dbm;
+        private string _userId;
+        private string rol;
         private string clienteId;
+        private string queryUserRol = "SELECT ROL_NOMBRE FROM MANA.ROL WHERE ROL_ID = (SELECT UR_ROL_ID FROM MANA.USUARIO_ROL WHERE UR_USR_ID = @UserId)";       
         private string querySaldo = "SELECT CLI_SALDO FROM MANA.CLIENTE WHERE CLI_ID = @ClienteId";
         private string queryCliente = "SELECT COUNT(CLI_ID) FROM MANA.CLIENTE WHERE CLI_ID = @ClienteId";        
         private string queryEstado = "SELECT USUARIO_ESTADO FROM MANA.USUARIO WHERE USER_ID = (SELECT CLI_USER_ID FROM MANA.CLIENTE WHERE CLI_ID = @ClienteId)";
 
-        public CargarCredito(DataBaseManager dbm)
+        public CargarCredito(DataBaseManager dbm, String userId)
         {
-            _dbm = dbm;            
+            _dbm = dbm;
+            _userId = userId;
             InitializeComponent();
+            this.load();
+        }
+
+        private void load()
+        { //Si el usuario es un Cliente su userId se va a cargar automaticamente.
+            Dictionary<string, object> map = new Dictionary<string, object>();
+            map.Add("@UserId", _userId);
+            rol = _dbm.executeSelectString(queryUserRol, map);
+            if (rol == "Cliente")
+            {
+                string query = "SELECT CLI_ID FROM MANA.CLIENTE WHERE CLI_USER_ID = @UserId";
+                Dictionary<string, object> map2 = new Dictionary<string, object>();
+                map2.Add("@UserId", _userId);
+                t1.Text = _dbm.executeSelectInt(query, map).ToString();
+                t1.ReadOnly = true;
+            }
         }
 
         private void b2_Click(object sender, EventArgs e)
@@ -60,7 +80,7 @@ namespace FrbaOfertas.CragaCredito
 
                             this.obtenerNuevoSaldo(clienteId);
                             Hide();
-                            CargaExitosa i = new CargaExitosa(_dbm);
+                            CargaExitosa i = new CargaExitosa(_dbm, _userId);
                             i.Show();
                             this.Close();
                         }

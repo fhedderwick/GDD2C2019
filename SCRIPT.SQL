@@ -859,29 +859,33 @@ GO
 /*Funcionalidades de Administrador General*/
 MANA.AsignarFuncionesAdministrador
 GO
-/*Funcionalidades de Usuario*/
+/*Funcionalidades de Usuario
 Mana.AsignarFuncionRol 2, 1
 GO
 Mana.AsignarFuncionRol 3, 1
 GO
 Mana.AsignarFuncionRol 4, 1
-GO
+GO*/
 /*Funcionalidades de Cliente*/
-Mana.AsignarFuncionRol 2, 4
+Mana.AsignarFuncionRol 2, 1
 GO
-Mana.AsignarFuncionRol 2, 6
+Mana.AsignarFuncionRol 2, 5
+GO
+Mana.AsignarFuncionRol 2, 7
 GO
 /*Funcionalidades de Proveedor*/
-Mana.AsignarFuncionRol 3, 5
+Mana.AsignarFuncionRol 3, 1
+GO
+Mana.AsignarFuncionRol 3, 6
 GO
 /*Funcionalidades de Administrativo*/
-Mana.AsignarFuncionRol 4, 2
+Mana.AsignarFuncionRol 4, 1
 GO
 Mana.AsignarFuncionRol 4, 3
 GO
-Mana.AsignarFuncionRol 4, 5
+Mana.AsignarFuncionRol 4, 4
 GO
-Mana.AsignarFuncionRol 4, 7
+Mana.AsignarFuncionRol 4, 6
 GO
 Mana.AsignarFuncionRol 4, 8
 GO
