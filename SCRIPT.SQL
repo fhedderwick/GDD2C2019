@@ -1023,8 +1023,6 @@ GO
 CREATE PROCEDURE MANA.ModificarCliente @ID int, @Nombre nvarchar(255), @Apellido nvarchar(255), @Dni numeric(18), @Mail nvarchar(255), 
                                    @Telefono numeric(18), @Direccion nvarchar(255), @CodigoPostal nvarchar(18), @Ciudad nvarchar(255), @FechaNac datetime
 AS
-IF(NOT EXISTS(SELECT CLI_NOMBRE, CLI_APELLIDO, CLI_DNI FROM MANA.CLIENTE 
-              where CLI_NOMBRE = @Nombre AND CLI_APELLIDO = @Apellido AND CLI_DNI = @Dni))
 BEGIN
    UPDATE MANA.CLIENTE
    SET  CLI_NOMBRE = @Nombre, CLI_APELLIDO = @Apellido, CLI_DNI = @Dni, CLI_MAIL = @Mail, CLI_TELEFONO = @Telefono,
@@ -1111,8 +1109,6 @@ GO
 CREATE PROCEDURE MANA.ModificarProveedor @ID int, @RazonSocial nvarchar(100), @NombreContacto nvarchar(20), @CUIT nvarchar(20), @Mail nvarchar(100), 
                                    @Telefono numeric(18), @Direccion nvarchar(100), @CodigoPostal nvarchar(18), @Ciudad nvarchar(255), @Rubro nvarchar(100)
 AS
-IF(NOT EXISTS(SELECT PROV_RAZON_SOCIAL, PROV_CUIT FROM MANA.PROVEEDOR 
-              where PROV_RAZON_SOCIAL = @RazonSocial AND PROV_CUIT = @CUIT))
 BEGIN
    UPDATE MANA.PROVEEDOR
    SET  PROV_RAZON_SOCIAL = @RazonSocial, PROV_CUIT = @CUIT, PROV_MAIL = @Mail, PROV_TELEFONO = @Telefono, 

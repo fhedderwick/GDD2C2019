@@ -16,7 +16,7 @@ namespace FrbaOfertas.Login
     public partial class NewUser : Form
     {
         const String USER_EXISTS_QUERY = "SELECT * FROM MANA.USUARIO WHERE USER_USERNAME = @username";
-        const String GET_ROLES_QUERY = "SELECT ROL_ID ID, ROL_NOMBRE NOMBRE FROM MANA.ROL";
+        const String GET_ROLES_QUERY = "SELECT ROL_ID ID, ROL_NOMBRE NOMBRE FROM MANA.ROL WHERE ROL_NOMBRE = @RolCliente or ROL_NOMBRE = @RolProv";
         
         DataBaseManager _dbm;
         String _username;
@@ -130,7 +130,12 @@ namespace FrbaOfertas.Login
 
         private void loadRol()
         {
-            SqlDataReader resultSet = _dbm.executeSelect(GET_ROLES_QUERY);
+            string rolCliente = "Cliente";
+            string rolProv = "Proveedor";
+            Dictionary<string, string> map = new Dictionary<string, string>();
+            map.Add("@RolCliente", rolCliente);
+            map.Add("@RolProv", rolProv);
+            SqlDataReader resultSet = _dbm.executeSelect(GET_ROLES_QUERY, map);
             //this.comboBox1.DisplayMember = "Text";
             //this.comboBox1.ValueMember = "Value";
             List<Par> list = new List<Par>();
