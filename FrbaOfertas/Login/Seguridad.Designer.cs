@@ -46,9 +46,9 @@
             // 
             // b1
             // 
-            this.b1.Location = new System.Drawing.Point(64, 92);
+            this.b1.Location = new System.Drawing.Point(63, 109);
             this.b1.Name = "b1";
-            this.b1.Size = new System.Drawing.Size(117, 40);
+            this.b1.Size = new System.Drawing.Size(117, 27);
             this.b1.TabIndex = 1;
             this.b1.Text = "Baja de Usuario";
             this.b1.Visible = false;
@@ -56,18 +56,18 @@
             // 
             // b2
             // 
-            this.b2.Location = new System.Drawing.Point(63, 54);
+            this.b2.Location = new System.Drawing.Point(63, 59);
             this.b2.Name = "b2";
-            this.b2.Size = new System.Drawing.Size(118, 32);
+            this.b2.Size = new System.Drawing.Size(118, 27);
             this.b2.TabIndex = 2;
             this.b2.Text = "Cambiar Password";
             this.b2.Click += new System.EventHandler(this.b2_Click);
             // 
             // b3
             // 
-            this.b3.Location = new System.Drawing.Point(75, 138);
+            this.b3.Location = new System.Drawing.Point(75, 165);
             this.b3.Name = "b3";
-            this.b3.Size = new System.Drawing.Size(88, 53);
+            this.b3.Size = new System.Drawing.Size(88, 39);
             this.b3.TabIndex = 3;
             this.b3.Text = "Volver Atras";
             this.b3.Click += new System.EventHandler(this.b3_Click);
@@ -76,7 +76,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(252, 207);
+            this.ClientSize = new System.Drawing.Size(252, 216);
             this.Controls.Add(this.l1);
             this.Controls.Add(this.b1);
             this.Controls.Add(this.b2);

@@ -29,7 +29,7 @@ namespace FrbaOfertas.Login
 
         private void load()
         { //Si el usuario es un Cliente o un Proveedor su username se va a cargar automaticamente.
-            if (_rol != "AdministradorGral" || _rol != "Administrativo") 
+            if (_rol == "Cliente" || _rol == "Proveedor") 
             {
                 string query = "SELECT USER_USERNAME FROM MANA.USUARIO WHERE USER_ID = @UserId";
                 Dictionary<string, object> map = new Dictionary<string, object>();
