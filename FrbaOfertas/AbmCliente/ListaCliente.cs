@@ -66,18 +66,14 @@ namespace FrbaOfertas.AbmCliente
             {
                 MessageBox.Show("Debe seleccionar un cliente.");
             }
-            else if (!"Habilitado".Equals(dataGridView1.SelectedRows[0].Cells[12].Value.ToString()))
+            else if (!"Habilitado".Equals(dataGridView1.SelectedRows[0].Cells[11].Value.ToString()))
             {
-                String id = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
-                String userId = dataGridView1.SelectedRows[0].Cells[1].Value.ToString();
-                RehabilitarCliente rehabilitarCliente = new RehabilitarCliente(_dbm, this, id, userId);
-                rehabilitarCliente.Show();
+                MessageBox.Show("El cliente elegido ya está deshabilitado.");
             } 
             else
             {
                 String id = dataGridView1.SelectedRows[0].Cells[0].Value.ToString();
-                String userId = dataGridView1.SelectedRows[0].Cells[1].Value.ToString();
-                BajaCliente bajaCliente = new BajaCliente(_dbm,this, id, userId);
+                BajaCliente bajaCliente = new BajaCliente(_dbm,this, id);
                 bajaCliente.Show();
             }
         }
@@ -157,9 +153,9 @@ namespace FrbaOfertas.AbmCliente
                 int userId = _dbm.getIntFromResultSet(resultSet, "USER_ID");
                 String nombre = _dbm.getStringFromResultSet(resultSet,"NOMBRE");
                 String apellido = _dbm.getStringFromResultSet(resultSet,"APELLIDO");
-                Decimal dni = _dbm.getNumericFromResultSet(resultSet, "DNI");
+                String dni = _dbm.getStringFromResultSet(resultSet,"DNI");
                 String mail = _dbm.getStringFromResultSet(resultSet,"MAIL");
-                Decimal telefono = _dbm.getNumericFromResultSet(resultSet, "TELEFONO");
+                String telefono = _dbm.getStringFromResultSet(resultSet,"TELEFONO");
                 String direccion = _dbm.getStringFromResultSet(resultSet,"DIRECCION");
                 String codigoPostal = _dbm.getStringFromResultSet(resultSet,"CODIGO_POSTAL");
                 String ciudad = _dbm.getStringFromResultSet(resultSet,"CIUDAD");
@@ -167,7 +163,7 @@ namespace FrbaOfertas.AbmCliente
                 Decimal saldo = _dbm.getNumericFromResultSet(resultSet,"SALDO");
                 String estado = _dbm.getStringFromResultSet(resultSet,"ESTADO");
 
-                string[] row = new string[] { id.ToString(), userId.ToString(), nombre, apellido, dni.ToString(), mail, telefono.ToString(), direccion, codigoPostal, ciudad, fechaNacimiento.ToShortDateString(), saldo.ToString(), estado };
+                string[] row = new string[] { id.ToString(), nombre, apellido, dni.ToString(), mail, telefono.ToString(), direccion, codigoPostal, ciudad, fechaNacimiento.ToShortDateString(), saldo.ToString(), estado };
                 dataGridView1.Rows.Add(row);
             }
             for (int i = 0; i < dataGridView1.Rows.Count; i++)
