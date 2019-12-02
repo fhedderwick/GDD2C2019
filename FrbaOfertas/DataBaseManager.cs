@@ -16,6 +16,13 @@ namespace FrbaOfertas
         string server = ConfigurationManager.AppSettings["server"].ToString();
         string user = ConfigurationManager.AppSettings["user"].ToString();
         string password = ConfigurationManager.AppSettings["password"].ToString();
+        string fecha = ConfigurationManager.AppSettings["fecha"].ToString();
+        DateTime fechaAsDateTime;
+
+        internal DateTime parse(string fecha)
+        {
+            return DateTime.Parse(fecha);
+        }
 
         internal bool initialize()
         {
@@ -24,6 +31,7 @@ namespace FrbaOfertas
             try
             {
                 this._conn.Open();
+                fechaAsDateTime = parse(fecha);
             }
             catch (Exception e)
             {
@@ -301,6 +309,23 @@ namespace FrbaOfertas
                 command.Parameters.AddWithValue(key, value);
             }
             return (String)command.ExecuteScalar();
+        }
+
+        internal DateTime getDatetimeFromResultSet(SqlDataReader resultSet, String nombreParametro)
+        {
+            return getDatetimeFromResultSet(resultSet, nombreParametro, new DateTime());
+        }
+
+        internal DateTime getDatetimeFromResultSet(SqlDataReader resultSet, String nombreParametro, DateTime defaultValue)
+        {
+            try
+            {
+                return (DateTime)resultSet.GetValue(resultSet.GetOrdinal(nombreParametro));
+            }
+            catch (Exception e)
+            {
+                return defaultValue;
+            }
         }
       
     }

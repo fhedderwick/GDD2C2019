@@ -13,17 +13,19 @@ namespace FrbaOfertas.AbmCliente
     public partial class BajaCliente : Form
     {
 
-        private String DELETE_USER_QUERY = "UPDATE MANA.CLIENTE SET CLI_ESTADO = 'Deshabilitado' WHERE CLI_ID = @cliId";
+        private String BAJA_USUARIO_PROCEDURE = "MANA.BajaUsuario";
 
         private DataBaseManager _dbm;
         ListaCliente _lista;
         private String _id;
+        private String _userId;
 
-        public BajaCliente(DataBaseManager dbm, ListaCliente lista, String id)
+        public BajaCliente(DataBaseManager dbm, ListaCliente lista, String id, String userId)
         {
             _dbm = dbm;
             _lista = lista;
             _id = id;
+            _userId = userId;
             InitializeComponent();
             label2.Text = id;
         }
@@ -36,8 +38,8 @@ namespace FrbaOfertas.AbmCliente
         private void button1_Click(object sender, EventArgs e)
         {
             Dictionary <string, Object> map = new Dictionary<string, Object>();
-            map.Add("@cliId", _id);
-            if (1 == _dbm.executeUpdate(DELETE_USER_QUERY, map))
+            map.Add("@UserId", _userId);
+            if (1 == _dbm.executeProcedure(BAJA_USUARIO_PROCEDURE, map))
             {
                 MessageBox.Show("Cliente dado de baja correctamente.");
                 _lista.llenarListado();
