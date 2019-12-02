@@ -16,6 +16,7 @@ using FrbaOfertas.ComprarOferta;
 using FrbaOfertas.CrearOferta;
 using FrbaOfertas.Facturar;
 using FrbaOfertas.CragaCredito;
+using FrbaOfertas.ListadoEstadistico;
 
 namespace FrbaOfertas
 {
@@ -115,6 +116,12 @@ namespace FrbaOfertas
             Hide();
             this.Close();
             Application.Exit();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+          ListadoEstad i = new ListadoEstad(_dbm);
+            i.Show();
         }
     }
 }

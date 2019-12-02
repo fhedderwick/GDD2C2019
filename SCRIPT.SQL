@@ -1279,6 +1279,25 @@ GO
 
 
 
+/**Listado Estadistico*/
+
+/*
+CREATE PROCEDURE MANA.MontoTotalFacturadoAProveedor (@FechaInicio datetime, @FechaFinal datetime)
+AS
+   declare @ProvId int
+   declare @RSProv nvarchar(100)
+   declare @CantidadFacturas int
+   declare @MontoTotalFacturado int
+   
+   set @ProvId = (select OV.OF_VEN_PROV_ID from OFERTA_VENDIDA OV)
+   set @RSProv = (SELECT PROV_RAZON_SOCIAL FROM MANA.PROVEEDOR WHERE PROV_ID = @ProvId)
+   set @CantidadFacturas = (SELECT COUNT(ITF.I_FACT_OF_VEN_ID) FROM MANA.ITEM_FACTURA ITF 
+       JOIN MANA.OFERTA_VENDIDA OV ON OV.OF_VEN_ID = ITF.I_FACT_OF_VEN_ID AND OV.OF_VEN_PROV_ID = @ProvId)
+
+GO
+*/
+
+
 
 /** Test **/ 
                           /*Formato Fechas AÑO/DIA/MES, no me pregunten porque*/
