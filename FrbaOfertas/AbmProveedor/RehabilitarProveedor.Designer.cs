@@ -1,6 +1,6 @@
 ﻿namespace FrbaOfertas.AbmProveedor
 {
-    partial class BajaProveedor
+    partial class RehabilitarProveedor
     {
         /// <summary>
         /// Required designer variable.
@@ -39,14 +39,14 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 19);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(259, 13);
+            this.label1.Size = new System.Drawing.Size(251, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "¿Está seguro de querer dar de baja al usuario con ID ";
+            this.label1.Text = "¿Está seguro de querer rehabilitar al usuario con ID ";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(269, 19);
+            this.label2.Location = new System.Drawing.Point(260, 19);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(18, 13);
             this.label2.TabIndex = 1;
@@ -72,7 +72,7 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // BajaProveedor
+            // RehabilitarProveedor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -81,8 +81,8 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Name = "BajaProveedor";
-            this.Text = "Baja de Proveedor";
+            this.Name = "RehabilitarProveedor";
+            this.Text = "Rehabilitar Proveedor";
             this.ResumeLayout(false);
             this.PerformLayout();
 

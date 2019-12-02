@@ -34,6 +34,7 @@ namespace FrbaOfertas.Login
         {
             NewUser newUser = new NewUser(_dbm,_username);
             newUser.Show();
+            Close();
         }
     }
 }

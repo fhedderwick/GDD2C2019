@@ -10,17 +10,17 @@ using System.Windows.Forms;
 
 namespace FrbaOfertas.AbmProveedor
 {
-    public partial class BajaProveedor : Form
+    public partial class RehabilitarProveedor : Form
     {
 
-        private String BAJA_USUARIO_PROCEDURE = "MANA.BajaUsuario";
+        private String REHABILITAR_USUARIO_PROCEDURE = "MANA.AltaUsuario";
 
         private DataBaseManager _dbm;
         ListaProveedor _lista;
         private String _id;
         private String _userId;
 
-        public BajaProveedor(DataBaseManager dbm, ListaProveedor lista, String id, String userId)
+        public RehabilitarProveedor(DataBaseManager dbm, ListaProveedor lista, String id, String userId)
         {
             _dbm = dbm;
             _lista = lista;
@@ -39,14 +39,14 @@ namespace FrbaOfertas.AbmProveedor
         {
             Dictionary <string, Object> map = new Dictionary<string, Object>();
             map.Add("@UserId", _userId);
-            if (1 == _dbm.executeProcedure(BAJA_USUARIO_PROCEDURE, map))
+            if (1 == _dbm.executeProcedure(REHABILITAR_USUARIO_PROCEDURE, map))
             {
-                MessageBox.Show("Proveedor dado de baja correctamente.");
+                MessageBox.Show("Proveedor rehabilitado correctamente.");
                 _lista.llenarListado();
             }
             else
             {
-                MessageBox.Show("Error al dar de baja al proveedor.");
+                MessageBox.Show("Error al rehabilitar al proveedor.");
             }
 
             Close();

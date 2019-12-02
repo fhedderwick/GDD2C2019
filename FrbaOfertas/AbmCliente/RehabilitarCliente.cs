@@ -8,19 +8,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FrbaOfertas.AbmProveedor
+namespace FrbaOfertas.AbmCliente
 {
-    public partial class BajaProveedor : Form
+    public partial class RehabilitarCliente : Form
     {
 
-        private String BAJA_USUARIO_PROCEDURE = "MANA.BajaUsuario";
+        private String REHABILITAR_USUARIO_PROCEDURE = "MANA.AltaUsuario";
 
         private DataBaseManager _dbm;
-        ListaProveedor _lista;
+        ListaCliente _lista;
         private String _id;
         private String _userId;
 
-        public BajaProveedor(DataBaseManager dbm, ListaProveedor lista, String id, String userId)
+        public RehabilitarCliente(DataBaseManager dbm, ListaCliente lista, String id, String userId)
         {
             _dbm = dbm;
             _lista = lista;
@@ -39,14 +39,14 @@ namespace FrbaOfertas.AbmProveedor
         {
             Dictionary <string, Object> map = new Dictionary<string, Object>();
             map.Add("@UserId", _userId);
-            if (1 == _dbm.executeProcedure(BAJA_USUARIO_PROCEDURE, map))
+            if (1 == _dbm.executeProcedure(REHABILITAR_USUARIO_PROCEDURE, map))
             {
-                MessageBox.Show("Proveedor dado de baja correctamente.");
+                MessageBox.Show("Cliente rehabilitado correctamente.");
                 _lista.llenarListado();
             }
             else
             {
-                MessageBox.Show("Error al dar de baja al proveedor.");
+                MessageBox.Show("Error al rehabilitar al cliente.");
             }
 
             Close();

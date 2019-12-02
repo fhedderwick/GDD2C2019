@@ -63,11 +63,17 @@
     <Compile Include="AbmCliente\ListaCliente.Designer.cs">
       <DependentUpon>ListaCliente.cs</DependentUpon>
     </Compile>
-    <Compile Include="AbmProveedor\AltaProveedor.cs">
+    <Compile Include="AbmCliente\RehabilitarCliente.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AbmProveedor\AltaProveedor.Designer.cs">
-      <DependentUpon>AltaProveedor.cs</DependentUpon>
+    <Compile Include="AbmCliente\RehabilitarCliente.Designer.cs">
+      <DependentUpon>RehabilitarCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmProveedor\AltaYModifProveedor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmProveedor\AltaYModifProveedor.Designer.cs">
+      <DependentUpon>AltaYModifProveedor.cs</DependentUpon>
     </Compile>
     <Compile Include="AbmProveedor\BajaProveedor.cs">
       <SubType>Form</SubType>
@@ -81,11 +87,11 @@
     <Compile Include="AbmProveedor\ListaProveedor.Designer.cs">
       <DependentUpon>ListaProveedor.cs</DependentUpon>
     </Compile>
-    <Compile Include="AbmProveedor\ModificarProveedor.cs">
+    <Compile Include="AbmProveedor\RehabilitarProveedor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AbmProveedor\ModificarProveedor.Designer.cs">
-      <DependentUpon>ModificarProveedor.cs</DependentUpon>
+    <Compile Include="AbmProveedor\RehabilitarProveedor.Designer.cs">
+      <DependentUpon>RehabilitarProveedor.cs</DependentUpon>
     </Compile>
     <Compile Include="AbmRol\AltaRol.cs">
       <SubType>Form</SubType>
@@ -262,8 +268,11 @@
     <EmbeddedResource Include="AbmCliente\ListaCliente.resx">
       <DependentUpon>ListaCliente.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AbmProveedor\AltaProveedor.resx">
-      <DependentUpon>AltaProveedor.cs</DependentUpon>
+    <EmbeddedResource Include="AbmCliente\RehabilitarCliente.resx">
+      <DependentUpon>RehabilitarCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmProveedor\AltaYModifProveedor.resx">
+      <DependentUpon>AltaYModifProveedor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AbmProveedor\BajaProveedor.resx">
       <DependentUpon>BajaProveedor.cs</DependentUpon>
@@ -271,8 +280,8 @@
     <EmbeddedResource Include="AbmProveedor\ListaProveedor.resx">
       <DependentUpon>ListaProveedor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AbmProveedor\ModificarProveedor.resx">
-      <DependentUpon>ModificarProveedor.cs</DependentUpon>
+    <EmbeddedResource Include="AbmProveedor\RehabilitarProveedor.resx">
+      <DependentUpon>RehabilitarProveedor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AbmRol\AltaRol.resx">
       <DependentUpon>AltaRol.cs</DependentUpon>
