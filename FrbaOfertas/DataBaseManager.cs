@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Globalization;
 
 namespace FrbaOfertas
 {
@@ -24,21 +25,31 @@ namespace FrbaOfertas
             return DateTime.Parse(fecha);
         }
 
-        internal bool initialize()
+        internal string initialize()
         {
             String uri = "data source=.\\SQLSERVER2012; initial catalog=GD2C2019; user id=" + user + "; password=" + password + "; MultipleActiveResultSets=True";
             this._conn = new SqlConnection(uri);
             try
             {
                 this._conn.Open();
-                fechaAsDateTime = parse(fecha);
+                string val = intentarParsearFecha(fecha);
+                if (!formatoFechaOk(fecha))
+                {
+                    return "La fecha configurada debe ser \"dd/mm/yyyy\".";
+                }
+                if (!"".Equals(val))
+                { 
+                    System.Console.Out.WriteLine(val);
+                    return "La fecha configurada es invalida.";
+                }
+                fechaAsDateTime = DateTime.ParseExact(fecha, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             }
             catch (Exception e)
             {
                 System.Console.Out.WriteLine(e);
-                return false;
+                return "¡Error en la conexión a Base de Datos!";
             }
-            return true;
+            return "";
         }
 
         internal SqlDataReader executeSelect(String query)
@@ -326,6 +337,39 @@ namespace FrbaOfertas
             {
                 return defaultValue;
             }
+        }
+
+        internal string intentarParsearFecha(string fecha)
+        {
+            try
+            {
+                fechaAsDateTime = DateTime.ParseExact(fecha, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            }
+            catch (Exception e)
+            {
+                return e.ToString();
+            }
+            return "";
+        }
+
+        internal bool formatoFechaOk(string fecha)
+        {
+            if (fecha.Length != 10)
+            {
+                return false;
+            }
+            try
+            {
+                if ("/".Equals(fecha.Substring(2, 1)) && ("/".Equals(fecha.Substring(5, 1))))
+                {
+                    int dia = int.Parse(fecha.Substring(0, 2));
+                    int mes = int.Parse(fecha.Substring(3, 2));
+                    int anio = int.Parse(fecha.Substring(6, 4));
+                    return true;
+                }
+            }
+            catch (Exception e) { }
+            return false;
         }
       
     }

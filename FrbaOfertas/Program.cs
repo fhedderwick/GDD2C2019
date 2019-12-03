@@ -17,7 +17,8 @@ namespace FrbaOfertas
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             DataBaseManager dbm = new DataBaseManager();
-            if (dbm.initialize())
+            string retval = dbm.initialize();
+            if (retval.Length == 0)
             {
                 System.Console.Out.WriteLine("Connected OK!");
                 Login.Login loginPanel = new Login.Login(dbm);
@@ -25,7 +26,7 @@ namespace FrbaOfertas
             }
             else
             {
-                Application.Run(new ErrorConexion());
+                Application.Run(new ErrorConexion(retval));
             }
         }
     }

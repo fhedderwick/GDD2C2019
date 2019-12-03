@@ -12,9 +12,10 @@ namespace FrbaOfertas
 {
     public partial class ErrorConexion : Form
     {
-        public ErrorConexion()
+        public ErrorConexion(string message)
         {
             InitializeComponent();
+            label1.Text = message;
         }
 
         private void button1_Click(object sender, EventArgs e)

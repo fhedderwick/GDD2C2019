@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Globalization;
 
 namespace FrbaOfertas.CragaCredito
 {
@@ -72,8 +73,8 @@ namespace FrbaOfertas.CragaCredito
                             int monto = Convert.ToInt32(t4.Text);
                             if (monto > 0)  //Valido que el monto a cargar sea positivo y no sea 0
                             {
-                                DateTime fechaArchivo = Convert.ToDateTime(ConfigurationManager.AppSettings["fecha"]);
-                                Dictionary<string, object> map = new Dictionary<string, object>();
+                                DateTime fechaArchivo = DateTime.ParseExact(ConfigurationManager.AppSettings["fecha"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                Dictionary<string, object> map = new Dictionary<string, object>(); 
                                 map.Add("@FechaCarga", fechaArchivo);                      //Fecha del archivo de Configuracion
                                 map.Add("@ClienteId", t1.Text);
                                 map.Add("@TipoPago", t3.SelectedItem.ToString());
