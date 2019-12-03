@@ -69,20 +69,25 @@ namespace FrbaOfertas.CragaCredito
 
                         if (estado == "Habilitado")  //Valido que el cliente este Habilitado
                         {
-                            DateTime fechaArchivo = Convert.ToDateTime(ConfigurationManager.AppSettings["fecha"]);
-                            Dictionary<string, object> map = new Dictionary<string, object>();
-                            map.Add("@FechaCarga", fechaArchivo);                      //Fecha del archivo de Configuracion
-                            map.Add("@ClienteId", t1.Text);
-                            map.Add("@TipoPago", t3.SelectedItem.ToString());
-                            map.Add("@Monto", t4.Text);
-                            map.Add("@NumeroTarjeta", t2.Text);
-                            _dbm.executeProcedure("Mana.CargarCredito", map);
+                            int monto = Convert.ToInt32(t4.Text);
+                            if (monto > 0)  //Valido que el monto a cargar sea positivo y no sea Cero
+                            {
+                                DateTime fechaArchivo = Convert.ToDateTime(ConfigurationManager.AppSettings["fecha"]);
+                                Dictionary<string, object> map = new Dictionary<string, object>();
+                                map.Add("@FechaCarga", fechaArchivo);                      //Fecha del archivo de Configuracion
+                                map.Add("@ClienteId", t1.Text);
+                                map.Add("@TipoPago", t3.SelectedItem.ToString());
+                                map.Add("@Monto", t4.Text);
+                                map.Add("@NumeroTarjeta", t2.Text);
+                                _dbm.executeProcedure("Mana.CargarCredito", map);
 
-                            this.obtenerNuevoSaldo(clienteId);
-                            Hide();
-                            CargaExitosa i = new CargaExitosa(_dbm, _userId);
-                            i.Show();
-                            this.Close();
+                                this.obtenerNuevoSaldo(clienteId);
+                                Hide();
+                                CargaExitosa i = new CargaExitosa(_dbm, _userId);
+                                i.Show();
+                                this.Close();
+                            }
+                        else { MessageBox.Show("El monto ingresado es invalido. Por favor vuelvalo a ingresar correctamente", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
                         }
                         else { MessageBox.Show("El cliente no puede realizar esta operacion porque se encuentra Deshabilitado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
                     }
