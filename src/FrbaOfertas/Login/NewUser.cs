@@ -22,6 +22,7 @@ namespace FrbaOfertas.Login
         String _username;
 
         public NewUser(DataBaseManager dbm, String username) : this(dbm, username, null) { }
+        //public NewUser(DataBaseManager dbm) : this(dbm, null) { }
 
         public NewUser(DataBaseManager dbm, String username, Par rol)
         {
@@ -31,7 +32,7 @@ namespace FrbaOfertas.Login
             this.comboBox1.DisplayMember = "Text";
             this.comboBox1.ValueMember = "Value";
             textBox2.Text = _username;
-            if (rol != null)
+            if (rol != null)    
             {
                 List<Par> list = new List<Par>();
                 list.Add(new Par() { Text = rol.Text, Value = rol.Value });

@@ -50,5 +50,12 @@ namespace FrbaOfertas.Login
                 usuarioInexistenteDialog.ShowDialog();
             }
         }
+
+        private void button2_Click(object sender, EventArgs e) //Crear Nuevo Usuario
+        {
+            string inputText = null;
+            NewUser i = new NewUser(_dbm, inputText);
+            i.Show();            
+        }
     }
 }

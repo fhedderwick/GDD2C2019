@@ -16,7 +16,7 @@ namespace FrbaOfertas.ComprarOferta
     {
         private DataBaseManager _dbm;
         private string _userId;
-        private string queryOfertasPublicadas = "SELECT * FROM MANA.OFERTA WHERE OF_ESTADO = @Estado AND CONVERT(DATE,OF_FECHA_PUBLICACION) >= CONVERT(DATE,@Fecha,103)"; //103 = dd/mm/yyyy
+        private string queryOfertasPublicadas = "SELECT * FROM MANA.OFERTA WHERE OF_ESTADO = @Estado AND CONVERT(DATE,OF_FECHA_PUBLICACION) <= CONVERT(DATE,@Fecha,103)"; //103 = dd/mm/yyyy
 
         public OfertasPublicadas(DataBaseManager dbm, String userId)
         {
