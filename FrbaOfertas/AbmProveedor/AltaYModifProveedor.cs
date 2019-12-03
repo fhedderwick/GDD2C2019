@@ -18,7 +18,7 @@ namespace FrbaOfertas.AbmProveedor
         private String UPDATE_PROVIDER_PROCEDURE = "MANA.ModificarProveedor";
 
         private String GET_PROVIDER_DATA_QUERY = "SELECT P.PROV_ID ID, P.PROV_RAZON_SOCIAL RAZON_SOCIAL, P.PROV_CUIT CUIT, P.PROV_NOMBRE_CONTACTO NOMBRE_CONTACTO, P.PROV_MAIL MAIL, P.PROV_TELEFONO TELEFONO, P.PROV_DIRECCION DIRECCION, P.PROV_CODIGO_POSTAL CODIGO_POSTAL, P.PROV_CIUDAD CIUDAD, P.PROV_RUBRO_ID RUBRO_ID, P.PROV_USER_ID USER_ID, U.USUARIO_ESTADO ESTADO FROM MANA.PROVEEDOR P INNER JOIN MANA.USUARIO U ON U.USER_ID = P.PROV_USER_ID WHERE P.PROV_ID = @providerId";
-        private String USER_EXISTS_QUERY = "SELECT * FROM MANA.PROVEEDOR P WHERE P.PROV_RAZON_SOCIAL = @razonSocial OR P.PROV_CUIT = @cuit";
+        private String USER_EXISTS_QUERY = "SELECT * FROM MANA.PROVEEDOR P WHERE (P.PROV_RAZON_SOCIAL = @razonSocial OR P.PROV_CUIT = @cuit)";
 
         const String GET_RUBROS_QUERY = "SELECT RUBRO_ID ID, RUBRO_DESCRIPCION DESCRIPCION FROM MANA.RUBRO";
 
@@ -38,7 +38,7 @@ namespace FrbaOfertas.AbmProveedor
             cargarDatos();
         }
 
-        public AltaYModifProveedor(DataBaseManager dbm, String user, String pass, String rolId )
+        public AltaYModifProveedor(DataBaseManager dbm, String user, String pass, String rolId)
         {
             _dbm = dbm;
             _user = user;
@@ -113,7 +113,7 @@ namespace FrbaOfertas.AbmProveedor
                     map.Add("@ID", _id);
                     map.Add("@RazonSocial", razonsocialTextBox.Text);
                     map.Add("@NombreContacto", nombrecontactoTextBox.Text);
-                    map.Add("@CUIT", Convert.ToInt64(cuitTextBox.Text));
+                    map.Add("@CUIT", cuitTextBox.Text);
                     map.Add("@Mail", mailTextBox.Text);
                     map.Add("@Telefono", Convert.ToInt64(telefonoTextBox.Text));
                     map.Add("@Direccion", direccionTextBox.Text);
@@ -190,13 +190,13 @@ namespace FrbaOfertas.AbmProveedor
                 MessageBox.Show("Debe completar el Nombre de Contacto.");
                 return false;
             }
-            
-            if (datosCopiados(razonSocial,cuit))
+
+            if (datosCopiados(razonSocial, cuit))
             {
                 MessageBox.Show("Ya existe un usuario con los mismos datos personales.");
                 return false;
             }
-            
+
             return true;
         }
 
