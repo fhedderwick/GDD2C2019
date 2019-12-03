@@ -21,8 +21,14 @@ namespace FrbaOfertas.ListadoEstadistico
           " GROUP BY O.OF_PROVEEDOR_ID, P.PROV_RAZON_SOCIAL, P.PROV_CUIT " +
           " ORDER BY MONTO_DESC_PROV DESC";
 
+        private String query2 = "SELECT TOP 5 F.FACT_PROV_ID PROV_ID, P.PROV_RAZON_SOCIAL, P.PROV_CUIT, SUM(F.FACT_IMPORTE_TOTAL) MONTO_FACT_PROV,COUNT(*) CANTIDAD_OFERTAS FROM MANA.FACTURA F " +
+            " INNER JOIN MANA.PROVEEDOR P ON F.FACT_PROV_ID = P.PROV_ID " +
+            " WHERE MONTH(F.FACT_FECHA) >= @mesInicial AND MONTH(F.FACT_FECHA) <= @mesFinal " +
+            " AND YEAR(F.FACT_FECHA) = @anio " +
+            " GROUP BY F.FACT_PROV_ID, P.PROV_RAZON_SOCIAL, P.PROV_CUIT " +
+            " ORDER BY MONTO_FACT_PROV DESC";
+
         private DataBaseManager _dbm;
-        private String query2 = "SELECT C.CLI_ID ID, C.CLI_NOMBRE NOMBRE, C.CLI_APELLIDO APELLIDO, C.CLI_DNI DNI, C.CLI_MAIL MAIL, C.CLI_TELEFONO TELEFONO, C.CLI_DIRECCION DIRECCION, C.CLI_CODIGO_POSTAL CODIGO_POSTAL, C.CLI_CIUDAD CIUDAD, C.CLI_FECHA_NACIMIENTO FECHA, C.CLI_SALDO SALDO, U.USUARIO_ESTADO ESTADO FROM MANA.CLIENTE C INNER JOIN MANA.USUARIO U ON U.USER_ID = C.CLI_USER_ID WHERE C.CLI_ID = @clientId";
         int mesInicio;
         int mesFinal;
 
@@ -90,12 +96,17 @@ namespace FrbaOfertas.ListadoEstadistico
                 else if ("2".Equals(firstComboValue))
                 {
                     d1.Rows.Clear();
-                    d1.AllowUserToAddRows = true;
-                    d1.ColumnCount = 4;
+                    d1.ColumnCount = 5;
                     d1.Columns[0].Name = "Codigo de Proveedor";
-                    d1.Columns[1].Name = "Razon Social de Proveedor";
-                    d1.Columns[2].Name = "Cantidad de Facturas realizadas";
-                    d1.Columns[3].Name = "Monto Total Facturado";
+                    d1.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                    d1.Columns[1].Name = "Razon Social";
+                    d1.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                    d1.Columns[2].Name = "CUIT";
+                    d1.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                    d1.Columns[3].Name = "Cantidad de Facturas realizadas";
+                    d1.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                    d1.Columns[4].Name = "Monto Total Facturado";
+                    d1.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                     d1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
                     SqlDataReader resultSet = _dbm.executeSelect(query2, map);
@@ -103,10 +114,11 @@ namespace FrbaOfertas.ListadoEstadistico
                     {
                         int id = (int)resultSet.GetValue(resultSet.GetOrdinal("PROV_ID"));
                         string razonSocial = (String)resultSet.GetValue(resultSet.GetOrdinal("PROV_RAZON_SOCIAL"));
+                        string cuit = (String)resultSet.GetValue(resultSet.GetOrdinal("PROV_CUIT"));
                         int cantidad = (int)resultSet.GetValue(resultSet.GetOrdinal("CANTIDAD_OFERTAS"));
                         decimal monto = (decimal)resultSet.GetValue(resultSet.GetOrdinal("MONTO_FACT_PROV"));
 
-                        string[] row = new string[] { id.ToString(), razonSocial, cantidad.ToString(), monto.ToString() };
+                        string[] row = new string[] { id.ToString(), razonSocial, cuit, cantidad.ToString(), monto.ToString() };
                         d1.Rows.Add(row);
                         for (int i = 0; i < d1.Rows.Count; i++)
                         { d1.Rows[i].ReadOnly = true; }
