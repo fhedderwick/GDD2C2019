@@ -49,7 +49,7 @@
             // 
             // l5
             // 
-            this.l5.Location = new System.Drawing.Point(127, 173);
+            this.l5.Location = new System.Drawing.Point(127, 166);
             this.l5.Name = "l5";
             this.l5.Size = new System.Drawing.Size(100, 23);
             this.l5.TabIndex = 4;
@@ -75,23 +75,21 @@
             // 
             // d1
             // 
-            this.d1.Location = new System.Drawing.Point(12, 208);
+            this.d1.Location = new System.Drawing.Point(12, 212);
             this.d1.Name = "d1";
-            this.d1.Size = new System.Drawing.Size(366, 205);
+            this.d1.Size = new System.Drawing.Size(366, 217);
             this.d1.TabIndex = 8;
-            
             // 
             // d2
             // 
             this.d2.Location = new System.Drawing.Point(12, 57);
             this.d2.Name = "d2";
-            this.d2.Size = new System.Drawing.Size(366, 87);
+            this.d2.Size = new System.Drawing.Size(366, 72);
             this.d2.TabIndex = 10;
-            
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(455, 149);
+            this.button1.Location = new System.Drawing.Point(455, 129);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 47);
             this.button1.TabIndex = 11;

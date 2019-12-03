@@ -129,7 +129,7 @@
             this.d1.Name = "d1";
             this.d1.ReadOnly = true;
             this.d1.RowTemplate.Height = 24;
-            this.d1.Size = new System.Drawing.Size(567, 211);
+            this.d1.Size = new System.Drawing.Size(567, 155);
             this.d1.TabIndex = 10;
             // 
             // b1
@@ -140,7 +140,7 @@
             this.b1.Name = "b1";
             this.b1.Size = new System.Drawing.Size(170, 32);
             this.b1.TabIndex = 11;
-            this.b1.Text = "Cancelar";
+            this.b1.Text = "Volver Atras";
             this.b1.UseVisualStyleBackColor = true;
             this.b1.Click += new System.EventHandler(this.b1_Click);
             // 
@@ -149,7 +149,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(626, 469);
+            this.ClientSize = new System.Drawing.Size(626, 413);
             this.Controls.Add(this.b1);
             this.Controls.Add(this.d1);
             this.Controls.Add(this.b2);

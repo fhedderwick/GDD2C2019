@@ -44,11 +44,12 @@ namespace FrbaOfertas.Facturar
             //Factura
             d2.Rows.Clear();
             d2.AllowUserToAddRows = true;
-            d2.ColumnCount = 4;
+            d2.ColumnCount = 5;
             d2.Columns[0].Name = "Codigo de Factura";
             d2.Columns[1].Name = "Numero de Factura";
             d2.Columns[2].Name = "Fecha de Factura";
-            d2.Columns[3].Name = "Importe";
+            d2.Columns[3].Name = "Codigo de Proveedor";
+            d2.Columns[4].Name = "Importe";
             d2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;            
 
             SqlDataReader resultSet = _dbm.executeSelect(queryFactura);
@@ -58,8 +59,9 @@ namespace FrbaOfertas.Facturar
                 decimal numero = (decimal)resultSet.GetValue(resultSet.GetOrdinal("FACT_NUMERO"));               
                 DateTime fecha = (DateTime)resultSet.GetValue(resultSet.GetOrdinal("FACT_FECHA"));
                 decimal importe = (decimal)resultSet.GetValue(resultSet.GetOrdinal("FACT_IMPORTE_TOTAL"));
+                int provId = (int)resultSet.GetValue(resultSet.GetOrdinal("FACT_PROV_ID"));
 
-                string[] row = new string[] { id.ToString(), numero.ToString(), fecha.ToString(), importe.ToString() };
+                string[] row = new string[] { id.ToString(), numero.ToString(), fecha.ToString(), provId.ToString(), importe.ToString() };
                 d2.Rows.Add(row);
 
                 for (int i = 0; i < d2.Rows.Count; i++)

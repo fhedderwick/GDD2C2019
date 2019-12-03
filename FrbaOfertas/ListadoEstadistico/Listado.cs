@@ -76,6 +76,9 @@ namespace FrbaOfertas.ListadoEstadistico
                     d1.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                     d1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                     SqlDataReader resultSet = _dbm.executeSelect(query1, map);
+                    if (resultSet.HasRows == false) 
+                    { MessageBox.Show("No se pudo realizar la operacion ya que no existen Ofertas registradas de Proveedores en el Año ingresado .", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
+
                     while (resultSet.Read())
                     {
                         int id = (int)resultSet.GetValue(resultSet.GetOrdinal("PROV_ID"));
@@ -110,6 +113,8 @@ namespace FrbaOfertas.ListadoEstadistico
                     d1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
                     SqlDataReader resultSet = _dbm.executeSelect(query2, map);
+                    if (resultSet.HasRows == false)
+                    { MessageBox.Show("No se pudo realizar la operacion ya que no existen Facturas a Proveedores en el Año ingresado .", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
                     while (resultSet.Read())
                     {
                         int id = (int)resultSet.GetValue(resultSet.GetOrdinal("PROV_ID"));

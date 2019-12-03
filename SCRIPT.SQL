@@ -5,7 +5,7 @@ GO
 /*La primera vez que ejecuten el SCRIPT haganlo con los DROP CONSTRAINTS Comentado. 
   Desde la 2da en adelante saquen los comentarios a DROP CONSTRAINTS para ejecutar para que no tengan problemas con las FK y la consulta sea ejecutada siempre correctamente*/
 
-
+/*
 ALTER TABLE [MANA].PROVEEDOR DROP CONSTRAINT FK_RUBRO_ID;
 ALTER TABLE [MANA].ITEM_FACTURA DROP CONSTRAINT FK_OF_VEN_ID;
 ALTER TABLE [MANA].FACTURA DROP CONSTRAINT FK_PR_ID;
@@ -23,6 +23,7 @@ ALTER TABLE [MANA].FUNCIONALIDAD_ROL DROP CONSTRAINT FK_R_ID;
 ALTER TABLE [MANA].FUNCIONALIDAD_ROL DROP CONSTRAINT FK_FUNC_ID;
 ALTER TABLE [MANA].CLIENTE DROP CONSTRAINT FK_CLI_USER_ID;
 ALTER TABLE [MANA].PROVEEDOR DROP CONSTRAINT FK_PROV_USER_ID;
+*/
 
 --DROP TABLES
 IF OBJECT_ID('MANA.PROVEEDOR') IS NOT NULL
@@ -91,10 +92,6 @@ IF OBJECT_ID('MANA.MigrarItemFactura') IS NOT NULL
 IF OBJECT_ID('MANA.MigrarFactura') IS NOT NULL
     DROP PROCEDURE MANA.MigrarFactura;
 	      /*Login, Usuario, Rol */
-IF OBJECT_ID('MANA.LoginFallido') IS NOT NULL
-    DROP PROCEDURE MANA.LoginFallido;
-IF OBJECT_ID('MANA.LimpiarLoginFallido') IS NOT NULL
-    DROP PROCEDURE MANA.LimpiarLoginFallido;
 IF OBJECT_ID('MANA.ValidarPassword') IS NOT NULL
     DROP PROCEDURE MANA.ValidarPassword;	
 IF OBJECT_ID('MANA.Encriptar') IS NOT NULL
@@ -104,9 +101,7 @@ IF OBJECT_ID('MANA.BorrarTT') IS NOT NULL
 IF OBJECT_ID('MANA.CrearRol') IS NOT NULL
     DROP PROCEDURE MANA.CrearRol;
 IF OBJECT_ID('MANA.FuncionalidadRol_VW') IS NOT NULL
-    DROP VIEW MANA.FuncionalidadRol_VW;
-IF OBJECT_ID('MANA.ObtenerFuncionalidadesDeRol') IS NOT NULL
-    DROP PROCEDURE MANA.ObtenerFuncionalidadesDeRol;	
+    DROP VIEW MANA.FuncionalidadRol_VW;	
 IF OBJECT_ID('MANA.EliminarFuncionalidadesDeRol') IS NOT NULL
     DROP PROCEDURE MANA.EliminarFuncionalidadesDeRol;
 IF OBJECT_ID('MANA.EliminarUsuariosDeRol') IS NOT NULL
@@ -669,36 +664,6 @@ GO
 
 /*Login*/
 
-CREATE PROCEDURE MANA.LoginFallido @Username nvarchar(200)
-AS
-BEGIN
-	DECLARE @Nueva_Cant_Int_Fallidos int
-	SET @Nueva_Cant_Int_Fallidos = (SELECT USER_INTENTOS_FALLIDOS FROM MANA.USUARIO WHERE USER_USERNAME = @Username) + 1
-
-	IF @Nueva_Cant_Int_Fallidos >= 3
-		BEGIN
-			UPDATE MANA.USUARIO 
-				SET USER_INTENTOS_FALLIDOS = @Nueva_Cant_Int_Fallidos
-				WHERE USER_USERNAME = @Username            
-		END		
-	ELSE
-		BEGIN
-			UPDATE MANA.USUARIO 
-				SET USER_INTENTOS_FALLIDOS = @Nueva_Cant_Int_Fallidos
-				WHERE USER_USERNAME = @Username 
-		END
-END
-GO
-
-CREATE PROCEDURE MANA.LimpiarLoginFallido @Username nvarchar(200)
-AS
-BEGIN
-	UPDATE MANA.USUARIO 
-	  SET USER_INTENTOS_FALLIDOS = 0
-	  WHERE USER_USERNAME = @Username 
-END
-GO
-
 CREATE FUNCTION MANA.Encriptar (@Password NVARCHAR(200))
 RETURNS NVARCHAR(255)
 BEGIN    
@@ -752,13 +717,6 @@ from
     MANA.FUNCIONALIDAD_ROL FR,
     MANA.FUNCIONALIDAD F
 where R.ROL_ID = FR.FR_ROL_ID AND FR.FR_FUNCIONALIDAD_ID = F.FUNC_ID    
-GO
-
-CREATE PROCEDURE MANA.ObtenerFuncionalidadesDeRol @RolID int
-AS
-    select FR.FUNC_ID, FR.FUN_NOMBRE
-    from MANA.FuncionalidadRol_VW FR
-    where FR.ROL_ID = @RolID
 GO
 
 CREATE PROCEDURE MANA.EliminarFuncionalidadesDeRol @RolID int
@@ -1284,52 +1242,3 @@ AS
   END     
 GO
 
-
-
-
-
-
-
-/** Test **/ 
-                          /*Formato Fechas AÑO/DIA/MES, no me pregunten porque*/
-/*ABM Cliente
-Mana.CrearCliente 'Gregory', 'House', 88430112, 'house@hotmail.com', 15856682, 'HOSPITAL521', 1252, 'Miami', '1985/06/10'
-GO
-Mana.ModificarCliente 5, 'Patrick', 'Jane', 62525087, 'jane@hotmail.com', 15534689, 'FBI5212', 1456, 'California', '1990/07/11'
-GO
-Mana.BajaCliente 'Adaia', 'Pino', 97990522, 'adaia@gmail.com'
-GO    
-Mana.CargarCredito '2019/08/11', 5, 'Debito', 100000, 0855648989
-GO
-Mana.CargarCredito '2019/08/11', 7, 'Crédito', 50000, 0975423614
-GO
-*/
-
-/*ABM Proveedor
-Mana.CrearProveedor 'Proveedor Cortinas S.R.L.', '11-22445103-2',  'Cortinas Congreso', 'cortinas@gmail.com', 43825679, 'Pozos618', 1256, 'CABA', 'Hogar' 
-GO
-Mana.ModificarProveedor 10, 'Proveedor Freddo S.R.L.', '71-43350643-1',  'Freddo', 'freddo@gmail.com', 48625167, 'Rivadavia6115', 1423, 'CABA', 'Comestibles' 
-GO
-Mana.BajaProveedor 'Proveedor N°13S.R.L.', '13-52415793-5'
-GO
-*/
-
-/*ABM Oferta
-
-Mana.CrearOferta 'NotebookICoreI9', '2020/12/12', '2025/10/12', 15000, 20000, 15, 100, 2
-GO
-Mana.CrearOferta 'CelularMotorolaE5', '2020/12/12', '2025/05/11', 7700, 12500, 12, 100, 5
-GO
-Mana.CanjearCupon 5, 'AZHEVYMSAC6', 26, '2020-01-08', 'Mirtha', 'Legrand', 00000001, NULL, 41114565, 'eltrece 99', '1920/04/10', 'CABA'			
-GO
-Mana.ComprarOferta '2019/15/11', 2, 7700, 12500, 10, 5
-GO
-Mana.ComprarOferta '2019/15/11', 2, 15000, 20000, 2, 7
-GO
-*/
-
-/*Facturacion
-
-Mana.FacturarOfertasAProveedor 12, '2018/05/10', '2024/30/12'
-GO
-*/
