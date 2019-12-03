@@ -558,7 +558,7 @@ GO
 /*Cupon*/
 
 CREATE PROCEDURE MANA.MigrarCupon    
-AS          /*Importe = PrecioOferta * CantAdq pero como no tengo registrada la cantidad en la Maestra, elegimos ponerle el PrecioOferta como importe para correcto func de App(Facturacion Ofertas) */
+AS          /*Importe = PrecioOferta * CantAdq pero como no tengo registrada la cantidad en la Maestra, elegimos que sea 1, siendo el importe = precioOferta */
 insert into MANA.CUPON                                        /*Fecha Validez = Fecha Compra + 1 mes*/
 select M.Oferta_Fecha_Compra, M.Oferta_Codigo, M.Oferta_Precio, M.Oferta_Precio_Ficticio, NULL as Cantidad_Adquirida, M.Oferta_Precio as Importe, C.CLI_ID, 'Habilitado', DATEADD(MONTH, 1,M.Oferta_Fecha_Compra) as Validez
 from gd_esquema.Maestra M, MANA.CLIENTE C
@@ -625,12 +625,31 @@ GO
 Mana.MigrarOfertaVendida
 GO
 
+
+/*Item Factura*/
+
+CREATE PROCEDURE MANA.MigrarItemFactura
+AS
+insert into MANA.ITEM_FACTURA
+select DISTINCT M.Factura_Nro, OV.OF_VEN_ID, OV.OF_VEN_IMPORTE
+from gd_esquema.Maestra M, MANA.OFERTA_VENDIDA OV
+where
+    M.Factura_Nro is not null AND
+   (M.Oferta_Fecha_Compra = OV.OF_VEN_FECHA_COMPRA AND M.Oferta_Codigo = OV.OF_VEN_OF_NUMERO)     
+group by M.Factura_Nro, OV.OF_VEN_ID, OV.OF_VEN_IMPORTE
+ORDER BY M.Factura_Nro ASC	 
+GO
+
+Mana.MigrarItemFactura
+GO
+
+
 /*Factura*/
 
 CREATE PROCEDURE MANA.MigrarFactura
 AS
 insert into MANA.FACTURA
-select DISTINCT M.Factura_Nro, M.Factura_Fecha, NULL as IMPORTE_TOTAL
+select DISTINCT M.Factura_Nro, M.Factura_Fecha, (select SUM(I_FACT_IMPORTE) FROM ITEM_FACTURA WHERE I_FACT_NUMERO = M.Factura_Nro)
 from gd_esquema.Maestra M
 where M.Factura_Nro is not null         
 group by M.Factura_Nro, M.Factura_Fecha
@@ -639,24 +658,6 @@ GO
 
 Mana.MigrarFactura
 GO
-
-/*Item Factura*/
-
-CREATE PROCEDURE MANA.MigrarItemFactura
-AS
-insert into MANA.ITEM_FACTURA
-select DISTINCT M.Factura_Nro, OV.OF_VEN_ID, NULL as IMPORTE
-from gd_esquema.Maestra M, MANA.OFERTA_VENDIDA OV
-where
-    M.Factura_Nro is not null AND
-   (M.Oferta_Fecha_Compra = OV.OF_VEN_FECHA_COMPRA AND M.Oferta_Codigo = OV.OF_VEN_OF_NUMERO)     
-group by M.Factura_Nro, OV.OF_VEN_ID
-ORDER BY M.Factura_Nro ASC	 
-GO
-
-Mana.MigrarItemFactura
-GO
-
 
 
 
@@ -1279,23 +1280,7 @@ GO
 
 
 
-/**Listado Estadistico*/
 
-/*
-CREATE PROCEDURE MANA.MontoTotalFacturadoAProveedor (@FechaInicio datetime, @FechaFinal datetime)
-AS
-   declare @ProvId int
-   declare @RSProv nvarchar(100)
-   declare @CantidadFacturas int
-   declare @MontoTotalFacturado int
-   
-   set @ProvId = (select OV.OF_VEN_PROV_ID from OFERTA_VENDIDA OV)
-   set @RSProv = (SELECT PROV_RAZON_SOCIAL FROM MANA.PROVEEDOR WHERE PROV_ID = @ProvId)
-   set @CantidadFacturas = (SELECT COUNT(ITF.I_FACT_OF_VEN_ID) FROM MANA.ITEM_FACTURA ITF 
-       JOIN MANA.OFERTA_VENDIDA OV ON OV.OF_VEN_ID = ITF.I_FACT_OF_VEN_ID AND OV.OF_VEN_PROV_ID = @ProvId)
-
-GO
-*/
 
 
 
