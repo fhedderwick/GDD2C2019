@@ -8,6 +8,7 @@ GO
 
 ALTER TABLE [MANA].PROVEEDOR DROP CONSTRAINT FK_RUBRO_ID;
 ALTER TABLE [MANA].ITEM_FACTURA DROP CONSTRAINT FK_OF_VEN_ID;
+ALTER TABLE [MANA].FACTURA DROP CONSTRAINT FK_PR_ID;
 ALTER TABLE [MANA].CONSUMO_OFERTA DROP CONSTRAINT FK_CUPON_ID;
 ALTER TABLE [MANA].CONSUMO_OFERTA DROP CONSTRAINT FK_PROVEED_ID;  
 ALTER TABLE [MANA].CARGA_CREDITO DROP CONSTRAINT FK_CLI_ID;
@@ -330,7 +331,7 @@ CREATE TABLE [MANA].ITEM_FACTURA (
 	I_FACT_NUMERO NUMERIC(18),
 	I_FACT_OF_VEN_ID INT, 
 	I_FACT_IMPORTE NUMERIC(18),
-
+	
 	CONSTRAINT ITEM_FACT_PK PRIMARY KEY (I_FACT_ID)
 );
 
@@ -339,7 +340,7 @@ CREATE TABLE [MANA].FACTURA (
 	FACT_NUMERO NUMERIC(18),
 	FACT_FECHA DATETIME,
 	FACT_IMPORTE_TOTAL NUMERIC(18),
-
+	FACT_PROV_ID INT,
 	CONSTRAINT FACT_PK PRIMARY KEY (FACT_ID)
 );
 
@@ -386,6 +387,7 @@ CREATE TABLE [MANA].FUNCIONALIDAD (
 
 ALTER TABLE [MANA].PROVEEDOR ADD CONSTRAINT FK_RUBRO_ID FOREIGN KEY (PROV_RUBRO_ID) REFERENCES [MANA].RUBRO (RUBRO_ID);
 ALTER TABLE [MANA].ITEM_FACTURA ADD CONSTRAINT FK_OF_VEN_ID FOREIGN KEY (I_FACT_OF_VEN_ID) REFERENCES [MANA].OFERTA_VENDIDA (OF_VEN_ID);
+ALTER TABLE [MANA].FACTURA ADD CONSTRAINT FK_PR_ID FOREIGN KEY (FACT_PROV_ID) REFERENCES [MANA].PROVEEDOR (PROV_ID);
 ALTER TABLE [MANA].CONSUMO_OFERTA ADD CONSTRAINT FK_PROVEED_ID FOREIGN KEY (CONSOF_PROV_ID) REFERENCES [MANA].PROVEEDOR(PROV_ID);
 ALTER TABLE [MANA].CONSUMO_OFERTA ADD CONSTRAINT FK_CUPON_ID FOREIGN KEY (CONSOF_CUPON_ID) REFERENCES [MANA].CUPON (CUPON_ID);
 ALTER TABLE [MANA].CARGA_CREDITO ADD CONSTRAINT FK_CLI_ID FOREIGN KEY (CC_CLIENTE_ID) REFERENCES [MANA].CLIENTE (CLI_ID);
@@ -558,7 +560,7 @@ GO
 /*Cupon*/
 
 CREATE PROCEDURE MANA.MigrarCupon    
-AS          /*Importe = PrecioOferta * CantAdq pero como no tengo registrada la cantidad en la Maestra, elegimos ponerle el PrecioOferta como importe para correcto func de App(Facturacion Ofertas) */
+AS          /*Importe = PrecioOferta * CantAdq pero como no tengo registrada la cantidad en la Maestra, elegimos que sea 1, siendo el importe = precioOferta */
 insert into MANA.CUPON                                        /*Fecha Validez = Fecha Compra + 1 mes*/
 select M.Oferta_Fecha_Compra, M.Oferta_Codigo, M.Oferta_Precio, M.Oferta_Precio_Ficticio, NULL as Cantidad_Adquirida, M.Oferta_Precio as Importe, C.CLI_ID, 'Habilitado', DATEADD(MONTH, 1,M.Oferta_Fecha_Compra) as Validez
 from gd_esquema.Maestra M, MANA.CLIENTE C
@@ -625,38 +627,40 @@ GO
 Mana.MigrarOfertaVendida
 GO
 
-/*Factura*/
-
-CREATE PROCEDURE MANA.MigrarFactura
-AS
-insert into MANA.FACTURA
-select DISTINCT M.Factura_Nro, M.Factura_Fecha, NULL as IMPORTE_TOTAL
-from gd_esquema.Maestra M
-where M.Factura_Nro is not null         
-group by M.Factura_Nro, M.Factura_Fecha
-Order by M.Factura_Nro ASC
-GO
-
-Mana.MigrarFactura
-GO
 
 /*Item Factura*/
 
 CREATE PROCEDURE MANA.MigrarItemFactura
 AS
 insert into MANA.ITEM_FACTURA
-select DISTINCT M.Factura_Nro, OV.OF_VEN_ID, NULL as IMPORTE
+select DISTINCT M.Factura_Nro, OV.OF_VEN_ID, OV.OF_VEN_IMPORTE
 from gd_esquema.Maestra M, MANA.OFERTA_VENDIDA OV
 where
     M.Factura_Nro is not null AND
    (M.Oferta_Fecha_Compra = OV.OF_VEN_FECHA_COMPRA AND M.Oferta_Codigo = OV.OF_VEN_OF_NUMERO)     
-group by M.Factura_Nro, OV.OF_VEN_ID
+group by M.Factura_Nro, OV.OF_VEN_ID, OV.OF_VEN_IMPORTE
 ORDER BY M.Factura_Nro ASC	 
 GO
 
 Mana.MigrarItemFactura
 GO
 
+
+/*Factura*/
+
+CREATE PROCEDURE MANA.MigrarFactura
+AS
+insert into MANA.FACTURA
+select DISTINCT M.Factura_Nro, M.Factura_Fecha, (select SUM(I_FACT_IMPORTE) FROM ITEM_FACTURA WHERE I_FACT_NUMERO = M.Factura_Nro), OV.OF_VEN_PROV_ID
+from gd_esquema.Maestra M, MANA.OFERTA_VENDIDA OV
+where M.Factura_Nro is not null AND
+   (M.Oferta_Fecha_Compra = OV.OF_VEN_FECHA_COMPRA AND M.Oferta_Codigo = OV.OF_VEN_OF_NUMERO)        
+group by M.Factura_Nro, M.Factura_Fecha, OV.OF_VEN_PROV_ID
+Order by M.Factura_Nro ASC
+GO
+
+Mana.MigrarFactura
+GO
 
 
 
@@ -1239,9 +1243,9 @@ AS
     insert into MANA.ITEM_FACTURA values (@FactNro, @OfertaVendidaId, @Importe)
 GO
 
-CREATE PROCEDURE MANA.CrearFactura @FacturaNro int, @ImporteTotal numeric(18)
+CREATE PROCEDURE MANA.CrearFactura @FacturaNro int, @ImporteTotal numeric(18), @ProvId int
 AS     
-	insert into MANA.FACTURA values(@FacturaNro, GETDATE(), @ImporteTotal)
+	insert into MANA.FACTURA values(@FacturaNro, GETDATE(), @ImporteTotal, @ProvId)
 GO
 
 CREATE PROCEDURE MANA.FacturarOfertasAProveedor @ProveedorId int, @FechaInicio datetime, @FechaFinal datetime
@@ -1268,7 +1272,7 @@ AS
 	   declare @ImporteTotal numeric(18)  
 	   set @FactNro = (select max(FACT_NUMERO) from FACTURA) + 1
 	   set @ImporteTotal = (select SUM(I_FACT_IMPORTE) FROM ITEM_FACTURA WHERE I_FACT_NUMERO = @FactNro)   /*Calculo el importe total de la factura */  
-       EXECUTE MANA.CrearFactura @FactNro, @ImporteTotal      /*Creo la factura*/          
+       EXECUTE MANA.CrearFactura @FactNro, @ImporteTotal, @ProveedorId      /*Creo la factura*/          
 	                                                                  
 	 IF((SELECT COUNT(I_FACT_ID) FROM ITEM_FACTURA WHERE I_FACT_NUMERO = @FactNro) != 0)     
 	  COMMIT TRANSACTION          	               /*Si hubo ofertas facturadas -> Se genera la Factura*/
@@ -1279,23 +1283,7 @@ GO
 
 
 
-/**Listado Estadistico*/
 
-/*
-CREATE PROCEDURE MANA.MontoTotalFacturadoAProveedor (@FechaInicio datetime, @FechaFinal datetime)
-AS
-   declare @ProvId int
-   declare @RSProv nvarchar(100)
-   declare @CantidadFacturas int
-   declare @MontoTotalFacturado int
-   
-   set @ProvId = (select OV.OF_VEN_PROV_ID from OFERTA_VENDIDA OV)
-   set @RSProv = (SELECT PROV_RAZON_SOCIAL FROM MANA.PROVEEDOR WHERE PROV_ID = @ProvId)
-   set @CantidadFacturas = (SELECT COUNT(ITF.I_FACT_OF_VEN_ID) FROM MANA.ITEM_FACTURA ITF 
-       JOIN MANA.OFERTA_VENDIDA OV ON OV.OF_VEN_ID = ITF.I_FACT_OF_VEN_ID AND OV.OF_VEN_PROV_ID = @ProvId)
-
-GO
-*/
 
 
 
