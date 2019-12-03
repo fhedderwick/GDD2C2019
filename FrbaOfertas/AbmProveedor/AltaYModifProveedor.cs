@@ -68,9 +68,9 @@ namespace FrbaOfertas.AbmProveedor
                 direccionTextBox.Text = _dbm.getStringFromResultSet(resultSet, "DIRECCION");
                 codigoPostalTextBox.Text = _dbm.getStringFromResultSet(resultSet, "CODIGO_POSTAL");
                 ciudadTextBox.Text = _dbm.getStringFromResultSet(resultSet, "CIUDAD");
-                cuitTextBox.Text = _dbm.getNumericFromResultSet(resultSet, "CUIT").ToString();
+                cuitTextBox.Text = _dbm.getStringFromResultSet(resultSet, "CUIT").ToString();
                 comboBox1.SelectedValue = _dbm.getIntFromResultSet(resultSet, "RUBRO_ID").ToString();
-                nombrecontactoTextBox.Text = _dbm.getNumericFromResultSet(resultSet, "NOMBRE_CONTACTO").ToString();
+                nombrecontactoTextBox.Text = _dbm.getStringFromResultSet(resultSet, "NOMBRE_CONTACTO").ToString();
             }
         }
 
