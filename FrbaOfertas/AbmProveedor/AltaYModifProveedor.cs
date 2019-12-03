@@ -212,7 +212,7 @@ namespace FrbaOfertas.AbmProveedor
             }
             else
             {
-                map.Add("@providerId", _id.ToString());
+                map.Add("@provId", _id.ToString());
                 resultSet = _dbm.executeSelect(USER_EXISTS_QUERY + " AND PROV_ID <> @provId", map);
             }
             return resultSet.HasRows;

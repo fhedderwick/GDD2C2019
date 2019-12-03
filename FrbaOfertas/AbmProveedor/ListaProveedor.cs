@@ -110,7 +110,7 @@ namespace FrbaOfertas.AbmProveedor
             {
                 query.Append(whereSet ? " AND " : " WHERE ");
                 whereSet = true;
-                query.Append(" C.PROV_MAIL LIKE @mail ");
+                query.Append(" P.PROV_MAIL LIKE @mail ");
                 map.Add("@mail", "%" + textBox4.Text + "%");
             }
             SqlDataReader resultSet = _dbm.executeSelect(query.ToString(), map);
