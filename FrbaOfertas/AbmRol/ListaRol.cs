@@ -102,7 +102,7 @@ namespace FrbaOfertas.AbmRol
             button3.Enabled = _habilitado;
         }
 
-        private void recargarListaFuncionalidades()
+        public void recargarListaFuncionalidades()
         {
             dataGridView1.ColumnCount = 2;
             dataGridView1.Columns[0].Name = "ID";

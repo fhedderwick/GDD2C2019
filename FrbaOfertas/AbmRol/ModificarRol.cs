@@ -95,16 +95,27 @@ namespace FrbaOfertas.AbmRol
         {
             Dictionary<string, Object> map = new Dictionary<string, Object>();
             map.Add("@ROL_ID", _rolId.ToString());
-            //int ret = _dbm.executeUpdate(DELETE_ROL_FUNC_QUERY, map);
+            int ret = _dbm.executeUpdate(DELETE_ROL_FUNC_QUERY, map);
             for (int i = 0; i < dataGridView1.RowCount; i++)
             {
-                String a = dataGridView1.Rows[i].Cells[2].Value.ToString();
-               /* map.Add("@FUNC_ID", funcid.ToString());
-                if (0 == _dbm.executeUpdate(INSERT_ROL_FUNC_QUERY, map))
+                String value = dataGridView1.Rows[i].Cells[2].Value.ToString();
+                if ("True".Equals(value))
                 {
-                    //rollback!
-                }*/
+                    Dictionary<string, Object> map2 = new Dictionary<string, Object>();
+                    string funcid = dataGridView1.Rows[i].Cells[0].Value.ToString();
+                    map2.Add("@ROL_ID", _rolId.ToString());
+                    map2.Add("@FUNC_ID", funcid);
+                    if (0 == _dbm.executeUpdate(INSERT_ROL_FUNC_QUERY, map2))
+                    {
+                        //rollback!
+                        MessageBox.Show("Ha ocurrido un error.");
+                        return;
+                    }
+                }
             }
+            _listaRol.recargarListaFuncionalidades();
+            MessageBox.Show("El rol se ha modificado correctamente.");
+            Close();
             
         }
     }
