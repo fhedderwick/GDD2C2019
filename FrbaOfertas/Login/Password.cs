@@ -39,10 +39,6 @@ namespace FrbaOfertas.Login
             passwordIngresado = _dbm.executeSelectString("SELECT USER_PASSWORD FROM MANA.TT");
             if (_count >= 3)
             {
-                _count = 3;
-                Dictionary<string, object> m = new Dictionary<string, object>();
-                m.Add("@UserId", _userId);
-                _dbm.executeProcedure("Mana.BajaUsuario", m);
                 MessageBox.Show("El usuario esta bloqueado por poner mal 3 veces la clave.");
             }
             else if (_password.Equals((passwordIngresado)))
@@ -60,11 +56,23 @@ namespace FrbaOfertas.Login
             else
             {
                 _count++;
-                Dictionary<string, object> map = new Dictionary<string, object>();
-                map.Add("@CONT", _count);
-                map.Add("@UserId", _userId);
-                _dbm.executeUpdate(CONT_UPDATE_QUERY, map);                
-                MessageBox.Show("Contraseña invalida.");
+
+                if (_count == 3)
+                {
+                    Dictionary<string, object> m = new Dictionary<string, object>();
+                    m.Add("@UserId", _userId);
+                    _dbm.executeProcedure("Mana.BajaUsuario", m);
+                    MessageBox.Show("Contraseña invalida. El usuario esta bloqueado por poner mal 3 veces la clave.");
+                }
+                else
+                {
+                    Dictionary<string, object> map = new Dictionary<string, object>();
+                    map.Add("@CONT", _count);
+                    map.Add("@UserId", _userId);
+                    _dbm.executeUpdate(CONT_UPDATE_QUERY, map);
+                    MessageBox.Show("Contraseña invalida.");
+                }
+                
             }
             _dbm.executeProcedure("Mana.BorrarTT");
         }
