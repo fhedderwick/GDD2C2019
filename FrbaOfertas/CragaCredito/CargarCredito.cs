@@ -54,7 +54,7 @@ namespace FrbaOfertas.CragaCredito
 
         private void b1_Click(object sender, EventArgs e)
         {
-            try
+            try  //Es para Validar que haya elegido un modo de pago. Si no seleccionas tira null pointer y como no hay manera de validar que seleccionas tiro el try
             {
                 if (this.validarModoPago() == true && this.ingresoCampos() == true)
                 {
@@ -70,7 +70,7 @@ namespace FrbaOfertas.CragaCredito
                         if (estado == "Habilitado")  //Valido que el cliente este Habilitado
                         {
                             int monto = Convert.ToInt32(t4.Text);
-                            if (monto > 0)  //Valido que el monto a cargar sea positivo y no sea Cero
+                            if (monto > 0)  //Valido que el monto a cargar sea positivo y no sea 0
                             {
                                 DateTime fechaArchivo = Convert.ToDateTime(ConfigurationManager.AppSettings["fecha"]);
                                 Dictionary<string, object> map = new Dictionary<string, object>();
