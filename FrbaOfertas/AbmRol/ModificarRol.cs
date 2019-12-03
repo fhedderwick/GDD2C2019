@@ -99,7 +99,6 @@ namespace FrbaOfertas.AbmRol
             for (int i = 0; i < dataGridView1.RowCount; i++)
             {
                 String a = dataGridView1.Rows[i].Cells[2].Value.ToString();
-                MessageBox.Show(a);
                /* map.Add("@FUNC_ID", funcid.ToString());
                 if (0 == _dbm.executeUpdate(INSERT_ROL_FUNC_QUERY, map))
                 {

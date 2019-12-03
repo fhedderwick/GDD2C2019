@@ -32,12 +32,13 @@ namespace FrbaOfertas.AbmRol
 
         private void button1_Click(object sender, EventArgs e)
         {
-            AltaRol altaRol = new AltaRol(_dbm);
+            AltaRol altaRol = new AltaRol(_dbm,this);
             altaRol.Show();
         }
 
-        private void cargarRoles()
+        public void cargarRoles()
         {
+            comboBox1.Items.Clear();
             SqlDataReader resultSet = _dbm.executeSelect(GET_ROLES_QUERY);
             while (resultSet.Read())
             {

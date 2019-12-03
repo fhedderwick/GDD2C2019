@@ -18,10 +18,12 @@ namespace FrbaOfertas.AbmRol
         const String ADD_ROL_QUERY = "INSERT INTO MANA.ROL (ROL_NOMBRE,ROL_ESTADO) VALUES (@ROL_NOMBRE,'Habilitado')";
 
         private DataBaseManager _dbm;
+        private ListaRol _caller;
 
-        public AltaRol(DataBaseManager dbm)
+        public AltaRol(DataBaseManager dbm, ListaRol caller)
         {
             _dbm = dbm;
+            _caller = caller;
             InitializeComponent();
         }
 
@@ -33,11 +35,13 @@ namespace FrbaOfertas.AbmRol
                 if (addRol(inputText))
                 {
                     MessageBox.Show("El rol \"" + inputText + "\" fue creado con éxito.");
+                    _caller.cargarRoles();
                 }
                 else
                 {
                     MessageBox.Show("No se pudo crear el rol \"" + inputText + "\".");
                 }
+                Close();
             }
             else
             {

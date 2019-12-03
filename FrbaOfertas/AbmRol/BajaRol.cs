@@ -59,7 +59,7 @@ namespace FrbaOfertas.AbmRol
             {
                 MessageBox.Show("Error al dar de baja al rol \"" + _rolname + "\".");
             }
-            
+            Close();
         }
     }
 }
