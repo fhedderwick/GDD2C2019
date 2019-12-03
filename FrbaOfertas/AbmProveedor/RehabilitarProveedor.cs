@@ -39,7 +39,7 @@ namespace FrbaOfertas.AbmProveedor
         {
             Dictionary <string, Object> map = new Dictionary<string, Object>();
             map.Add("@UserId", _userId);
-            if (1 == _dbm.executeProcedure(REHABILITAR_USUARIO_PROCEDURE, map))
+            if (0 != _dbm.executeProcedure(REHABILITAR_USUARIO_PROCEDURE, map))
             {
                 MessageBox.Show("Proveedor rehabilitado correctamente.");
                 _lista.llenarListado();
