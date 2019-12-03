@@ -104,7 +104,7 @@
             this.t1.Location = new System.Drawing.Point(190, 97);
             this.t1.Margin = new System.Windows.Forms.Padding(2);
             this.t1.Name = "t1";
-            this.t1.Size = new System.Drawing.Size(295, 20);
+            this.t1.Size = new System.Drawing.Size(73, 20);
             this.t1.TabIndex = 8;
             // 
             // b2
