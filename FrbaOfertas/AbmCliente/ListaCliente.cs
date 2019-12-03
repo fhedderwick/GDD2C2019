@@ -157,9 +157,9 @@ namespace FrbaOfertas.AbmCliente
                 int userId = _dbm.getIntFromResultSet(resultSet, "USER_ID");
                 String nombre = _dbm.getStringFromResultSet(resultSet,"NOMBRE");
                 String apellido = _dbm.getStringFromResultSet(resultSet,"APELLIDO");
-                String dni = _dbm.getStringFromResultSet(resultSet,"DNI");
+                Decimal dni = _dbm.getNumericFromResultSet(resultSet, "DNI");
                 String mail = _dbm.getStringFromResultSet(resultSet,"MAIL");
-                String telefono = _dbm.getStringFromResultSet(resultSet,"TELEFONO");
+                Decimal telefono = _dbm.getNumericFromResultSet(resultSet, "TELEFONO");
                 String direccion = _dbm.getStringFromResultSet(resultSet,"DIRECCION");
                 String codigoPostal = _dbm.getStringFromResultSet(resultSet,"CODIGO_POSTAL");
                 String ciudad = _dbm.getStringFromResultSet(resultSet,"CIUDAD");
